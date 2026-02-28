@@ -14,7 +14,7 @@ export default function Login() {
     e.preventDefault();
     login();
     if (returnToStartup && startup?.name) {
-      navigate(`/startup/${encodeURIComponent(startup.name)}`, { state: { startup }, replace: true });
+      navigate(`/startup/view/${encodeURIComponent(startup.name)}`, { state: { startup }, replace: true });
     } else {
       navigate(from || '/dashboard', { replace: true });
     }

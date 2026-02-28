@@ -16,7 +16,11 @@ import { useScrollReveal } from './hooks/useAnimations';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import StartupDetail from './pages/StartupDetail';
+import StartupProfile from './pages/StartupProfile';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { InvestorProvider } from './context/InvestorContext';
+import InvestorOnboarding from './pages/InvestorOnboarding';
+import InvestorDashboard from './pages/InvestorDashboard';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -49,6 +53,7 @@ function App() {
   return (
     <Router>
       <AuthProvider>
+        <InvestorProvider>
         <div className="min-h-screen bg-[#06060f] text-gray-100">
           <CustomCursor />
           <Navbar />
@@ -74,19 +79,23 @@ function App() {
                     </RequireAuth>
                   }
                 />
+                <Route path="/startup/profile/:id" element={<StartupProfile />} />
                 <Route
-                  path="/startup/:name"
+                  path="/startup/view/:name"
                   element={
                     <RequireAuth>
                       <StartupDetail />
                     </RequireAuth>
                   }
                 />
+                <Route path="/investor-onboarding" element={<InvestorOnboarding />} />
+                <Route path="/investor-dashboard/*" element={<InvestorDashboard />} />
               </Routes>
             </AnimationProvider>
           </main>
           <Footer />
         </div>
+        </InvestorProvider>
       </AuthProvider>
     </Router>
   );

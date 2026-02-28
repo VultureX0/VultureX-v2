@@ -116,9 +116,9 @@ export default function ForInvestors() {
             Stop swimming through unstructured decks. Vulture X delivers AI-ranked, filter-ready deal flow from a curated startup ecosystem.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <button className="flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-[#60a5fa] to-[#a78bfa] text-black font-bold rounded-xl hover:opacity-90 transition-opacity">
+            <Link to="/investor-onboarding" className="flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-[#60a5fa] to-[#a78bfa] text-black font-bold rounded-xl hover:opacity-90 transition-opacity">
               Join as Investor <ArrowRight size={18} />
-            </button>
+            </Link>
             <Link to="/explore" className="flex items-center gap-2 px-7 py-3.5 bg-white/5 border border-[#1c1c3a] text-white font-semibold rounded-xl hover:bg-white/10 transition-all">
               Browse Startups
             </Link>
@@ -243,13 +243,16 @@ export default function ForInvestors() {
                     </li>
                   ))}
                 </ul>
-                <button className={`w-full py-3 rounded-xl font-semibold text-sm transition-all ${
-                  tier.highlight
-                    ? 'bg-gradient-to-r from-[#60a5fa] to-[#a78bfa] text-black hover:opacity-90'
-                    : 'border border-[#1c1c3a] text-gray-300 hover:border-[#60a5fa]/30 hover:text-white'
-                }`}>
+                <Link
+                  to={tier.cta === 'Contact Sales' ? '/about' : '/investor-onboarding'}
+                  className={`block w-full py-3 rounded-xl font-semibold text-sm transition-all text-center ${
+                    tier.highlight
+                      ? 'bg-gradient-to-r from-[#60a5fa] to-[#a78bfa] text-black hover:opacity-90'
+                      : 'border border-[#1c1c3a] text-gray-300 hover:border-[#60a5fa]/30 hover:text-white'
+                  }`}
+                >
                   {tier.cta}
-                </button>
+                </Link>
               </div>
             ))}
           </div>

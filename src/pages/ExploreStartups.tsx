@@ -1,23 +1,13 @@
 import { useState } from 'react';
-import { Search, Filter, Grid, List, Star, TrendingUp, MapPin } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Search, Grid, List, MapPin, Eye } from 'lucide-react';
+import { getExploreStartups } from '../data/startups';
+import StartupProfileModal from '../components/startupProfile/StartupProfileModal';
 
 const sectors = ['All', 'SaaS', 'CleanTech', 'FinTech', 'HealthTech', 'AgriTech', 'Web3', 'EdTech', 'DeepTech'];
 const stages = ['All', 'Idea', 'MVP', 'Revenue', 'Scaling'];
 
-const startups = [
-  { name: 'SolarAI', sector: 'CleanTech', stage: 'MVP', score: 94, sdg: true, raised: '$2.1M', location: 'Nairobi, Kenya', team: 6, desc: 'AI-driven solar energy optimization platform for emerging markets.', rank: 1, tags: ['SDG 7', 'SDG 13'] },
-  { name: 'NeuralPay', sector: 'FinTech', stage: 'Revenue', score: 91, sdg: false, raised: '$5.4M', location: 'Lagos, Nigeria', team: 12, desc: 'Neural network-powered fraud detection for mobile payments across Africa.', rank: 2, tags: [] },
-  { name: 'AgriSense', sector: 'AgriTech', stage: 'Scaling', score: 89, sdg: true, raised: '$8.2M', location: 'Accra, Ghana', team: 24, desc: 'IoT sensors and AI analytics for precision farming and yield optimization.', rank: 3, tags: ['SDG 2', 'SDG 8'] },
-  { name: 'HealthChain', sector: 'HealthTech', stage: 'MVP', score: 87, sdg: true, raised: '$1.8M', location: 'Cairo, Egypt', team: 8, desc: 'Blockchain-based patient records and telemedicine for underserved communities.', rank: 4, tags: ['SDG 3'] },
-  { name: 'CodeStream', sector: 'SaaS', stage: 'Revenue', score: 85, sdg: false, raised: '$3.6M', location: 'Cape Town, SA', team: 15, desc: 'Developer collaboration platform with AI code review and team analytics.', rank: 5, tags: [] },
-  { name: 'WaterNet', sector: 'CleanTech', stage: 'MVP', score: 83, sdg: true, raised: '$900K', location: 'Dar es Salaam, TZ', team: 5, desc: 'Smart water distribution networks reducing waste by up to 40%.', rank: 6, tags: ['SDG 6', 'SDG 13'] },
-  { name: 'EduBlock', sector: 'EdTech', stage: 'Idea', score: 80, sdg: true, raised: 'Pre-seed', location: 'Kampala, Uganda', team: 4, desc: 'Decentralized credential verification system for African universities.', rank: 7, tags: ['SDG 4'] },
-  { name: 'QuantumLend', sector: 'FinTech', stage: 'Revenue', score: 79, sdg: false, raised: '$4.2M', location: 'Casablanca, Morocco', team: 18, desc: 'Alternative credit scoring using ML to unlock lending for the unbanked.', rank: 8, tags: [] },
-  { name: 'GreenFreight', sector: 'DeepTech', stage: 'MVP', score: 77, sdg: true, raised: '$1.2M', location: 'Tunis, Tunisia', team: 7, desc: 'Electric freight routing optimization for last-mile logistics networks.', rank: 9, tags: ['SDG 11', 'SDG 13'] },
-  { name: 'MediAlert', sector: 'HealthTech', stage: 'Idea', score: 75, sdg: false, raised: 'Pre-seed', location: 'Johannesburg, SA', team: 3, desc: 'AI-powered early disease detection via wearable biosensors.', rank: 10, tags: [] },
-  { name: 'ChainCrop', sector: 'AgriTech', stage: 'MVP', score: 73, sdg: true, raised: '$600K', location: 'Nairobi, Kenya', team: 6, desc: 'Blockchain-enabled crop insurance and supply chain for smallholder farmers.', rank: 11, tags: ['SDG 1', 'SDG 2'] },
-  { name: 'MetaWork', sector: 'SaaS', stage: 'Revenue', score: 71, sdg: false, raised: '$2.8M', location: 'Lagos, Nigeria', team: 20, desc: 'Virtual workspace platform built for remote-first African teams.', rank: 12, tags: [] },
-];
+const startups = getExploreStartups();
 
 export default function ExploreStartups() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -25,6 +15,7 @@ export default function ExploreStartups() {
   const [selectedStage, setSelectedStage] = useState('All');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sdgOnly, setSdgOnly] = useState(false);
+  const [modalStartupId, setModalStartupId] = useState<number | null>(null);
 
   const filtered = startups.filter((s) => {
     const matchSearch = s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -105,7 +96,12 @@ export default function ExploreStartups() {
         {viewMode === 'grid' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filtered.map((startup) => (
-              <div key={startup.name} className="bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-6 card-hover cursor-pointer">
+              <div
+                key={startup.id}
+                className="bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-6 card-hover cursor-pointer group relative"
+              >
+                <Link to={`/startup/profile/${startup.id}`} className="block absolute inset-0 z-0" aria-label={`View ${startup.name} profile`} />
+                <div className="relative z-10 pointer-events-none">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-gradient-to-br from-[#8b5cf6]/20 to-[#7c3aed]/20 border border-[#8b5cf6]/20 rounded-xl flex items-center justify-center text-[#8b5cf6] font-bold text-lg">
@@ -144,13 +140,24 @@ export default function ExploreStartups() {
                   </div>
                   <div className="text-[#8b5cf6] text-sm font-semibold">{startup.raised}</div>
                 </div>
+                </div>
+                <div className="relative z-10 pt-3 flex justify-end pointer-events-auto">
+                  <button
+                    type="button"
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setModalStartupId(startup.id); }}
+                    className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-[#8b5cf6] transition-colors"
+                  >
+                    <Eye size={14} /> Quick view
+                  </button>
+                </div>
               </div>
             ))}
           </div>
         ) : (
           <div className="space-y-3">
             {filtered.map((startup) => (
-              <div key={startup.name} className="flex items-center gap-5 bg-[#0f0f1e] border border-[#1c1c3a] rounded-xl px-6 py-4 card-hover cursor-pointer">
+              <div key={startup.id} className="flex items-center gap-5 bg-[#0f0f1e] border border-[#1c1c3a] rounded-xl px-6 py-4 card-hover cursor-pointer group">
+              <Link to={`/startup/profile/${startup.id}`} className="flex flex-1 items-center gap-5 min-w-0" aria-label={`View ${startup.name}`}>
                 <div className={`text-xl font-black min-w-[2.5rem] text-center ${startup.rank <= 3 ? 'text-[#8b5cf6]' : 'text-gray-600'}`}>
                   #{startup.rank}
                 </div>
@@ -176,10 +183,20 @@ export default function ExploreStartups() {
                     <span className="text-[#8b5cf6] font-bold">{startup.score}</span>
                   </div>
                 </div>
+              </Link>
+              <button
+                type="button"
+                onClick={() => setModalStartupId(startup.id)}
+                className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-[#8b5cf6] transition-colors shrink-0"
+              >
+                <Eye size={14} /> Quick view
+              </button>
               </div>
             ))}
           </div>
         )}
+
+        <StartupProfileModal startupId={modalStartupId} onClose={() => setModalStartupId(null)} />
 
         {filtered.length === 0 && (
           <div className="text-center py-20">
