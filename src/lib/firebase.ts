@@ -15,18 +15,10 @@ function getApp(): FirebaseApp {
     throw new Error('Firebase is not configured. Set VITE_FIREBASE_* env vars in your .env file.');
   }
   _app = initializeApp(firebaseConfig);
-  // Initialize Analytics if measurementId is set
   if (firebaseConfig.measurementId) {
     _analytics = getAnalytics(_app);
   }
   return _app;
-}
-
-export function getFirebaseAnalytics(): Analytics | null {
-  if (_analytics) return _analytics;
-  if (!isFirebaseConfigured() || !firebaseConfig.measurementId) return null;
-  getApp(); // ensures analytics is initialized
-  return _analytics;
 }
 
 export function getFirebaseAuth(): Auth {

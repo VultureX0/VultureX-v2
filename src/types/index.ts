@@ -2,4 +2,4 @@ export type { Founder, Milestone, StartupProfileData, ExploreStartup, UserStartu
 export { defaultUserStartupProfile } from './startup';
 export type { InvestorType, InvestorProfile } from './investor';
 export { defaultInvestorProfile } from './investor';
-export type { AuthUser, SignUpInput, SignInInput, ConfirmSignUpInput, AuthState } from './auth';
+export type { AuthUser, SignUpInput, SignInInput } from './auth';

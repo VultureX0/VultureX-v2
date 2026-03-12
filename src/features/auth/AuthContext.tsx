@@ -37,7 +37,6 @@ type AuthContextValue = {
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, role: 'startup' | 'investor') => Promise<void>;
-  confirmSignUp: (email: string, code: string) => Promise<void>;
   signOut: () => void;
   error: string | null;
   clearError: () => void;
@@ -89,16 +88,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     []
   );
 
-  const handleConfirmSignUp = useCallback(async (email: string, code: string) => {
-    setError(null);
-    try {
-      await authService.confirmSignUp({ email, code });
-    } catch (err) {
-      setError(friendlyError(err));
-      throw err;
-    }
-  }, []);
-
   const handleSignOut = useCallback(() => {
     authService.signOut();
     setUser(null);
@@ -115,7 +104,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         signIn: handleSignIn,
         signUp: handleSignUp,
-        confirmSignUp: handleConfirmSignUp,
         signOut: handleSignOut,
         error,
         clearError,

@@ -29,7 +29,12 @@ export default function InvestorOnboarding() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-    await setProfile(form);
+    try {
+      await setProfile(form);
+    } catch (err) {
+      console.error('Failed to save investor profile:', err);
+    }
+    // Navigate regardless — optimistic state + localStorage are already set
     navigate('/investor-dashboard', { replace: true });
   };
 

@@ -2,16 +2,14 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
-  sendEmailVerification,
   sendPasswordResetEmail,
-  confirmPasswordReset,
   onAuthStateChanged,
   type User,
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { getFirebaseAuth, getDb } from '../../lib/firebase';
 import { isFirebaseConfigured } from '../../config/firebase';
-import type { AuthUser, SignUpInput, SignInInput, ConfirmSignUpInput } from '../../types';
+import type { AuthUser, SignUpInput, SignInInput } from '../../types';
 
 const STORAGE_KEY = 'vx-auth-user';
 
@@ -41,7 +39,6 @@ function firebaseUserToAuthUser(fbUser: User, role: AuthUser['role'] = 'startup'
     id: fbUser.uid,
     email: fbUser.email ?? '',
     role,
-    emailVerified: fbUser.emailVerified,
   };
 }
 
@@ -52,7 +49,6 @@ export async function signUp(input: SignUpInput): Promise<void> {
       id: crypto.randomUUID(),
       email: input.email,
       role: input.role,
-      emailVerified: false,
     };
     persistUser(mockUser);
     return;
@@ -69,28 +65,7 @@ export async function signUp(input: SignUpInput): Promise<void> {
     createdAt: new Date().toISOString(),
   });
 
-  // Send verification email
-  await sendEmailVerification(credential.user);
-
   persistUser(firebaseUserToAuthUser(credential.user, input.role));
-}
-
-/** Confirm sign up — Firebase auto-verifies via email link, so this is a no-op/check */
-export async function confirmSignUp(_input: ConfirmSignUpInput): Promise<void> {
-  if (!isFirebaseConfigured()) {
-    const user = loadPersistedUser();
-    if (user) persistUser({ ...user, emailVerified: true });
-    return;
-  }
-  // Firebase handles email verification via links, not codes.
-  // If you need code-based verification, use a Cloud Function.
-  // For now, just reload to pick up verified status.
-  const auth = getFirebaseAuth();
-  if (auth.currentUser) {
-    await auth.currentUser.reload();
-    const role = await getUserRole(auth.currentUser.uid);
-    persistUser(firebaseUserToAuthUser(auth.currentUser, role));
-  }
 }
 
 /** Sign in */
@@ -101,7 +76,6 @@ export async function signIn(input: SignInInput): Promise<AuthUser> {
       id: existing?.id ?? crypto.randomUUID(),
       email: input.email,
       role: existing?.role ?? 'startup',
-      emailVerified: true,
     };
     persistUser(mockUser);
     return mockUser;
@@ -157,13 +131,6 @@ export async function forgotPassword(email: string): Promise<void> {
   if (!isFirebaseConfigured()) return;
   const auth = getFirebaseAuth();
   await sendPasswordResetEmail(auth, email);
-}
-
-/** Confirm new password with reset code */
-export async function confirmPassword(_email: string, code: string, newPassword: string): Promise<void> {
-  if (!isFirebaseConfigured()) return;
-  const auth = getFirebaseAuth();
-  await confirmPasswordReset(auth, code, newPassword);
 }
 
 /** Helper: fetch role from Firestore users collection */

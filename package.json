@@ -1,5 +1,5 @@
 {
-  "name": "youware-react-template",
+  "name": "vulturex",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,22 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.18",
-    "cannon-es": "^0.20.0",
-    "clsx": "^2.1.0",
     "firebase": "^11.0.0",
     "framer-motion": "^11.0.8",
-    "gsap": "^3.13.0",
     "lucide-react": "^0.533.0",
-    "matter-js": "^0.20.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.30.1",
-    "three": "^0.179.1",
-    "zod": "^3.25.67"
+    "react-router-dom": "^6.30.1"
   },
   "devDependencies": {
-    "@types/matter-js": "^0.20.0",
     "@types/node": "^24.0.14",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",

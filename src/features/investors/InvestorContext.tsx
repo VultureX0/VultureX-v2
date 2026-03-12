@@ -28,7 +28,12 @@ export function InvestorProvider({ children }: { children: ReactNode }) {
   const setProfile = useCallback(async (p: InvestorProfile) => {
     const withDate = { ...p, submittedAt: new Date().toISOString() };
     setProfileState(withDate);
-    await investorService.saveInvestorProfile(withDate);
+    try {
+      await investorService.saveInvestorProfile(withDate);
+    } catch (err) {
+      console.error('Remote save failed (local cache is intact):', err);
+      throw err;
+    }
   }, []);
 
   const clearProfile = useCallback(() => {

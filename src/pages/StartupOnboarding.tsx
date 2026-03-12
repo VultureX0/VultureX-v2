@@ -1,19 +1,31 @@
 import type { FormEvent } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStartup } from '../features/startups';
 import type { UserStartupProfile, Founder } from '../types';
 import { defaultUserStartupProfile } from '../types';
-import { Building2, User, BarChart3, DollarSign, FileText, Plus, X } from 'lucide-react';
+import { Building2, User, BarChart3, DollarSign, FileText, Plus, X, Loader2 } from 'lucide-react';
 
 const SECTORS = ['SaaS', 'Fintech', 'AI', 'Healthtech', 'Web3', 'Consumer', 'DeepTech', 'CleanTech', 'EdTech', 'AgriTech', 'Impact'];
 const STAGES = ['Idea', 'MVP', 'Revenue', 'Scaling'];
 
 export default function StartupOnboarding() {
   const navigate = useNavigate();
-  const { profile: existing, setProfile } = useStartup();
+  const { profile: existing, isLoading, setProfile } = useStartup();
   const [form, setForm] = useState<UserStartupProfile>(existing ?? defaultUserStartupProfile);
   const [submitting, setSubmitting] = useState(false);
+  const [saveError, setSaveError] = useState('');
+  const [hydrated, setHydrated] = useState(!isLoading);
+
+  // Sync form state when the existing profile finishes loading (edit mode)
+  useEffect(() => {
+    if (!isLoading && existing && !hydrated) {
+      setForm(existing);
+      setHydrated(true);
+    } else if (!isLoading) {
+      setHydrated(true);
+    }
+  }, [isLoading, existing, hydrated]);
 
   const update = (patch: Partial<UserStartupProfile>) => setForm((f) => ({ ...f, ...patch }));
 
@@ -28,14 +40,27 @@ export default function StartupOnboarding() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setSaveError('');
     setSubmitting(true);
     try {
       await setProfile(form);
-      navigate('/dashboard', { replace: true });
+    } catch (err) {
+      console.error('Failed to save profile:', err);
+      setSaveError('Could not save your profile. Your changes are saved locally — please try again later.');
     } finally {
       setSubmitting(false);
     }
+    // Navigate regardless — optimistic state + localStorage are already set
+    navigate('/dashboard', { replace: true });
   };
+
+  if (!hydrated) {
+    return (
+      <div className="min-h-screen pt-20 bg-[#050511] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-[#8b5cf6] animate-spin" />
+      </div>
+    );
+  }
 
   const inputClass =
     'w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 text-sm focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all';
@@ -365,6 +390,12 @@ export default function StartupOnboarding() {
               </div>
             </div>
           </section>
+
+          {saveError && (
+            <div className="rounded-xl bg-red-500/10 border border-red-500/30 px-4 py-3 text-sm text-red-300">
+              {saveError}
+            </div>
+          )}
 
           <button
             type="submit"

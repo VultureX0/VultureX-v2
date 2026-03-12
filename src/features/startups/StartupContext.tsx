@@ -37,7 +37,12 @@ export function StartupProvider({ children }: { children: ReactNode }) {
       if (!user) return;
       const withDate = { ...p, updatedAt: new Date().toISOString() };
       setProfileState(withDate);
-      await startupService.saveUserStartupProfile(user.id, withDate);
+      try {
+        await startupService.saveUserStartupProfile(user.id, withDate);
+      } catch (err) {
+        console.error('Remote save failed (local cache is intact):', err);
+        throw err; // let caller decide how to handle
+      }
     },
     [user],
   );
