@@ -122,6 +122,11 @@ export function signOut(): void {
     firebaseSignOut(auth);
   }
   persistUser(null);
+  // Clear all cached profile data
+  try {
+    localStorage.removeItem('vx-investor-profile');
+    localStorage.removeItem('vx-my-startup');
+  } catch { /* ignore */ }
 }
 
 /** Check if there's a valid current session and return the user */

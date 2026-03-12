@@ -56,10 +56,15 @@ service cloud.firestore {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
-    // Startups: anyone can read, only authenticated users can write
+    // Startups (public catalog): anyone can read, only authenticated users can write
     match /startups/{startupId} {
       allow read: if true;
       allow write: if request.auth != null;
+    }
+
+    // Startup profiles (user's own): only the owner can read/write
+    match /startup_profiles/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
     // Investors: only the owner can read/write (matched by email)
@@ -107,12 +112,13 @@ npm run dev
 
 ## Firestore Collections
 
-The app uses 3 collections (created automatically on first write):
+The app uses 4 collections (created automatically on first write):
 
 | Collection | Document ID | Purpose |
 |---|---|---|
 | `users` | Firebase UID | Stores user role (startup/investor) |
-| `startups` | Startup ID (number as string) | Startup profiles |
+| `startup_profiles` | Firebase UID | The user's own startup profile (dashboard data) |
+| `startups` | Startup ID (number as string) | Public startup catalog for explore/browse |
 | `investors` | Email address | Investor profiles |
 
 ## Free Tier Limits (permanent, not 12-month)

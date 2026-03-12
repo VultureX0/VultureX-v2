@@ -10,6 +10,67 @@ export type Milestone = {
   title: string;
 };
 
+/** The logged-in startup user's own profile (stored in Firestore `startup_profiles/{uid}`) */
+export type UserStartupProfile = {
+  // Basic info
+  companyName: string;
+  tagline: string;
+  sector: string;
+  location: string;
+  stage: string;
+  website: string;
+  // Founder info
+  founderName: string;
+  founderRole: string;
+  founderBio: string;
+  founderLinkedIn: string;
+  // Team
+  team: Founder[];
+  // Traction
+  mrr: string;
+  activeUsers: string;
+  customers: string;
+  monthlyGrowthPercent: string;
+  // Financials
+  fundingRaised: string;
+  runway: string;
+  burnRate: string;
+  cashInBank: string;
+  // Pitch
+  problemStatement: string;
+  solutionDescription: string;
+  pitchDeckUrl: string;
+  demoVideoUrl: string;
+  // Meta
+  updatedAt?: string;
+};
+
+export const defaultUserStartupProfile: UserStartupProfile = {
+  companyName: '',
+  tagline: '',
+  sector: '',
+  location: '',
+  stage: '',
+  website: '',
+  founderName: '',
+  founderRole: '',
+  founderBio: '',
+  founderLinkedIn: '',
+  team: [],
+  mrr: '',
+  activeUsers: '',
+  customers: '',
+  monthlyGrowthPercent: '',
+  fundingRaised: '',
+  runway: '',
+  burnRate: '',
+  cashInBank: '',
+  problemStatement: '',
+  solutionDescription: '',
+  pitchDeckUrl: '',
+  demoVideoUrl: '',
+};
+
 export type StartupProfileData = {
   id: number;
   name: string;

@@ -21,8 +21,17 @@ import StartupDetail from './pages/StartupDetail';
 import StartupProfile from './pages/StartupProfile';
 import { AuthProvider, useAuth } from './features/auth';
 import { InvestorProvider } from './features/investors';
+import { StartupProvider } from './features/startups';
 import InvestorOnboarding from './pages/InvestorOnboarding';
 import InvestorDashboard from './pages/InvestorDashboard';
+import StartupOnboarding from './pages/StartupOnboarding';
+
+/** Route /dashboard based on user role */
+function RoleDashboard() {
+  const { user } = useAuth();
+  if (user?.role === 'investor') return <Navigate to="/investor-dashboard" replace />;
+  return <Dashboard />;
+}
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -56,6 +65,7 @@ function App() {
     <Router basename={import.meta.env.BASE_URL}>
       <AuthProvider>
         <InvestorProvider>
+        <StartupProvider>
         <div className="min-h-screen bg-[#06060f] text-gray-100">
           <CustomCursor />
           <Navbar />
@@ -78,7 +88,15 @@ function App() {
                   path="/dashboard"
                   element={
                     <RequireAuth>
-                      <Dashboard />
+                      <RoleDashboard />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/startup-onboarding"
+                  element={
+                    <RequireAuth>
+                      <StartupOnboarding />
                     </RequireAuth>
                   }
                 />
@@ -98,6 +116,7 @@ function App() {
           </main>
           <Footer />
         </div>
+        </StartupProvider>
         </InvestorProvider>
       </AuthProvider>
     </Router>
