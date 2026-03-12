@@ -2,6 +2,7 @@ import type { FormEvent } from 'react';
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../features/auth';
+import { forgotPassword } from '../services/auth';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -14,10 +15,13 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
+  const [resetError, setResetError] = useState('');
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     clearError();
+    setResetSent(false);
     setSubmitting(true);
     try {
       await signIn(email, password);
@@ -30,6 +34,20 @@ export default function Login() {
       // error is set in context
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    setResetError('');
+    if (!email.trim()) {
+      setResetError('Enter your email above first, then click Forgot password.');
+      return;
+    }
+    try {
+      await forgotPassword(email);
+      setResetSent(true);
+    } catch {
+      setResetError('Could not send reset email. Please check the address and try again.');
     }
   };
 
@@ -48,9 +66,14 @@ export default function Login() {
               {message}
             </p>
           )}
-          {error && (
+          {resetSent && (
+            <p className="mb-4 px-4 py-2.5 rounded-xl text-sm bg-emerald-500/10 border border-emerald-500/30 text-emerald-300">
+              Password reset link sent! Check your email.
+            </p>
+          )}
+          {(error || resetError) && (
             <p className="mb-4 px-4 py-2.5 rounded-xl text-sm bg-red-500/10 border border-red-500/30 text-red-300">
-              {error}
+              {error || resetError}
             </p>
           )}
           <p className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium bg-[#8b5cf6]/10 border border-[#8b5cf6]/30 text-[#c4b5fd] mb-4">
@@ -90,6 +113,7 @@ export default function Login() {
               </label>
               <button
                 type="button"
+                onClick={handleForgotPassword}
                 className="text-xs text-[#a78bfa] hover:text-[#c4b5fd] transition-colors"
               >
                 Forgot password?

@@ -1,19 +1,17 @@
 import type { FormEvent } from 'react';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../features/auth';
 
-type Step = 'form' | 'verify';
+type Step = 'form' | 'verify-email';
 
 export default function Signup() {
-  const navigate = useNavigate();
-  const { signUp, confirmSignUp, error, clearError } = useAuth();
+  const { signUp, error, clearError } = useAuth();
   const [step, setStep] = useState<Step>('form');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPw, setConfirmPw] = useState('');
   const [role, setRole] = useState<'startup' | 'investor'>('startup');
-  const [code, setCode] = useState('');
   const [localError, setLocalError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -34,21 +32,7 @@ export default function Signup() {
     setSubmitting(true);
     try {
       await signUp(email, password, role);
-      setStep('verify');
-    } catch {
-      // error is set in context
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleVerify = async (e: FormEvent) => {
-    e.preventDefault();
-    clearError();
-    setSubmitting(true);
-    try {
-      await confirmSignUp(email, code);
-      navigate('/login', { state: { message: 'Account verified! Please sign in.' } });
+      setStep('verify-email');
     } catch {
       // error is set in context
     } finally {
@@ -71,12 +55,12 @@ export default function Signup() {
             Join Vulture X
           </p>
           <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3">
-            {step === 'form' ? 'Create your account' : 'Verify your email'}
+            {step === 'form' ? 'Create your account' : 'Check your email'}
           </h1>
           <p className="text-sm text-gray-400">
             {step === 'form'
               ? 'Get started as a startup or investor on the platform.'
-              : `We sent a verification code to ${email}`}
+              : `We've sent a verification link to ${email}`}
           </p>
         </div>
 
@@ -89,6 +73,7 @@ export default function Signup() {
         {step === 'form' ? (
           <form
             onSubmit={handleSignUp}
+            autoComplete="on"
             className="bg-[#0b0b18]/90 border border-[#1c1c3a] rounded-2xl p-6 sm:p-7 shadow-[0_0_40px_rgba(15,23,42,0.8)] backdrop-blur neon-border space-y-5"
           >
             {/* Role selector */}
@@ -169,35 +154,25 @@ export default function Signup() {
             </button>
           </form>
         ) : (
-          <form
-            onSubmit={handleVerify}
-            className="bg-[#0b0b18]/90 border border-[#1c1c3a] rounded-2xl p-6 sm:p-7 shadow-[0_0_40px_rgba(15,23,42,0.8)] backdrop-blur neon-border space-y-5"
-          >
-            <div>
-              <label htmlFor="code" className="block text-sm font-medium text-gray-300 mb-1.5">
-                Verification Code
-              </label>
-              <input
-                id="code"
-                type="text"
-                required
-                autoComplete="one-time-code"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#050511] border border-[#1c1c3a] text-sm text-gray-100 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all text-center tracking-[0.3em] text-lg"
-                placeholder="123456"
-                maxLength={6}
-              />
+          <div className="bg-[#0b0b18]/90 border border-[#1c1c3a] rounded-2xl p-6 sm:p-7 shadow-[0_0_40px_rgba(15,23,42,0.8)] backdrop-blur neon-border space-y-5 text-center">
+            <div className="w-16 h-16 mx-auto rounded-full bg-[#8b5cf6]/10 border border-[#8b5cf6]/30 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 text-[#8b5cf6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+              </svg>
             </div>
-
-            <button
-              type="submit"
-              disabled={submitting}
-              className="w-full mt-2 px-4 py-2.5 text-sm font-semibold rounded-xl bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-white shadow-[0_0_30px_rgba(139,92,246,0.35)] hover:opacity-90 transition-all disabled:opacity-50"
+            <p className="text-sm text-gray-300">
+              Click the link in the email to verify your account, then sign in.
+            </p>
+            <p className="text-xs text-gray-500">
+              Didn&apos;t receive it? Check your spam folder.
+            </p>
+            <Link
+              to="/login"
+              className="inline-block mt-2 px-6 py-2.5 text-sm font-semibold rounded-xl bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-white shadow-[0_0_30px_rgba(139,92,246,0.35)] hover:opacity-90 transition-all"
             >
-              {submitting ? 'Verifying...' : 'Verify Email'}
-            </button>
-          </form>
+              Go to Sign In
+            </Link>
+          </div>
         )}
 
         <p className="mt-5 text-xs text-center text-gray-500">

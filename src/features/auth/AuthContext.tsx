@@ -3,6 +3,34 @@ import { createContext, useContext, useEffect, useState, useCallback } from 'rea
 import type { AuthUser } from '../../types';
 import * as authService from '../../services/auth';
 
+/** Map Firebase error codes to user-friendly messages */
+function friendlyError(err: unknown): string {
+  const msg = err instanceof Error ? err.message : String(err);
+  const code = msg.match(/\(auth\/([^)]+)\)/)?.[1];
+  switch (code) {
+    case 'invalid-credential':
+    case 'wrong-password':
+    case 'user-not-found':
+      return 'Incorrect email or password. Please try again.';
+    case 'email-already-in-use':
+      return 'An account with this email already exists. Try signing in instead.';
+    case 'weak-password':
+      return 'Password is too weak. Use at least 6 characters.';
+    case 'invalid-email':
+      return 'Please enter a valid email address.';
+    case 'user-disabled':
+      return 'This account has been disabled. Contact support.';
+    case 'too-many-requests':
+      return 'Too many attempts. Please wait a moment and try again.';
+    case 'network-request-failed':
+      return 'Network error. Check your internet connection.';
+    case 'requires-recent-login':
+      return 'Please sign in again to continue.';
+    default:
+      return msg.replace(/^Firebase:\s*/i, '').replace(/\s*\(auth\/[^)]+\)\.?$/, '') || 'Something went wrong. Please try again.';
+  }
+}
+
 type AuthContextValue = {
   user: AuthUser | null;
   isAuthenticated: boolean;
@@ -38,8 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const u = await authService.signIn({ email, password });
       setUser(u);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Sign in failed';
-      setError(msg);
+      setError(friendlyError(err));
       throw err;
     } finally {
       setIsLoading(false);
@@ -53,8 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         await authService.signUp({ email, password, role });
       } catch (err) {
-        const msg = err instanceof Error ? err.message : 'Sign up failed';
-        setError(msg);
+        setError(friendlyError(err));
         throw err;
       } finally {
         setIsLoading(false);
@@ -68,8 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await authService.confirmSignUp({ email, code });
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Verification failed';
-      setError(msg);
+      setError(friendlyError(err));
       throw err;
     }
   }, []);
