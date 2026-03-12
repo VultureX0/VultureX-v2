@@ -1,22 +1,35 @@
+import type { FormEvent } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../features/auth';
 
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
+  const { signIn, error, clearError } = useAuth();
   const from = (location.state as { from?: string })?.from;
   const message = (location.state as { message?: string })?.message;
   const startup = (location.state as { startup?: { name: string } })?.startup;
   const returnToStartup = (location.state as { returnToStartup?: boolean })?.returnToStartup;
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login();
-    if (returnToStartup && startup?.name) {
-      navigate(`/startup/view/${encodeURIComponent(startup.name)}`, { state: { startup }, replace: true });
-    } else {
-      navigate(from || '/dashboard', { replace: true });
+    clearError();
+    setSubmitting(true);
+    try {
+      await signIn(email, password);
+      if (returnToStartup && startup?.name) {
+        navigate(`/startup/view/${encodeURIComponent(startup.name)}`, { state: { startup }, replace: true });
+      } else {
+        navigate(from || '/dashboard', { replace: true });
+      }
+    } catch {
+      // error is set in context
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -33,6 +46,11 @@ export default function Login() {
           {message && (
             <p className="mb-4 px-4 py-2.5 rounded-xl text-sm bg-amber-500/10 border border-amber-500/30 text-amber-200">
               {message}
+            </p>
+          )}
+          {error && (
+            <p className="mb-4 px-4 py-2.5 rounded-xl text-sm bg-red-500/10 border border-red-500/30 text-red-300">
+              {error}
             </p>
           )}
           <p className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium bg-[#8b5cf6]/10 border border-[#8b5cf6]/30 text-[#c4b5fd] mb-4">
@@ -58,6 +76,8 @@ export default function Login() {
               type="email"
               required
               autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-3.5 py-2.5 rounded-xl bg-[#050511] border border-[#1c1c3a] text-sm text-gray-100 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all"
               placeholder="you@example.com"
             />
@@ -81,6 +101,8 @@ export default function Login() {
               type="password"
               required
               autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full px-3.5 py-2.5 rounded-xl bg-[#050511] border border-[#1c1c3a] text-sm text-gray-100 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all"
               placeholder="••••••••"
             />
@@ -88,19 +110,20 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full mt-2 px-4 py-2.5 text-sm font-semibold rounded-xl bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-white shadow-[0_0_30px_rgba(139,92,246,0.35)] hover:opacity-90 transition-all"
+            disabled={submitting}
+            className="w-full mt-2 px-4 py-2.5 text-sm font-semibold rounded-xl bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-white shadow-[0_0_30px_rgba(139,92,246,0.35)] hover:opacity-90 transition-all disabled:opacity-50"
           >
-            Continue
+            {submitting ? 'Signing in...' : 'Continue'}
           </button>
         </form>
 
         <p className="mt-5 text-xs text-center text-gray-500">
           Don&apos;t have an account?{' '}
           <Link
-            to="/for-startups"
+            to="/signup"
             className="text-[#c4b5fd] hover:text-white font-medium transition-colors"
           >
-            Get started
+            Create an account
           </Link>
         </p>
       </div>

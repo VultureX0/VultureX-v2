@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, TrendingUp, Trophy, Users, Star, ChevronRight, Globe, Target, BarChart3, BookOpen, Shield, DollarSign, Zap } from 'lucide-react';
+import type { ReactNode, MouseEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
 /* ---- Particle Background ---- */
@@ -98,10 +99,10 @@ function OrbitRings() {
 }
 
 /* ---- 3D Tilt Card ---- */
-function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
+function TiltCard({ children, className }: { children: ReactNode; className?: string }) {
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
     const el = cardRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();

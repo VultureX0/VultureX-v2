@@ -1,3 +1,4 @@
+import type { ComponentType } from 'react';
 import { Routes, Route, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -10,7 +11,7 @@ import {
   Building2,
   LogOut,
 } from 'lucide-react';
-import { useInvestor } from '../context/InvestorContext';
+import { useInvestor } from '../features/investors';
 
 const investorTypeLabels: Record<string, string> = {
   vc: 'Venture Capital / Investment Firm',
@@ -217,7 +218,7 @@ function ProfileSummary() {
   );
 }
 
-function Placeholder({ title, icon: Icon }: { title: string; icon: React.ComponentType<{ size?: number; className?: string }> }) {
+function Placeholder({ title, icon: Icon }: { title: string; icon: ComponentType<{ size?: number; className?: string }> }) {
   return (
     <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-12 text-center">
       <Icon size={48} className="mx-auto text-gray-600 mb-4" />

@@ -1,5 +1,5 @@
 import { Users, Linkedin } from 'lucide-react';
-import type { Founder } from '../../data/startups';
+import type { Founder } from '../../types';
 
 type Props = { team: Founder[] };
 

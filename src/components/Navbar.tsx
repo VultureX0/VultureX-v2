@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, LogOut } from 'lucide-react';
+import { useAuth } from '../features/auth';
 import logo from '../assets/logo.png';
 
 const navLinks = [
@@ -25,6 +26,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, user, signOut } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -105,18 +107,37 @@ export default function Navbar() {
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center gap-3">
-            <Link
-              to="/login"
-              className="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link
-              to="/for-startups"
-              className="px-4 py-2 text-sm font-semibold bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black rounded-lg hover:opacity-90 transition-opacity"
-            >
-              Get Started
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <Link
+                  to="/dashboard"
+                  className="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={signOut}
+                  className="flex items-center gap-1.5 px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  <LogOut size={14} /> Sign Out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/signup"
+                  className="px-4 py-2 text-sm font-semibold bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black rounded-lg hover:opacity-90 transition-opacity"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile menu toggle */}
@@ -164,18 +185,37 @@ export default function Navbar() {
               );
             })}
             <div className="pt-3 flex flex-col gap-2">
-              <Link
-                to="/login"
-                className="w-full px-4 py-2.5 text-sm border border-[#1c1c3a] rounded-lg text-gray-300 hover:text-white hover:border-[#8b5cf6]/30 transition-all text-center"
-              >
-                Sign In
-              </Link>
-              <Link
-                to="/for-startups"
-                className="w-full px-4 py-2.5 text-sm font-semibold bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black rounded-lg text-center"
-              >
-                Get Started
-              </Link>
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="w-full px-4 py-2.5 text-sm font-semibold bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black rounded-lg text-center"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={signOut}
+                    className="w-full px-4 py-2.5 text-sm border border-[#1c1c3a] rounded-lg text-gray-300 hover:text-white hover:border-[#8b5cf6]/30 transition-all text-center"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="w-full px-4 py-2.5 text-sm border border-[#1c1c3a] rounded-lg text-gray-300 hover:text-white hover:border-[#8b5cf6]/30 transition-all text-center"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="w-full px-4 py-2.5 text-sm font-semibold bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black rounded-lg text-center"
+                  >
+                    Get Started
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

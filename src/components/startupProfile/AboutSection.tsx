@@ -1,4 +1,4 @@
-import type { StartupProfileData } from '../../data/startups';
+import type { StartupProfileData } from '../../types';
 
 type Props = { startup: StartupProfileData };
 

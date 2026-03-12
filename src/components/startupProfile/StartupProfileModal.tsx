@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
-import { getStartupById } from '../../data/startups';
-import type { StartupProfileData } from '../../data/startups';
+import { getStartupById } from '../../services/startups';
+import type { StartupProfileData } from '../../types';
 import {
   HeroSection,
   AboutSection,
@@ -18,7 +18,19 @@ type Props = {
 };
 
 export default function StartupProfileModal({ startupId, onClose }: Props) {
-  const startup = startupId != null ? getStartupById(startupId) : null;
+  const [startup, setStartup] = useState<StartupProfileData | null>(null);
+
+  useEffect(() => {
+    if (startupId == null) {
+      setStartup(null);
+      return;
+    }
+    let cancelled = false;
+    getStartupById(startupId).then((s) => {
+      if (!cancelled) setStartup(s);
+    });
+    return () => { cancelled = true; };
+  }, [startupId]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => e.key === 'Escape' && onClose();

@@ -1,21 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Grid, List, MapPin, Eye } from 'lucide-react';
-import { getExploreStartups } from '../data/startups';
+import { getExploreStartups } from '../services/startups';
+import type { ExploreStartup } from '../types';
 import StartupProfileModal from '../components/startupProfile/StartupProfileModal';
 
 const sectors = ['All', 'SaaS', 'CleanTech', 'FinTech', 'HealthTech', 'AgriTech', 'Web3', 'EdTech', 'DeepTech'];
 const stages = ['All', 'Idea', 'MVP', 'Revenue', 'Scaling'];
 
-const startups = getExploreStartups();
-
 export default function ExploreStartups() {
+  const [startups, setStartups] = useState<ExploreStartup[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSector, setSelectedSector] = useState('All');
   const [selectedStage, setSelectedStage] = useState('All');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sdgOnly, setSdgOnly] = useState(false);
   const [modalStartupId, setModalStartupId] = useState<number | null>(null);
+
+  useEffect(() => {
+    getExploreStartups().then(setStartups);
+  }, []);
 
   const filtered = startups.filter((s) => {
     const matchSearch = s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||

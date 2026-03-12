@@ -1,6 +1,8 @@
+import type { FormEvent } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useInvestor, defaultProfile, type InvestorProfile, type InvestorType } from '../context/InvestorContext';
+import { useInvestor, defaultInvestorProfile } from '../features/investors';
+import type { InvestorProfile, InvestorType } from '../types';
 import { User, Building2, Target, FileText } from 'lucide-react';
 
 const SECTORS = ['SaaS', 'Fintech', 'AI', 'Healthtech', 'Web3', 'Consumer', 'DeepTech', 'CleanTech', 'EdTech', 'AgriTech', 'Impact'];
@@ -10,7 +12,7 @@ export default function InvestorOnboarding() {
   const navigate = useNavigate();
   const { setProfile } = useInvestor();
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [form, setForm] = useState<InvestorProfile>(defaultProfile);
+  const [form, setForm] = useState<InvestorProfile>(defaultInvestorProfile);
 
   const update = (patch: Partial<InvestorProfile>) => setForm((f) => ({ ...f, ...patch }));
 
@@ -24,10 +26,10 @@ export default function InvestorOnboarding() {
     return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-    setProfile(form);
+    await setProfile(form);
     navigate('/investor-dashboard', { replace: true });
   };
 

@@ -1,8 +1,8 @@
 import { useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { getStartupById } from '../data/startups';
-import type { StartupProfileData } from '../data/startups';
+import { getStartupById } from '../services/startups';
+import type { StartupProfileData } from '../types';
 import {
   HeroSection,
   AboutSection,
@@ -66,11 +66,14 @@ export default function StartupProfilePage() {
       setStartup(null);
       return;
     }
-    // Simulate async load (e.g. API) for loading state
-    const t = setTimeout(() => {
-      setStartup(getStartupById(id) ?? null);
-    }, 400);
-    return () => clearTimeout(t);
+    // Load startup data
+    let cancelled = false;
+    const load = async () => {
+      const result = await getStartupById(id);
+      if (!cancelled) setStartup(result);
+    };
+    load();
+    return () => { cancelled = true; };
   }, [id]);
 
   if (startup === undefined) return <LoadingState />;

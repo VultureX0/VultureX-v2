@@ -1,3 +1,4 @@
+import type { ComponentType } from 'react';
 import { useState } from 'react';
 import { BarChart3, DollarSign, FileText, Settings, Users, LayoutDashboard, Briefcase } from 'lucide-react';
 
@@ -228,7 +229,7 @@ export default function Dashboard() {
 }
 
 type SidebarItemProps = {
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: ComponentType<{ size?: number; className?: string }>;
   label: string;
   active?: boolean;
 };

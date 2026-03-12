@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -14,11 +15,12 @@ import Impact from './pages/Impact';
 import About from './pages/About';
 import { useScrollReveal } from './hooks/useAnimations';
 import Login from './pages/Login';
+import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import StartupDetail from './pages/StartupDetail';
 import StartupProfile from './pages/StartupProfile';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import { InvestorProvider } from './context/InvestorContext';
+import { AuthProvider, useAuth } from './features/auth';
+import { InvestorProvider } from './features/investors';
 import InvestorOnboarding from './pages/InvestorOnboarding';
 import InvestorDashboard from './pages/InvestorDashboard';
 
@@ -33,7 +35,7 @@ function ScrollToTop() {
   return null;
 }
 
-function AnimationProvider({ children }: { children: React.ReactNode }) {
+function AnimationProvider({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   useScrollReveal(pathname);
   return <>{children}</>;
@@ -51,7 +53,7 @@ function RequireAuth({ children }: { children: JSX.Element }) {
 
 function App() {
   return (
-    <Router>
+    <Router basename={import.meta.env.BASE_URL}>
       <AuthProvider>
         <InvestorProvider>
         <div className="min-h-screen bg-[#06060f] text-gray-100">
@@ -71,6 +73,7 @@ function App() {
                 <Route path="/impact" element={<Impact />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
                 <Route
                   path="/dashboard"
                   element={
