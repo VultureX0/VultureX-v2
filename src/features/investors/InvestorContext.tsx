@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import type { InvestorProfile } from '../../types';
 import { defaultInvestorProfile } from '../../types';
+import { useAuth } from '../auth';
 import * as investorService from '../../services/investors';
 
 type InvestorContextValue = {
@@ -14,16 +15,23 @@ type InvestorContextValue = {
 const InvestorContext = createContext<InvestorContextValue | undefined>(undefined);
 
 export function InvestorProvider({ children }: { children: ReactNode }) {
+  const { user } = useAuth();
   const [profile, setProfileState] = useState<InvestorProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (!user || user.role !== 'investor') {
+      setProfileState(null);
+      setIsLoading(false);
+      return;
+    }
+    setIsLoading(true);
     investorService
-      .getInvestorProfile()
+      .getInvestorProfile(user.email)
       .then((p) => setProfileState(p))
       .catch(() => setProfileState(null))
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [user]);
 
   const setProfile = useCallback(async (p: InvestorProfile) => {
     const withDate = { ...p, submittedAt: new Date().toISOString() };

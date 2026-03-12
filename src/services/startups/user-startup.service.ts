@@ -20,24 +20,29 @@ export async function saveUserStartupProfile(uid: string, profile: UserStartupPr
 
 /** Load the current user's startup profile by UID. Falls back to localStorage. */
 export async function getUserStartupProfile(uid?: string): Promise<UserStartupProfile | null> {
-  // Try localStorage cache first
+  // If Firebase is configured, always try Firestore first for fresh data
+  if (isFirebaseConfigured() && uid) {
+    try {
+      const snap = await getDoc(doc(getDb(), COLLECTION, uid));
+      if (snap.exists()) {
+        const profile = snap.data() as UserStartupProfile;
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+        } catch { /* ignore */ }
+        return profile;
+      }
+    } catch {
+      // Firestore failed — fall through to localStorage cache
+    }
+  }
+
+  // Fallback to localStorage cache
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) return JSON.parse(raw) as UserStartupProfile;
   } catch { /* ignore */ }
 
-  if (!isFirebaseConfigured() || !uid) return null;
-
-  const snap = await getDoc(doc(getDb(), COLLECTION, uid));
-  if (!snap.exists()) return null;
-
-  const profile = snap.data() as UserStartupProfile;
-  // Cache locally
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
-  } catch { /* ignore */ }
-
-  return profile;
+  return null;
 }
 
 /** Clear local cache (used on sign-out). */

@@ -24,21 +24,29 @@ export async function saveInvestorProfile(profile: InvestorProfile): Promise<voi
 
 /** Load investor profile by email. Falls back to localStorage. */
 export async function getInvestorProfile(email?: string): Promise<InvestorProfile | null> {
-  // Try localStorage first (cache / offline fallback)
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const cached = JSON.parse(raw) as InvestorProfile;
-      if (!email || cached.email === email) return cached;
+  // If Firebase is configured, always try Firestore first for fresh data
+  if (isFirebaseConfigured() && email) {
+    try {
+      const snap = await getDoc(doc(getDb(), COLLECTION, email));
+      if (snap.exists()) {
+        const profile = snap.data() as InvestorProfile;
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+        } catch { /* ignore */ }
+        return profile;
+      }
+    } catch {
+      // Firestore failed — fall through to localStorage cache
     }
-  } catch {
-    // ignore
   }
 
-  if (!isFirebaseConfigured() || !email) return null;
+  // Fallback to localStorage cache
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw) as InvestorProfile;
+  } catch { /* ignore */ }
 
-  const snap = await getDoc(doc(getDb(), COLLECTION, email));
-  return snap.exists() ? (snap.data() as InvestorProfile) : null;
+  return null;
 }
 
 /** Clear local investor profile cache */

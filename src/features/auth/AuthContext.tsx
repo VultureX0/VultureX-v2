@@ -78,6 +78,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(true);
       try {
         await authService.signUp({ email, password, role });
+        const u = await authService.getCurrentUser();
+        if (u) setUser(u);
       } catch (err) {
         setError(friendlyError(err));
         throw err;

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TrendingUp, Flame, ArrowUp } from 'lucide-react';
+import { useAuth } from '../features/auth';
 
 const categories = [
   { id: 'overall', label: 'Top 10 Overall', icon: '🏆' },
@@ -103,17 +104,21 @@ export default function Trending() {
   const [activeCategory, setActiveCategory] = useState('overall');
   const list = data[activeCategory] || data.overall;
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   const handleStartupClick = (startup: (typeof list)[0]) => {
-    // Always require login: send to login page; after login they are redirected to this startup (see Login.tsx)
-    navigate('/login', {
-      state: {
-        from: '/trending',
-        message: 'Please log in to view startup details.',
-        startup,
-        returnToStartup: true,
-      },
-    });
+    if (isAuthenticated) {
+      navigate(`/startup/view/${encodeURIComponent(startup.name)}`, { state: { startup } });
+    } else {
+      navigate('/login', {
+        state: {
+          from: '/trending',
+          message: 'Please log in to view startup details.',
+          startup,
+          returnToStartup: true,
+        },
+      });
+    }
   };
 
   return (
