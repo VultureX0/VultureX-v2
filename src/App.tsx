@@ -25,8 +25,11 @@ import { StartupProvider } from './features/startups';
 import InvestorOnboarding from './pages/InvestorOnboarding';
 import InvestorDashboard from './pages/InvestorDashboard';
 import StartupOnboarding from './pages/StartupOnboarding';
+import { StartupMandateProvider } from './context/StartupMandateContext';
+import StartupMandate from './pages/StartupMandate';
+import { ImpactVerificationProvider } from './context/ImpactVerificationContext';
+import ImpactVerification from './pages/ImpactVerification';
 
-/** Route /dashboard based on user role */
 function RoleDashboard() {
   const { user } = useAuth();
   if (user?.role === 'investor') return <Navigate to="/investor-dashboard" replace />;
@@ -36,7 +39,6 @@ function RoleDashboard() {
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
-    // Defer so the new route has painted; ensures Home is visible from the top
     requestAnimationFrame(() => {
       window.scrollTo({ top: 0, behavior: 'instant' });
     });
@@ -74,6 +76,8 @@ function App() {
       <AuthProvider>
         <InvestorProvider>
         <StartupProvider>
+        <StartupMandateProvider>
+        <ImpactVerificationProvider>
         <div className="min-h-screen bg-[#06060f] text-gray-100">
           <CustomCursor />
           <Navbar />
@@ -93,7 +97,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route
-                  path="/dashboard"
+                  path="/dashboard/*"
                   element={
                     <RequireAuth>
                       <RoleDashboard />
@@ -119,11 +123,15 @@ function App() {
                 />
                 <Route path="/investor-onboarding" element={<InvestorOnboarding />} />
                 <Route path="/investor-dashboard/*" element={<InvestorDashboard />} />
+                <Route path="/startup-mandate" element={<StartupMandate />} />
+                <Route path="/impact-verification" element={<ImpactVerification />} />
               </Routes>
             </AnimationProvider>
           </main>
           <Footer />
         </div>
+        </ImpactVerificationProvider>
+        </StartupMandateProvider>
         </StartupProvider>
         </InvestorProvider>
       </AuthProvider>
@@ -132,5 +140,3 @@ function App() {
 }
 
 export default App;
-
-

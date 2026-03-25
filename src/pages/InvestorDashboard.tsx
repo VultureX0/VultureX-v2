@@ -10,8 +10,14 @@ import {
   Target,
   Building2,
   LogOut,
+  TrendingUp,
+  Star,
+  Bell,
+  Shield,
+  Globe,
+  ArrowRight,
 } from 'lucide-react';
-import { useInvestor } from '../features/investors';
+import { useInvestor } from '../context/InvestorContext';
 
 const investorTypeLabels: Record<string, string> = {
   vc: 'Venture Capital / Investment Firm',
@@ -79,6 +85,12 @@ function ProfileSummary() {
 
   return (
     <div className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <MetricCard label="Typical check size" value={`$${profile.checkSizeMin}K – $${profile.checkSizeMax}K`} icon={Wallet} />
+        <MetricCard label="Preferred sectors" value={profile.preferredSectors.length ? `${profile.preferredSectors.length} selected` : 'Not set'} icon={Target} />
+        <MetricCard label="Cold pitches" value={profile.openToColdPitches ? 'Open' : 'Closed'} icon={Bell} />
+      </div>
+
       <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
         <div className="flex items-center gap-2 text-[#60a5fa] mb-4">
           <User size={20} />
@@ -209,6 +221,38 @@ function ProfileSummary() {
         </div>
       )}
 
+      <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
+        <div className="flex items-center justify-between gap-4 mb-5">
+          <div>
+            <h3 className="text-lg font-semibold text-white">Recommended Startups</h3>
+            <p className="text-sm text-gray-500 mt-1">Matched from your sector preferences and platform activity.</p>
+          </div>
+          <Link to="/explore" className="text-sm text-[#60a5fa] hover:text-[#93c5fd] transition-colors inline-flex items-center gap-1">
+            Explore all <ArrowRight size={14} />
+          </Link>
+        </div>
+        <div className="space-y-3">
+          {getRecommendedStartups(profile.preferredSectors).map((startup) => (
+            <Link
+              key={startup.id}
+              to={`/startup/profile/${startup.id}`}
+              className="flex items-center justify-between gap-4 bg-[#09091a] border border-[#1c1c3a] rounded-xl px-4 py-3 hover:border-[#60a5fa]/30 hover:bg-[#101021] transition-all"
+            >
+              <div className="min-w-0">
+                <div className="text-white font-medium">{startup.name}</div>
+                <div className="text-xs text-gray-500 mt-0.5">
+                  {startup.sector} · {startup.stage} · {startup.location}
+                </div>
+              </div>
+              <div className="text-right shrink-0">
+                <div className="text-[#60a5fa] font-semibold">{startup.matchScore ?? startup.score}</div>
+                <div className="text-xs text-gray-500">match</div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
       {profile.submittedAt && (
         <p className="text-gray-500 text-xs">
           Profile submitted {new Date(profile.submittedAt).toLocaleDateString()}
@@ -226,6 +270,180 @@ function Placeholder({ title, icon: Icon }: { title: string; icon: ComponentType
       <p className="text-gray-500 text-sm max-w-sm mx-auto">This section is coming soon. Your data is saved and the dashboard is ready to expand.</p>
     </div>
   );
+}
+
+function InvestmentsView() {
+  const items = [
+    { name: 'SolarAI', stage: 'Due diligence', value: '$250K target', status: 'In review' },
+    { name: 'AgriSense', stage: 'Partner call', value: '$500K target', status: 'Meeting booked' },
+    { name: 'CodeStream', stage: 'Pipeline', value: '$150K target', status: 'Watching' },
+  ];
+
+  return (
+    <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
+      <div className="flex items-center gap-2 text-[#60a5fa] mb-5">
+        <TrendingUp size={20} />
+        <h3 className="text-lg font-semibold text-white">My Investments</h3>
+      </div>
+      <div className="space-y-3">
+        {items.map((item) => (
+          <div key={item.name} className="bg-[#09091a] border border-[#1c1c3a] rounded-xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <div className="text-white font-medium">{item.name}</div>
+              <div className="text-xs text-gray-500 mt-0.5">{item.stage}</div>
+            </div>
+            <div className="text-sm text-gray-300">{item.value}</div>
+            <span className="px-2.5 py-1 rounded-full text-xs bg-[#60a5fa]/10 text-[#93c5fd] border border-[#60a5fa]/20">
+              {item.status}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SavedStartupsView() {
+  const saved = STARTUP_PROFILES.slice(0, 4);
+
+  return (
+    <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
+      <div className="flex items-center gap-2 text-[#60a5fa] mb-5">
+        <Bookmark size={20} />
+        <h3 className="text-lg font-semibold text-white">Saved Startups</h3>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {saved.map((startup) => (
+          <Link
+            key={startup.id}
+            to={`/startup/profile/${startup.id}`}
+            className="bg-[#09091a] border border-[#1c1c3a] rounded-xl p-5 hover:border-[#60a5fa]/30 hover:bg-[#101021] transition-all"
+          >
+            <div className="flex items-start justify-between gap-3 mb-2">
+              <div>
+                <div className="text-white font-medium">{startup.name}</div>
+                <div className="text-xs text-gray-500">{startup.sector} · {startup.stage}</div>
+              </div>
+              <div className="text-[#60a5fa] text-sm font-semibold">{startup.matchScore ?? startup.score}</div>
+            </div>
+            <p className="text-sm text-gray-400 leading-relaxed">{startup.tagline}</p>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MessagesView() {
+  const messages = [
+    { from: 'Founders Desk', subject: 'New startups match your thesis', preview: 'Three clean tech startups now fit your check size and geography.' },
+    { from: 'SolarAI', subject: 'Thanks for saving our profile', preview: 'We would be happy to share our latest deck and pilot updates.' },
+    { from: 'Vulture X Team', subject: 'Your investor profile is 92% complete', preview: 'Add firm website and thesis details to improve recommendations.' },
+  ];
+
+  return (
+    <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
+      <div className="flex items-center gap-2 text-[#60a5fa] mb-5">
+        <MessageSquare size={20} />
+        <h3 className="text-lg font-semibold text-white">Messages</h3>
+      </div>
+      <div className="space-y-3">
+        {messages.map((message) => (
+          <div key={message.subject} className="bg-[#09091a] border border-[#1c1c3a] rounded-xl p-4">
+            <div className="flex items-center justify-between gap-3">
+              <div className="text-sm text-white font-medium">{message.subject}</div>
+              <div className="text-xs text-gray-500">{message.from}</div>
+            </div>
+            <p className="text-sm text-gray-400 mt-2">{message.preview}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SettingsView() {
+  const { clearProfile } = useInvestor();
+
+  return (
+    <div className="space-y-6">
+      <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
+        <div className="flex items-center gap-2 text-[#60a5fa] mb-5">
+          <Settings size={20} />
+          <h3 className="text-lg font-semibold text-white">Settings</h3>
+        </div>
+        <div className="space-y-4">
+          <ToggleRow icon={Bell} title="Startup match alerts" description="Get notified when new startups fit your thesis." enabled />
+          <ToggleRow icon={Globe} title="Weekly market digest" description="Receive curated market and portfolio updates every week." enabled />
+          <ToggleRow icon={Shield} title="Cold pitch access" description="Allow founders to send you introductory requests." enabled={false} />
+        </div>
+      </div>
+
+      <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
+        <h3 className="text-lg font-semibold text-white mb-2">Reset investor profile</h3>
+        <p className="text-sm text-gray-400 mb-4">
+          This clears your saved onboarding data from the current browser.
+        </p>
+        <button
+          type="button"
+          onClick={clearProfile}
+          className="px-4 py-2 rounded-xl border border-red-500/30 text-red-300 hover:bg-red-500/10 transition-colors"
+        >
+          Clear saved profile
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function MetricCard({
+  label,
+  value,
+  icon: Icon,
+}: {
+  label: string;
+  value: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+}) {
+  return (
+    <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-5">
+      <Icon size={18} className="text-[#60a5fa] mb-3" />
+      <div className="text-lg font-semibold text-white">{value}</div>
+      <div className="text-sm text-gray-500 mt-1">{label}</div>
+    </div>
+  );
+}
+
+function ToggleRow({
+  icon: Icon,
+  title,
+  description,
+  enabled,
+}: {
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+  title: string;
+  description: string;
+  enabled: boolean;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-4 bg-[#09091a] border border-[#1c1c3a] rounded-xl p-4">
+      <div className="flex items-start gap-3">
+        <Icon size={18} className="text-[#60a5fa] mt-0.5" />
+        <div>
+          <div className="text-white text-sm font-medium">{title}</div>
+          <div className="text-xs text-gray-500 mt-1">{description}</div>
+        </div>
+      </div>
+      <div className={`relative inline-flex h-6 w-11 items-center rounded-full ${enabled ? 'bg-[#60a5fa]' : 'bg-gray-700'}`}>
+        <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${enabled ? 'translate-x-5' : 'translate-x-1'}`} />
+      </div>
+    </div>
+  );
+}
+
+function getRecommendedStartups(preferredSectors: string[]) {
+  const preferred = STARTUP_PROFILES.filter((startup) => preferredSectors.includes(startup.sector));
+  return (preferred.length ? preferred : STARTUP_PROFILES).slice(0, 4);
 }
 
 function DashboardLayout() {
@@ -272,10 +490,10 @@ export default function InvestorDashboard() {
     <Routes>
       <Route element={<DashboardLayout />}>
         <Route index element={<ProfileSummary />} />
-        <Route path="investments" element={<Placeholder title="My Investments" icon={Wallet} />} />
-        <Route path="saved" element={<Placeholder title="Saved Startups" icon={Bookmark} />} />
-        <Route path="messages" element={<Placeholder title="Messages" icon={MessageSquare} />} />
-        <Route path="settings" element={<Placeholder title="Settings" icon={Settings} />} />
+        <Route path="investments" element={<InvestmentsView />} />
+        <Route path="saved" element={<SavedStartupsView />} />
+        <Route path="messages" element={<MessagesView />} />
+        <Route path="settings" element={<SettingsView />} />
       </Route>
     </Routes>
   );
