@@ -1,5 +1,5 @@
-import type { ComponentType } from 'react';
-import { Routes, Route, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Routes, Route, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import type { LucideIcon } from 'lucide-react';
 import {
   LayoutDashboard,
   Wallet,
@@ -11,13 +11,14 @@ import {
   Building2,
   LogOut,
   TrendingUp,
-  Star,
   Bell,
   Shield,
   Globe,
   ArrowRight,
 } from 'lucide-react';
 import { useInvestor } from '../context/InvestorContext';
+import { STARTUP_PROFILES } from '../services/startups';
+import type { StartupProfileData } from '../types';
 
 const investorTypeLabels: Record<string, string> = {
   vc: 'Venture Capital / Investment Firm',
@@ -146,7 +147,7 @@ function ProfileSummary() {
             <div>
               <span className="text-gray-500 block mb-1">Preferred Sectors</span>
               <div className="flex flex-wrap gap-2">
-                {profile.preferredSectors.map((s) => (
+                {profile.preferredSectors.map((s: string) => (
                   <span key={s} className="px-2 py-0.5 rounded-lg bg-[#1c1c3a] text-gray-300 text-xs">
                     {s}
                   </span>
@@ -202,7 +203,7 @@ function ProfileSummary() {
               <div>
                 <span className="text-gray-500 block mb-1">Stage Focus</span>
                 <div className="flex flex-wrap gap-2">
-                  {profile.stageFocus.map((s) => (
+                  {profile.stageFocus.map((s: string) => (
                     <span key={s} className="px-2 py-0.5 rounded-lg bg-[#1c1c3a] text-gray-300 text-xs">
                       {s}
                     </span>
@@ -232,7 +233,7 @@ function ProfileSummary() {
           </Link>
         </div>
         <div className="space-y-3">
-          {getRecommendedStartups(profile.preferredSectors).map((startup) => (
+          {getRecommendedStartups(profile.preferredSectors).map((startup: StartupProfileData) => (
             <Link
               key={startup.id}
               to={`/startup/profile/${startup.id}`}
@@ -258,16 +259,6 @@ function ProfileSummary() {
           Profile submitted {new Date(profile.submittedAt).toLocaleDateString()}
         </p>
       )}
-    </div>
-  );
-}
-
-function Placeholder({ title, icon: Icon }: { title: string; icon: ComponentType<{ size?: number; className?: string }> }) {
-  return (
-    <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-12 text-center">
-      <Icon size={48} className="mx-auto text-gray-600 mb-4" />
-      <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
-      <p className="text-gray-500 text-sm max-w-sm mx-auto">This section is coming soon. Your data is saved and the dashboard is ready to expand.</p>
     </div>
   );
 }
@@ -313,7 +304,7 @@ function SavedStartupsView() {
         <h3 className="text-lg font-semibold text-white">Saved Startups</h3>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {saved.map((startup) => (
+        {saved.map((startup: StartupProfileData) => (
           <Link
             key={startup.id}
             to={`/startup/profile/${startup.id}`}
@@ -403,7 +394,7 @@ function MetricCard({
 }: {
   label: string;
   value: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
 }) {
   return (
     <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-5">
@@ -420,7 +411,7 @@ function ToggleRow({
   description,
   enabled,
 }: {
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   title: string;
   description: string;
   enabled: boolean;
@@ -442,7 +433,7 @@ function ToggleRow({
 }
 
 function getRecommendedStartups(preferredSectors: string[]) {
-  const preferred = STARTUP_PROFILES.filter((startup) => preferredSectors.includes(startup.sector));
+  const preferred = STARTUP_PROFILES.filter((startup: StartupProfileData) => preferredSectors.includes(startup.sector));
   return (preferred.length ? preferred : STARTUP_PROFILES).slice(0, 4);
 }
 

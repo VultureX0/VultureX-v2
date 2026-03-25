@@ -1,6 +1,6 @@
-import type { ComponentType } from 'react';
 import { useState } from 'react';
 import { Link, NavLink, Outlet, Route, Routes } from 'react-router-dom';
+import type { LucideIcon } from 'lucide-react';
 import {
   BarChart3,
   DollarSign,
@@ -595,7 +595,7 @@ function SidebarLink({
   compact,
 }: {
   to: string;
-  icon: ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   label: string;
   end?: boolean;
   compact?: boolean;
@@ -706,7 +706,7 @@ function SectionCard({
   children,
 }: {
   title: string;
-  icon: ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   children: React.ReactNode;
 }) {
   return (

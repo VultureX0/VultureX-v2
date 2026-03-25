@@ -26,7 +26,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const location = useLocation();
-  const { isAuthenticated, user, signOut } = useAuth();
+  const { isAuthenticated, signOut } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { CheckCircle2, ArrowRight, Leaf } from 'lucide-react';
+import { CheckCircle2, Leaf } from 'lucide-react';
 import { useImpactVerification } from '../context/ImpactVerificationContext';
 
 const SDG_OPTIONS = [

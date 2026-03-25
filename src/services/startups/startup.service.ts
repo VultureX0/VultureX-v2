@@ -18,7 +18,7 @@ export async function getAllStartups(): Promise<StartupProfileData[]> {
 
   const snap = await getDocs(collection(getDb(), COLLECTION));
   if (snap.empty) return STARTUP_PROFILES;
-  return snap.docs.map((d) => d.data() as StartupProfileData);
+  return snap.docs.map((d: { data: () => unknown }) => d.data() as StartupProfileData);
 }
 
 /** Get a single startup by ID */

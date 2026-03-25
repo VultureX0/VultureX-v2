@@ -12,7 +12,7 @@ export default function InvestorOnboarding() {
   const navigate = useNavigate();
   const { profile, setProfile } = useInvestor();
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [form, setForm] = useState<InvestorProfile>(defaultProfile);
+  const [form, setForm] = useState<InvestorProfile>(profile ?? defaultInvestorProfile);
 
   const update = (patch: Partial<InvestorProfile>) => setForm((f) => ({ ...f, ...patch }));
 
