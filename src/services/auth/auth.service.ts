@@ -6,7 +6,7 @@ import {
   onAuthStateChanged,
   type User,
 } from 'firebase/auth';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { getFirebaseAuth, getDb } from '../../lib/firebase';
 import { isFirebaseConfigured } from '../../config/firebase';
 import type { AuthUser, SignUpInput, SignInInput } from '../../types';
@@ -56,13 +56,15 @@ export async function signUp(input: SignUpInput): Promise<void> {
 
   const auth = getFirebaseAuth();
   const credential = await createUserWithEmailAndPassword(auth, input.email, input.password);
+  const firestoreRole = input.role === 'startup' ? 'founder' : 'investor';
 
   // Store role in Firestore user profile
   const db = getDb();
   await setDoc(doc(db, 'users', credential.user.uid), {
+    uid: credential.user.uid,
     email: input.email,
-    role: input.role,
-    createdAt: new Date().toISOString(),
+    role: firestoreRole,
+    createdAt: serverTimestamp(),
   });
 
   persistUser(firebaseUserToAuthUser(credential.user, input.role));
@@ -139,7 +141,10 @@ async function getUserRole(uid: string): Promise<AuthUser['role']> {
     const db = getDb();
     const snap = await getDoc(doc(db, 'users', uid));
     if (snap.exists()) {
-      return (snap.data().role as AuthUser['role']) ?? 'startup';
+      const role = snap.data().role as string | undefined;
+      if (role === 'founder') return 'startup';
+      if (role === 'investor') return 'investor';
+      return 'startup';
     }
   } catch {
     // ignore
