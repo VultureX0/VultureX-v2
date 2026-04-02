@@ -5,9 +5,9 @@ import { getFirestore, type Firestore } from 'firebase/firestore';
 import { firebaseConfig, isFirebaseConfigured } from '../config/firebase';
 
 let _app: FirebaseApp | null = null;
-let _analytics: Analytics | null = null;
 let _auth: Auth | null = null;
 let _db: Firestore | null = null;
+let _analytics: Analytics | null = null;
 
 function getApp(): FirebaseApp {
   if (_app) return _app;
@@ -31,4 +31,8 @@ export function getDb(): Firestore {
   if (_db) return _db;
   _db = getFirestore(getApp());
   return _db;
+}
+
+export function getFirebaseAnalytics(): Analytics | null {
+  return _analytics;
 }

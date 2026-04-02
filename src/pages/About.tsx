@@ -1,10 +1,10 @@
 import { ArrowRight, Target, Globe, Users, TrendingUp, Zap, Mail } from 'lucide-react';
 
 const team = [
-  { name: 'Amir Hassan', role: 'CEO & Co-founder', bg: 'from-[#8b5cf6] to-[#7c3aed]', desc: 'Serial entrepreneur. Former VC analyst. Built 3 startups, raised $12M+ total.' },
-  { name: 'Priya Nair', role: 'CTO & Co-founder', bg: 'from-[#60a5fa] to-[#a78bfa]', desc: 'ML engineer. 10+ years in AI systems. Ex-Google, ex-DeepMind. Led teams of 30+.' },
-  { name: 'Leila Osei', role: 'Chief Impact Officer', bg: 'from-[#4ade80] to-[#22c55e]', desc: 'SDG advocate and impact measurement expert. Former UNDP. Worked across 18 countries.' },
-  { name: 'James Rodrigues', role: 'Head of Investor Relations', bg: 'from-[#f472b6] to-[#ec4899]', desc: 'Former investment banker. $2B+ in transactions across Africa and Southeast Asia.' },
+  { name: 'Hiten Yadav', role: 'Co-founder & CTO', bg: 'from-[#8b5cf6] to-[#7c3aed]', desc: 'Leads platform architecture, technical systems, and product infrastructure at Vulture X.' },
+  { name: 'Geet Khandelwal', role: 'COO', bg: 'from-[#60a5fa] to-[#a78bfa]', desc: 'Drives execution, operations, and internal coordination across the company.' },
+  { name: 'Ray', role: 'Co-founder', bg: 'from-[#4ade80] to-[#22c55e]', desc: 'Supports strategic growth, partnerships, and fundraising execution for Vulture X.' },
+  { name: 'Devansh Yadav', role: 'Tech Lead', bg: 'from-[#f472b6] to-[#ec4899]', desc: 'Leads engineering execution, product delivery, and implementation across the Vulture X platform.' },
 ];
 
 const milestones = [
@@ -80,8 +80,8 @@ export default function About() {
                 Vulture X removes the three biggest barriers to fundraising: presentation bias (solved by AI pitch decks), network dependency (solved by structured discovery), and geographic invisibility (solved by global rankings).
               </p>
               <div className="bg-[#0f0f1e] border border-[#8b5cf6]/20 rounded-xl p-6">
-                <p className="text-[#8b5cf6] font-semibold italic text-lg">"The best startup ideas don't always come with the best pitch decks. We fix that."</p>
-                <p className="text-gray-500 text-sm mt-2">— Amir Hassan, CEO</p>
+                <p className="text-[#8b5cf6] font-semibold italic text-lg">"Great founders need better infrastructure, not more gatekeeping."</p>
+                <p className="text-gray-500 text-sm mt-2">— Vulture X Team</p>
               </div>
             </div>
             <div>

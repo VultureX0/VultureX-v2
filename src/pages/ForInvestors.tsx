@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, Filter, BarChart3, Shield, Target, Trophy, TrendingUp } from 'lucide-react';
+import { useInvestor } from '../context/InvestorContext';
 
 const investorTypes = [
   { type: 'Angel Investor', desc: 'Individual investors seeking high-growth early-stage opportunities.', icon: '👼' },
@@ -101,6 +102,8 @@ const pricingTiers = [
 ];
 
 export default function ForInvestors() {
+  const { profile } = useInvestor();
+
   return (
     <div className="min-h-screen pt-20">
       {/* Hero */}
@@ -115,12 +118,33 @@ export default function ForInvestors() {
             Stop swimming through unstructured decks. Vulture X delivers AI-ranked, filter-ready deal flow from a curated startup ecosystem.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link to="/investor-onboarding" className="flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-[#60a5fa] to-[#a78bfa] text-black font-bold rounded-xl hover:opacity-90 transition-opacity">
-              Join as Investor <ArrowRight size={18} />
+            <Link
+              to={profile ? '/investor-dashboard' : '/investor-onboarding'}
+              className="flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-[#60a5fa] to-[#a78bfa] text-black font-bold rounded-xl hover:opacity-90 transition-opacity"
+            >
+              {profile ? 'Open Investor Dashboard' : 'Join as Investor'} <ArrowRight size={18} />
             </Link>
-            <Link to="/explore" className="flex items-center gap-2 px-7 py-3.5 bg-white/5 border border-[#1c1c3a] text-white font-semibold rounded-xl hover:bg-white/10 transition-all">
-              Browse Startups
-            </Link>
+            {profile ? (
+              <Link to="/investor-onboarding" className="flex items-center gap-2 px-7 py-3.5 bg-white/5 border border-[#1c1c3a] text-white font-semibold rounded-xl hover:bg-white/10 transition-all">
+                Edit Investor Profile
+              </Link>
+            ) : (
+              <Link to="/explore" className="flex items-center gap-2 px-7 py-3.5 bg-white/5 border border-[#1c1c3a] text-white font-semibold rounded-xl hover:bg-white/10 transition-all">
+                Browse Startups
+              </Link>
+            )}
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-12 max-w-3xl">
+            {[
+              { value: '2,400+', label: 'Startups in discovery' },
+              { value: '850+', label: 'Verified investors' },
+              { value: '120+', label: 'Competitions hosted' },
+            ].map((stat) => (
+              <div key={stat.label} className="bg-[#0f0f1e]/80 border border-[#1c1c3a] rounded-xl px-5 py-4">
+                <div className="text-2xl font-bold text-white">{stat.value}</div>
+                <div className="text-sm text-gray-500">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -252,6 +276,41 @@ export default function ForInvestors() {
                 >
                   {tier.cta}
                 </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-16 bg-[#09091a] border-t border-[#1c1c3a]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <div className="text-[#60a5fa] text-sm font-semibold uppercase tracking-widest mb-3">FAQ</div>
+            <h2 className="text-4xl font-bold text-white">Common Investor Questions</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {[
+              {
+                q: 'How are startups ranked?',
+                a: 'Startups are ranked using traction, competition performance, investor interest, and profile completeness.',
+              },
+              {
+                q: 'Can I filter by sector and stage?',
+                a: 'Yes. You can filter startups by sector, stage, geography, SDG alignment, and more.',
+              },
+              {
+                q: 'Do I need a paid plan to contact founders?',
+                a: 'Paid plans unlock full discovery features, pitch deck access, and founder contact workflows.',
+              },
+              {
+                q: 'Can my team access one account?',
+                a: 'Yes. Team access is designed for enterprise and fund workflows.',
+              },
+            ].map((item) => (
+              <div key={item.q} className="bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-6">
+                <h3 className="text-white font-semibold mb-2">{item.q}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">{item.a}</p>
               </div>
             ))}
           </div>

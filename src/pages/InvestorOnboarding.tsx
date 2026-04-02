@@ -10,9 +10,9 @@ const STAGES = ['Pre-seed', 'Seed', 'Series A', 'Series B', 'Series C+'];
 
 export default function InvestorOnboarding() {
   const navigate = useNavigate();
-  const { setProfile } = useInvestor();
+  const { profile, setProfile } = useInvestor();
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [form, setForm] = useState<InvestorProfile>(defaultInvestorProfile);
+  const [form, setForm] = useState<InvestorProfile>(profile ?? defaultInvestorProfile);
 
   const update = (patch: Partial<InvestorProfile>) => setForm((f) => ({ ...f, ...patch }));
 
@@ -57,7 +57,11 @@ export default function InvestorOnboarding() {
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
         <div className="mb-10">
           <h1 className="text-3xl font-bold text-white">Investor Onboarding</h1>
-          <p className="text-gray-400 mt-1">Complete your profile to access deal flow and recommendations.</p>
+          <p className="text-gray-400 mt-1">
+            {profile
+              ? 'Update your investor profile, preferences, and contact details.'
+              : 'Complete your profile to access deal flow and recommendations.'}
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-10">
@@ -368,7 +372,7 @@ export default function InvestorOnboarding() {
               type="submit"
               className="px-8 py-3.5 bg-gradient-to-r from-[#60a5fa] to-[#a78bfa] text-black font-bold rounded-xl hover:opacity-90 transition-opacity"
             >
-              Complete Onboarding
+              {profile ? 'Save Changes' : 'Complete Onboarding'}
             </button>
           </div>
         </form>
