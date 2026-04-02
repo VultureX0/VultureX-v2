@@ -58,9 +58,9 @@ export default function Impact() {
             Vulture X is committed to accelerating SDG-aligned startups. Impact founders pay zero success fee, get free Pro access, and are connected to a global network of impact investors.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/impact-verification" className="flex items-center gap-2 px-7 py-3.5 bg-[#4ade80] text-black font-bold rounded-xl hover:bg-[#22c55e] transition-colors">
+            <button className="flex items-center gap-2 px-7 py-3.5 bg-[#4ade80] text-black font-bold rounded-xl hover:bg-[#22c55e] transition-colors">
               Apply for Impact Verification <ArrowRight size={18} />
-            </Link>
+            </button>
             <Link to="/explore" className="flex items-center gap-2 px-7 py-3.5 bg-white/5 border border-[#2d5a2d] text-white font-semibold rounded-xl hover:bg-white/10 transition-all">
               Browse Impact Startups
             </Link>
@@ -180,9 +180,9 @@ export default function Impact() {
             ))}
           </div>
           <div className="text-center">
-            <Link to="/impact-verification" className="inline-flex items-center gap-2 px-8 py-4 bg-[#4ade80] text-black font-bold rounded-xl hover:bg-[#22c55e] transition-colors mx-auto">
+            <button className="flex items-center gap-2 px-8 py-4 bg-[#4ade80] text-black font-bold rounded-xl hover:bg-[#22c55e] transition-colors mx-auto">
               Apply for Impact Verification <ArrowRight size={18} />
-            </Link>
+            </button>
           </div>
         </div>
       </section>

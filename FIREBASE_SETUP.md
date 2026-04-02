@@ -71,6 +71,38 @@ service cloud.firestore {
     match /investors/{email} {
       allow read, write: if request.auth != null && request.auth.token.email == email;
     }
+
+    // Competitions: signed-in users can read; admin users can write
+    match /competitions/{competitionId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
+    }
+
+    // Competition winners: signed-in users can read; admin users can write
+    match /competition_winners/{winnerId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
+    }
+
+    // Leaderboard definitions: signed-in users can read; admin users can write
+    match /leaderboards/{leaderboardId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
+    }
+
+    // Leaderboard entries: signed-in users can read; admin users can write
+    match /leaderboard_entries/{entryId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
+    }
   }
 }
 ```
@@ -112,7 +144,7 @@ npm run dev
 
 ## Firestore Collections
 
-The app uses 4 collections (created automatically on first write):
+The app uses 8 collections (created automatically on first write):
 
 | Collection | Document ID | Purpose |
 |---|---|---|
@@ -120,6 +152,66 @@ The app uses 4 collections (created automatically on first write):
 | `startup_profiles` | Firebase UID | The user's own startup profile (dashboard data) |
 | `startups` | Startup ID (number as string) | Public startup catalog for explore/browse |
 | `investors` | Email address | Investor profiles |
+| `competitions` | Competition ID (string slug or UUID) | Active/upcoming/completed competitions |
+| `competition_winners` | Winner entry ID | Historical winner list shown in past winners |
+| `leaderboards` | Category ID (`overall`, `cleantech`, etc.) | Leaderboard metadata for each category |
+| `leaderboard_entries` | Entry ID (UUID) | Ranked startup rows per leaderboard category |
+
+### Competition document shape
+
+```
+{
+  id: string,
+  title: string,
+  host: string,
+  prize: string,
+  sector: string,
+  stage: string,
+  applicants: number,
+  criteria: string[],
+  color: string,
+  sdg: boolean,
+  deadline?: string,
+  opensOn?: string,
+  status: 'active' | 'upcoming' | 'completed'
+}
+```
+
+### Leaderboard entry document shape
+
+```
+{
+  id: string,
+  category: 'overall' | 'cleantech' | 'fintech' | 'web3' | 'impact' | 'rising' | 'investor',
+  rank: number,
+  startupId?: string,
+  name: string,
+  sector: string,
+  stage: string,
+  score: number,
+  sdg: boolean,
+  change: number,
+  desc: string,
+  investors: number
+}
+```
+
+## Initial Data Bootstrap (Admin)
+
+After creating an admin user (`users/{uid}.role = "admin"`), sign in and open:
+
+- `/workspace/bootstrap-kit`
+
+This hidden admin page can seed:
+
+- Competitions + winners
+- Leaderboard definitions
+- Leaderboard entries
+
+Use "Seed Everything" once after first setup, then manage data from:
+
+- `/workspace/sync-center` (competitions)
+- `/workspace/ranking-lab` (leaderboards)
 
 ## Free Tier Limits (permanent, not 12-month)
 

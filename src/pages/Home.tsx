@@ -2,12 +2,6 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, TrendingUp, Trophy, Users, Star, ChevronRight, Globe, Target, BarChart3, BookOpen, Shield, DollarSign, Zap } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-/* Simple card wrapper (no 3D tilt — reads more like a real product site) */
-function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={className}>{children}</div>;
-
-}
-
 /* ---- Counter Hook ---- */
 function useCounter(target: number, duration = 1500) {
   const [count, setCount] = useState(0);
@@ -47,7 +41,7 @@ const stats = [
 ];
 
 const howItWorks = [
-  { step: '01', icon: Zap, title: 'Build Your Startup Identity', desc: 'Share your problem, solution, market, and traction in a clear format to create an investor-ready profile.', color: 'from-[#8b5cf6] to-[#7c3aed]' },
+  { step: '01', icon: Zap, title: 'Build Your Startup Identity', desc: 'Submit structured data — problem, solution, market, traction — and receive an AI-generated investor-ready pitch deck.', color: 'from-[#8b5cf6] to-[#7c3aed]' },
   { step: '02', icon: Trophy, title: 'Compete & Get Discovered', desc: 'Enter themed competitions, earn winner badges, and get ranked dynamically on the merit-based leaderboard.', color: 'from-[#60a5fa] to-[#a78bfa]' },
   { step: '03', icon: Users, title: 'Connect With Capital', desc: 'Verified investors discover you, request meetings, and manage their pipeline — all within the platform.', color: 'from-[#4ade80] to-[#22c55e]' },
 ];
@@ -67,7 +61,7 @@ const competitions = [
 ];
 
 const features = [
-  { icon: Zap, title: 'Structured Profile Builder', desc: 'Turn your startup details into a clear, investor-ready profile', color: 'text-[#8b5cf6]', bg: 'bg-[#8b5cf6]/10' },
+  { icon: Zap, title: 'AI Pitch Deck', desc: 'Auto-generated investor-ready decks from your data', color: 'text-[#8b5cf6]', bg: 'bg-[#8b5cf6]/10' },
   { icon: BarChart3, title: 'Merit-Based Rankings', desc: 'Dynamic rankings based on traction, scores & competitions', color: 'text-[#60a5fa]', bg: 'bg-[#60a5fa]/10' },
   { icon: Shield, title: 'Verified Investors', desc: 'Only verified angels, VCs and institutional investors', color: 'text-[#a78bfa]', bg: 'bg-[#a78bfa]/10' },
   { icon: Target, title: 'SDG Aligned', desc: 'Impact startups get 0% success fee & priority discovery', color: 'text-[#4ade80]', bg: 'bg-[#4ade80]/10' },
@@ -78,68 +72,96 @@ const features = [
 ];
 
 const testimonials = [
-  { name: 'Priya Sharma', role: 'Co-founder, AgriSense', quote: 'Having our story in one place made investor calls much easier. We closed our seed round in about six weeks.', sdg: true },
-  { name: 'James Chen', role: 'Partner, Apex Ventures', quote: 'I can filter by sector and stage without wading through random decks. The signal-to-noise is better than my old inbox.', sdg: false },
-  { name: 'Amina Al-Hassan', role: 'Founder, SolarAI', quote: 'The impact pricing meant we could join without upfront fees. We raised $2M with far less friction than we expected.', sdg: true },
+  { name: 'Priya Sharma', role: 'Co-founder, AgriSense', quote: 'Vulture X gave our startup credibility. The AI pitch deck alone saved us months of work. We closed our seed round in 6 weeks.', sdg: true },
+  { name: 'James Chen', role: 'Partner, Apex Ventures', quote: 'Finally, a structured deal flow platform. I can filter by sector, stage, and AI score. No more random cold pitches.', sdg: false },
+  { name: 'Amina Al-Hassan', role: 'Founder, SolarAI', quote: 'As an impact startup, the 0% success fee policy is transformative. We raised $2M through Vulture X without any barrier.', sdg: true },
 ];
 
 function StatCard({ stat }: { stat: typeof stats[0] }) {
   const { count, ref } = useCounter(stat.value);
   const display = stat.display.replace(/\d+/, count.toLocaleString());
   return (
-    <div ref={ref} className="reveal-scale bg-[#0f0f1e] border border-[#1c1c3a] rounded-xl p-5 text-center">
-      <div className="text-2xl sm:text-3xl font-semibold text-white mb-1 tabular-nums">{display}</div>
-      <div className="text-gray-500 text-sm">{stat.label}</div>
+    <div ref={ref} className="reveal-scale bg-[#0f0f1e]/80 backdrop-blur border border-[#1c1c3a] rounded-2xl p-5 text-center">
+      <div className="text-3xl font-bold gradient-text mb-1">{display}</div>
+      <div className="text-gray-400 text-sm">{stat.label}</div>
     </div>
   );
 }
 
 export default function Home() {
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  // Parallax hero
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      el.style.transform = `translateY(${window.scrollY * 0.15}px)`;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
     <div className="min-h-screen">
       {/* =================== HERO =================== */}
-      <section className="relative pt-24 pb-16 md:pt-28 md:pb-24 min-h-[88vh] flex items-center border-b border-[#1c1c3a] bg-[#07070d]">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_45%_at_50%_-10%,rgba(139,92,246,0.08),transparent)] pointer-events-none" />
+      <section className="relative pt-28 pb-24 overflow-hidden grid-bg min-h-screen flex items-center">
+        {/* Subtle background gradient */}
+        <div ref={heroRef} className="absolute inset-0 pointer-events-none z-0">
+          <div className="absolute top-20 left-1/4 w-[700px] h-[700px] bg-[#8b5cf6]/4 rounded-full blur-[180px]" />
+        </div>
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-          <div className="max-w-2xl">
-            <p className="reveal text-sm text-gray-500 mb-4">Vulture X · For founders & investors</p>
-            <h1 className="reveal delay-100 text-4xl sm:text-5xl lg:text-[3.25rem] font-semibold text-white tracking-tight leading-[1.12] mb-6">
-              A calmer way to get in front of the right investors
-            </h1>
-            <p className="reveal delay-200 text-lg text-gray-400 mb-8 leading-relaxed">
-              One place to build a clear profile, join sector competitions, and talk to verified investors—without the usual noise.
-            </p>
-            <div className="reveal delay-300 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-14">
-              <Link
-                to="/for-startups"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#8b5cf6] text-white font-medium rounded-lg hover:bg-[#7c3aed] transition-colors text-base"
-              >
-                For startups
-                <ArrowRight size={18} />
-              </Link>
-              <Link
-                to="/for-investors"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 border border-[#2a2a3d] text-white font-medium rounded-lg hover:border-gray-600 hover:bg-white/[0.03] transition-colors text-base"
-              >
-                For investors
-                <ChevronRight size={18} />
-              </Link>
-              <Link
-                to="/explore"
-                className="inline-flex items-center justify-center text-sm text-gray-500 hover:text-gray-300 transition-colors sm:ml-2"
-              >
-                Browse startups →
-              </Link>
-            </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 w-full">
+          {/* Badge */}
+          <div className="reveal inline-flex items-center gap-2 px-5 py-2.5 bg-[#8b5cf6]/10 border border-[#8b5cf6]/20 rounded-full text-[#a78bfa] text-sm font-medium mb-8">
+            <Star size={14} fill="currentColor" />
+            AI-Powered Startup Ecosystem
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 max-w-4xl">
+          {/* Headline */}
+          <h1 className="reveal delay-200 text-5xl sm:text-6xl lg:text-8xl font-bold tracking-tight mb-6 max-w-6xl mx-auto leading-[1.05]">
+            Where Startups Get<br />
+            <span className="gradient-text">Discovered, Ranked</span><br />
+            <span className="text-white/80">& Funded</span>
+          </h1>
+
+          <p className="reveal delay-300 text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+            Vulture X is the merit-based marketplace connecting ambitious founders with verified investors through AI-powered tools, structured competitions, and persistent visibility.
+          </p>
+
+          {/* CTAs */}
+          <div className="reveal delay-400 flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+            <Link
+              to="/for-startups"
+              className="flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-white font-semibold rounded-xl hover:opacity-90 transition-all text-base group"
+            >
+              Launch Your Startup
+              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <Link
+              to="/for-investors"
+              className="flex items-center gap-2 px-8 py-4 bg-white/5 border border-[#1c1c3a] text-white font-semibold rounded-xl hover:bg-white/10 hover:border-[#8b5cf6]/30 transition-all text-base"
+            >
+              Join as Investor
+              <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 max-w-4xl mx-auto">
             {stats.map((stat, i) => (
               <div key={stat.label} className={`delay-${(i + 1) * 100}`}>
                 <StatCard stat={stat} />
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-500 text-xs reveal" style={{ animationDelay: '1s' }}>
+          <span>Scroll to explore</span>
+          <div className="w-5 h-8 border border-gray-600 rounded-full flex justify-center pt-1.5">
+            <div className="w-1 h-2 bg-[#8b5cf6] rounded-full animate-bounce" />
           </div>
         </div>
       </section>
@@ -149,24 +171,27 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#06060f] to-transparent opacity-50 pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="mb-14 max-w-2xl">
-            <div className="reveal text-sm text-gray-500 mb-2">How it works</div>
-            <h2 className="reveal delay-100 text-3xl sm:text-4xl font-semibold text-white tracking-tight">Three steps, start to finish</h2>
+          <div className="text-center mb-16">
+            <div className="reveal text-[#8b5cf6] text-sm font-semibold uppercase tracking-widest mb-3">How It Works</div>
+            <h2 className="reveal delay-100 text-4xl lg:text-5xl font-bold text-white">Three Steps to Funding</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {howItWorks.map((item, i) => (
-              <TiltCard
+              <div
                 key={item.step}
-                className={`reveal delay-${(i + 1) * 200} relative bg-[#0f0f1e] border border-[#1c1c3a] rounded-xl p-7 overflow-hidden`}
+                className={`reveal delay-${(i + 1) * 200} relative bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-8 group overflow-hidden`}
               >
-                <div className="absolute top-5 right-5 text-4xl font-bold text-[#1c1c3a]">{item.step}</div>
-                <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${item.color} flex items-center justify-center mb-5`}>
-                  <item.icon size={22} className="text-white" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#8b5cf6]/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute top-6 right-6 text-5xl font-black text-[#1c1c3a] group-hover:text-[#8b5cf6]/10 transition-colors">{item.step}</div>
+                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-6 shadow-lg`}>
+                  <item.icon size={24} className="text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
-              </TiltCard>
+                <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
+                <p className="text-gray-400 leading-relaxed">{item.desc}</p>
+                {/* Bottom accent line */}
+                <div className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r ${item.color} w-0 group-hover:w-full transition-all duration-500`} />
+              </div>
             ))}
           </div>
         </div>
@@ -177,10 +202,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-12">
             <div>
-              <div className="reveal text-sm text-gray-500 mb-2 flex items-center gap-2">
-                <TrendingUp size={14} /> This week
+              <div className="reveal text-[#8b5cf6] text-sm font-semibold uppercase tracking-widest mb-2 flex items-center gap-2">
+                <TrendingUp size={14} /> Live Rankings
               </div>
-              <h2 className="reveal delay-100 text-3xl sm:text-4xl font-semibold text-white tracking-tight">Trending startups</h2>
+              <h2 className="reveal delay-100 text-4xl lg:text-5xl font-bold text-white">Trending Startups</h2>
             </div>
             <Link to="/trending" className="reveal flex items-center gap-1.5 text-[#8b5cf6] text-sm hover:gap-3 transition-all hover:text-[#a78bfa]">
               View All <ArrowRight size={14} />
@@ -191,9 +216,9 @@ export default function Home() {
             {trendingStartups.map((startup, i) => (
               <div
                 key={startup.name}
-                className={`reveal delay-${i * 100 + 100} flex items-center gap-4 bg-[#0f0f1e] border border-[#1c1c3a] rounded-lg px-5 py-4 cursor-pointer group transition-colors hover:bg-[#12102a] hover:border-[#2a2a3d]`}
+                className={`reveal delay-${i * 100 + 100} flex items-center gap-4 bg-[#0f0f1e] border border-[#1c1c3a] rounded-xl px-6 py-4 cursor-pointer group transition-all duration-300 hover:bg-[#12102a] hover:border-[#8b5cf6]/25`}
               >
-                <div className={`text-xl font-semibold min-w-[2.5rem] text-center ${i === 0 ? 'text-[#8b5cf6]' : i === 1 ? 'text-gray-300' : i === 2 ? 'text-[#cd7f32]' : 'text-gray-500'}`}>
+                <div className={`text-2xl font-black min-w-[2.5rem] text-center transition-transform group-hover:scale-110 ${i === 0 ? 'text-[#8b5cf6]' : i === 1 ? 'text-gray-300' : i === 2 ? 'text-[#cd7f32]' : 'text-gray-500'}`}>
                   #{startup.rank}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -232,12 +257,12 @@ export default function Home() {
       </section>
 
       {/* =================== COMPETITIONS =================== */}
-      <section className="py-24 bg-[#09091a] relative">
+      <section className="py-28 bg-[#09091a] relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex items-center justify-between mb-12">
             <div>
-              <div className="reveal text-sm text-gray-500 mb-2">Competitions</div>
-              <h2 className="reveal delay-100 text-3xl sm:text-4xl font-semibold text-white tracking-tight">Open challenges</h2>
+              <div className="reveal text-[#8b5cf6] text-sm font-semibold uppercase tracking-widest mb-2">Competitions</div>
+              <h2 className="reveal delay-100 text-4xl lg:text-5xl font-bold text-white">Active Challenges</h2>
             </div>
             <Link to="/competitions" className="reveal flex items-center gap-1.5 text-[#8b5cf6] text-sm hover:text-[#a78bfa] transition-all hover:gap-3">
               All Competitions <ArrowRight size={14} />
@@ -246,10 +271,11 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {competitions.map((comp, i) => (
-              <TiltCard
+              <div
                 key={comp.title}
-                className={`reveal delay-${i * 200 + 100} bg-[#0f0f1e] border border-[#1c1c3a] rounded-xl p-6 cursor-pointer group overflow-hidden relative`}
+                className={`reveal delay-${i * 200 + 100} bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-6 cursor-pointer group overflow-hidden relative`}
               >
+                {/* Animated top border */}
                 <div className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${comp.color}`} />
                 <div className={`inline-block px-3 py-1 text-xs font-semibold bg-gradient-to-r ${comp.color} text-black rounded-full mb-4`}>
                   {comp.sector}
@@ -257,7 +283,7 @@ export default function Home() {
                 <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#a78bfa] transition-colors">{comp.title}</h3>
                 <div className="flex items-center justify-between text-sm mb-4">
                   <span className="text-gray-400">{comp.applicants} applicants</span>
-                  <span className="text-amber-200/90 font-medium">{comp.deadline}</span>
+                  <span className="text-orange-400 font-medium">{comp.deadline}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[#8b5cf6] font-semibold">{comp.prize}</span>
@@ -268,46 +294,49 @@ export default function Home() {
                     Apply Now
                   </Link>
                 </div>
-              </TiltCard>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* =================== FEATURES GRID =================== */}
-      <section className="py-24 relative">
+      <section className="py-28 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="mb-14 max-w-2xl mx-auto text-center">
-            <div className="reveal text-sm text-gray-500 mb-2">What you get</div>
-            <h2 className="reveal delay-100 text-3xl sm:text-4xl font-semibold text-white tracking-tight">Built for real fundraising workflows</h2>
+          <div className="text-center mb-16">
+            <div className="reveal text-[#8b5cf6] text-sm font-semibold uppercase tracking-widest mb-3">Platform Features</div>
+            <h2 className="reveal delay-100 text-4xl lg:text-5xl font-bold text-white">Everything You Need to Raise</h2>
             <p className="reveal delay-200 text-gray-400 mt-4 max-w-xl mx-auto">
-              One platform to build your profile, join competitions, and connect with investors.
+              One platform. AI-powered tools. Merit-based visibility. Real capital connections.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {features.map((f, i) => (
-              <TiltCard
+              <div
                 key={f.title}
-                className={`reveal delay-${(i % 4) * 100 + 100} group bg-[#0f0f1e] border border-[#1c1c3a] rounded-xl p-6 cursor-default`}
+                className={`reveal delay-${(i % 4) * 100 + 100} group bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-6 card-hover cursor-default`}
               >
-                <div className={`w-11 h-11 rounded-lg ${f.bg} flex items-center justify-center mb-4`}>
-                  <f.icon size={20} className={f.color} />
+                <div className={`w-12 h-12 rounded-xl ${f.bg} flex items-center justify-center mb-4`}>
+                  <f.icon size={22} className={f.color} />
                 </div>
-                <h4 className="text-white font-medium mb-2">{f.title}</h4>
+                <h4 className="text-white font-semibold mb-2">{f.title}</h4>
                 <p className="text-gray-400 text-sm leading-relaxed">{f.desc}</p>
-              </TiltCard>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* =================== IMPACT =================== */}
-      <section className="py-24 relative bg-[#06060f]">
+      <section className="py-28 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#06060f] via-[#0a0f0a] to-[#06060f] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(74,222,128,0.05)_0%,transparent_70%)] pointer-events-none" />
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <TiltCard className="reveal bg-[#0c1410] border border-[#1a2e1a] rounded-2xl p-10 sm:p-12 text-center">
-            <div className="text-4xl mb-4">🌱</div>
-            <h2 className="reveal delay-100 text-3xl sm:text-4xl font-semibold text-white mb-4 tracking-tight">Impact startups</h2>
+          <div className="reveal bg-gradient-to-br from-[#0d2010] via-[#0f2010] to-[#091509] border border-[#4ade80]/15 rounded-3xl p-12 text-center relative overflow-hidden">
+            <div className="text-6xl mb-4">🌱</div>
+            <h2 className="reveal delay-100 text-4xl lg:text-5xl font-bold text-white mb-4">Built for Impact</h2>
             <p className="reveal delay-200 text-gray-300 text-lg max-w-2xl mx-auto mb-8">
               Impact startups aligned with the UN Sustainable Development Goals receive{' '}
               <strong className="text-[#4ade80]">free Pro access</strong> and{' '}
@@ -325,36 +354,36 @@ export default function Home() {
             </div>
             <Link
               to="/impact"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#4ade80] text-black font-medium rounded-lg hover:bg-[#22c55e] transition-colors group"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#4ade80] text-black font-semibold rounded-xl hover:bg-[#22c55e] transition-all group"
             >
               Explore Impact Startups
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Link>
-          </TiltCard>
+          </div>
         </div>
       </section>
 
       {/* =================== TESTIMONIALS =================== */}
-      <section className="py-24 bg-[#09091a] relative">
+      <section className="py-28 bg-[#09091a] relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-14 max-w-2xl">
-            <div className="reveal text-sm text-gray-500 mb-2">People on the platform</div>
-            <h2 className="reveal delay-100 text-3xl sm:text-4xl font-semibold text-white tracking-tight">What founders and investors say</h2>
+          <div className="text-center mb-16">
+            <div className="reveal text-[#8b5cf6] text-sm font-semibold uppercase tracking-widest mb-3">Success Stories</div>
+            <h2 className="reveal delay-100 text-4xl lg:text-5xl font-bold text-white">Founders & Investors Love Vulture X</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {testimonials.map((t, i) => (
-              <TiltCard
+              <div
                 key={t.name}
-                className={`reveal delay-${i * 200 + 100} bg-[#0f0f1e] border border-[#1c1c3a] rounded-xl p-7 relative`}
+                className={`reveal delay-${i * 200 + 100} bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-7 group`}
               >
                 <div className="flex gap-1 mb-4">
                   {[...Array(5)].map((_, si) => (
                     <Star key={si} size={14} className="text-[#8b5cf6]" fill="currentColor" />
                   ))}
                 </div>
-                <p className="text-gray-300 leading-relaxed mb-6 text-[15px]">“{t.quote}”</p>
+                <p className="text-gray-300 leading-relaxed mb-6 italic">"{t.quote}"</p>
                 <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 bg-[#2a2540] border border-[#3d3558] rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                  <div className="w-11 h-11 bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] rounded-full flex items-center justify-center text-white font-bold text-sm">
                     {t.name[0]}
                   </div>
                   <div>
@@ -365,35 +394,39 @@ export default function Home() {
                     <div className="text-gray-500 text-xs">{t.role}</div>
                   </div>
                 </div>
-              </TiltCard>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* =================== CTA BANNER =================== */}
-      <section className="py-20 bg-[#07070d] border-t border-[#1c1c3a]">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="reveal text-3xl sm:text-4xl font-semibold text-white mb-4 tracking-tight">
-            Ready to get started?
-          </h2>
-          <p className="reveal delay-100 text-gray-400 text-lg mb-8">
-            Create a profile or join as an investor—no hype, just the tools to move faster.
-          </p>
-          <div className="reveal delay-200 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              to="/for-startups"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#8b5cf6] text-white font-medium rounded-lg hover:bg-[#7c3aed] transition-colors"
-            >
-              Create startup profile
-              <ArrowRight size={18} />
-            </Link>
-            <Link
-              to="/for-investors"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 border border-[#2a2a3d] text-white font-medium rounded-lg hover:bg-white/[0.03] transition-colors"
-            >
-              Join as investor
-            </Link>
+      <section className="py-28 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[#09091a]" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="border border-[#8b5cf6]/15 rounded-3xl p-14 text-center bg-[#0b0b18]">
+            <h2 className="reveal text-4xl sm:text-6xl font-bold text-white mb-4">
+              Ready to Get <span className="gradient-text">Discovered?</span>
+            </h2>
+            <p className="reveal delay-100 text-gray-400 text-xl mb-10 max-w-xl mx-auto">
+              Join 2,400+ startups already on Vulture X. Build your identity, compete, and raise capital.
+            </p>
+            <div className="reveal delay-200 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link
+                to="/for-startups"
+                className="flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-white font-bold rounded-xl hover:opacity-90 transition-all text-lg group"
+              >
+                Create Startup Profile
+                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                to="/for-investors"
+                className="flex items-center gap-2 px-8 py-4 bg-white/5 border border-white/10 text-white font-semibold rounded-xl hover:bg-white/10 hover:border-[#8b5cf6]/20 transition-all text-lg"
+              >
+                Join as Investor
+              </Link>
+            </div>
           </div>
         </div>
       </section>
