@@ -161,7 +161,7 @@ export default function Trending() {
               onClick={() => handleStartupClick(startup)}
               onKeyDown={(e) => e.key === 'Enter' && handleStartupClick(startup)}
               className={`flex items-center gap-5 bg-[#0f0f1e] rounded-2xl px-6 py-5 card-hover cursor-pointer border transition-all ${
-                i === 0 ? 'border-[#8b5cf6]/30 amber-glow' : i === 1 ? 'border-gray-400/20' : i === 2 ? 'border-[#cd7f32]/20' : 'border-[#1c1c3a]'
+                i === 0 ? 'border-[#8b5cf6]/25' : i === 1 ? 'border-gray-400/20' : i === 2 ? 'border-[#cd7f32]/20' : 'border-[#1c1c3a]'
               }`}
             >
               {/* Rank */}

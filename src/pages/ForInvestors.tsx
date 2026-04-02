@@ -105,7 +105,6 @@ export default function ForInvestors() {
     <div className="min-h-screen pt-20">
       {/* Hero */}
       <section className="bg-[#09091a] border-b border-[#1c1c3a] py-20 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-[#60a5fa]/5 rounded-full blur-[150px] pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-[#60a5fa] text-sm font-semibold uppercase tracking-widest mb-4">For Investors</div>
           <h1 className="text-5xl font-bold text-white mb-6 max-w-2xl">

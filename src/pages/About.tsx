@@ -29,7 +29,6 @@ export default function About() {
     <div className="min-h-screen pt-20">
       {/* Hero */}
       <section className="bg-[#09091a] border-b border-[#1c1c3a] py-20 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#8b5cf6]/5 rounded-full blur-[150px] pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-[#8b5cf6] text-sm font-semibold uppercase tracking-widest mb-4">About Us</div>
           <h1 className="text-5xl font-bold text-white mb-6 max-w-3xl">
@@ -180,7 +179,7 @@ export default function About() {
                 ))}
               </div>
             </div>
-            <div className="bg-gradient-to-br from-[#1a1000] to-[#0f0f1e] border border-[#8b5cf6]/20 rounded-2xl p-8 flex flex-col justify-between amber-glow">
+            <div className="bg-[#0f0f1e] border border-[#8b5cf6]/15 rounded-2xl p-8 flex flex-col justify-between">
               <div>
                 <h3 className="text-2xl font-bold text-white mb-3">Join the Ecosystem</h3>
                 <p className="text-gray-400 mb-6">Whether you're a founder, investor, or accelerator — Vulture X is built for you.</p>

@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import CustomCursor from './components/CustomCursor';
 import Home from './pages/Home';
 import ExploreStartups from './pages/ExploreStartups';
 import Trending from './pages/Trending';
@@ -75,7 +74,6 @@ function App() {
         <InvestorProvider>
         <StartupProvider>
         <div className="min-h-screen bg-[#06060f] text-gray-100">
-          <CustomCursor />
           <Navbar />
           <main>
             <AnimationProvider>

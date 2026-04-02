@@ -21,7 +21,7 @@ function EmptyDashboard() {
         </p>
         <Link
           to="/startup-onboarding"
-          className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-white shadow-[0_0_30px_rgba(139,92,246,0.35)] hover:opacity-90 transition-all"
+          className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-white hover:opacity-90 transition-all"
         >
           <Rocket size={18} /> Set Up Startup Profile
         </Link>

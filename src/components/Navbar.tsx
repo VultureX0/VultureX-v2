@@ -51,7 +51,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <img src={logo} alt="Vulture X" className="w-9 h-9 rounded-lg object-cover pulse-glow" />
+            <img src={logo} alt="Vulture X" className="w-9 h-9 rounded-lg object-cover" />
             <span className="text-xl font-bold tracking-tight">
               <span className="text-white">Vulture</span>
               <span className="text-[#8b5cf6]"> X</span>

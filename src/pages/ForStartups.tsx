@@ -40,7 +40,6 @@ export default function ForStartups() {
     <div className="min-h-screen pt-20">
       {/* Hero */}
       <section className="bg-[#09091a] border-b border-[#1c1c3a] py-20 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#8b5cf6]/5 rounded-full blur-[150px] pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-[#8b5cf6] text-sm font-semibold uppercase tracking-widest mb-4">For Startups</div>
           <h1 className="text-5xl font-bold text-white mb-6 max-w-2xl">
@@ -120,7 +119,7 @@ export default function ForStartups() {
                   Get Started Free
                 </button>
               </div>
-              <div className="bg-gradient-to-br from-[#1a1000] to-[#0f0f1e] border border-[#8b5cf6]/30 rounded-2xl p-7 relative overflow-hidden amber-glow">
+              <div className="bg-[#0f0f1e] border border-[#8b5cf6]/20 rounded-2xl p-7 relative overflow-hidden">
                 <div className="absolute top-4 right-4 px-2 py-1 bg-[#8b5cf6] text-black text-xs font-bold rounded-full">POPULAR</div>
                 <div className="text-[#8b5cf6] text-sm mb-1">Pro Tier</div>
                 <div className="text-3xl font-bold text-white mb-3">$49 <span className="text-gray-400 text-base font-normal">/ month</span></div>

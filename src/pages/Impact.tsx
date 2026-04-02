@@ -48,7 +48,6 @@ export default function Impact() {
     <div className="min-h-screen pt-20">
       {/* Hero */}
       <section className="bg-gradient-to-b from-[#0a0f0a] to-[#06060f] border-b border-[#1c1c3a] py-20 relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[#4ade80]/5 rounded-full blur-[120px] pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <div className="text-5xl mb-6">🌱</div>
           <div className="text-[#4ade80] text-sm font-semibold uppercase tracking-widest mb-4">Impact & SDG</div>
