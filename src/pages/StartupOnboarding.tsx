@@ -400,7 +400,7 @@ export default function StartupOnboarding() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full px-4 py-3 text-sm font-semibold rounded-xl bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-white shadow-[0_0_30px_rgba(139,92,246,0.35)] hover:opacity-90 transition-all disabled:opacity-50"
+            className="w-full px-4 py-3 text-sm font-semibold rounded-xl bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-white hover:opacity-90 transition-all disabled:opacity-50"
           >
             {submitting ? 'Saving...' : existing ? 'Save Changes' : 'Complete Setup'}
           </button>

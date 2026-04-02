@@ -144,6 +144,7 @@ async function getUserRole(uid: string): Promise<AuthUser['role']> {
       const role = snap.data().role as string | undefined;
       if (role === 'founder') return 'startup';
       if (role === 'investor') return 'investor';
+      if (role === 'admin') return 'admin';
       return 'startup';
     }
   } catch {

@@ -1,76 +1,70 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Clock, Users, ArrowRight, CheckCircle } from 'lucide-react';
+import { getActiveCompetitions, getPastCompetitionWinners, getUpcomingCompetitions } from '../services';
+import type { Competition, CompetitionWinner } from '../types';
 
 const tabs = ['Active', 'Upcoming', 'Past Winners', 'Host a Competition'];
 
-const active = [
-  {
-    title: 'Climate Innovation Challenge',
-    host: 'GreenCapital Ventures',
-    prize: '$50,000 + 6-month mentorship',
-    deadline: 'March 15, 2026',
-    sector: 'CleanTech',
-    stage: 'Idea/MVP',
-    applicants: 234,
-    criteria: ['Innovation (30%)', 'Feasibility (25%)', 'Impact (25%)', 'Scalability (20%)'],
-    color: 'from-[#4ade80] to-[#22c55e]',
-    sdg: true,
-  },
-  {
-    title: 'Web3 Founders Sprint',
-    host: 'Apex Web3 Fund',
-    prize: '$30,000 + Pilot Partnership',
-    deadline: 'March 8, 2026',
-    sector: 'Web3',
-    stage: 'Idea/MVP',
-    applicants: 178,
-    criteria: ['Technical Innovation (35%)', 'Market Potential (30%)', 'Team (20%)', 'Traction (15%)'],
-    color: 'from-[#60a5fa] to-[#a78bfa]',
-    sdg: false,
-  },
-  {
-    title: 'SaaS Product Showdown',
-    host: 'Horizon VC',
-    prize: '$25,000 + Investor Visibility',
-    deadline: 'March 22, 2026',
-    sector: 'SaaS',
-    stage: 'MVP/Revenue',
-    applicants: 312,
-    criteria: ['Product Quality (30%)', 'Revenue Growth (30%)', 'Market Size (20%)', 'Team (20%)'],
-    color: 'from-[#8b5cf6] to-[#7c3aed]',
-    sdg: false,
-  },
-  {
-    title: 'Impact Startup Challenge',
-    host: 'UN SDG Capital',
-    prize: '$40,000 + 0% Success Fee',
-    deadline: 'April 1, 2026',
-    sector: 'Any (SDG-aligned)',
-    stage: 'All Stages',
-    applicants: 156,
-    criteria: ['SDG Impact (40%)', 'Innovation (25%)', 'Scalability (20%)', 'Team (15%)'],
-    color: 'from-[#34d399] to-[#059669]',
-    sdg: true,
-  },
-];
-
-const upcoming = [
-  { title: 'FinTech Revolution Cup', host: 'BankTech Fund', prize: '$35K + Pilot', date: 'Opens April 15, 2026', sector: 'FinTech', color: 'from-[#a78bfa] to-[#f59e0b]' },
-  { title: 'HealthTech Innovation Award', host: 'MedVentures', prize: '$45K + Hospital Partnership', date: 'Opens May 1, 2026', sector: 'HealthTech', color: 'from-[#f472b6] to-[#ec4899]' },
-  { title: 'Student Founders Challenge', host: 'University Alliance Fund', prize: '$20K + Incubation', date: 'Opens April 20, 2026', sector: 'All Sectors', color: 'from-[#a78bfa] to-[#7c3aed]' },
-];
-
-const pastWinners = [
-  { competition: 'AgriTech Africa Cup 2025', winner: 'AgriSense', prize: '$40K', raised: '$8.2M since', sector: 'AgriTech' },
-  { competition: 'DeepTech Summit 2025', winner: 'NeuralPay', prize: '$30K', raised: '$5.4M since', sector: 'FinTech' },
-  { competition: 'SDG Founders Pitch 2024', winner: 'SolarAI', prize: '$25K', raised: '$2.1M since', sector: 'CleanTech' },
-  { competition: 'Web3 Build Sprint 2024', winner: 'ChainVault', prize: '$20K', raised: '$1.5M since', sector: 'Web3' },
-  { competition: 'SaaS Growth Challenge 2024', winner: 'CodeStream', prize: '$35K', raised: '$3.6M since', sector: 'SaaS' },
-];
+function CompetitionsSkeleton() {
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {[1, 2, 3, 4].map((id) => (
+        <div key={id} className="bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-7 animate-pulse">
+          <div className="h-5 w-36 bg-[#1c1c3a] rounded mb-3" />
+          <div className="h-6 w-56 bg-[#1c1c3a] rounded mb-2" />
+          <div className="h-4 w-44 bg-[#1c1c3a] rounded mb-6" />
+          <div className="grid grid-cols-2 gap-3 mb-5">
+            <div className="h-16 bg-[#09091a] rounded-xl" />
+            <div className="h-16 bg-[#09091a] rounded-xl" />
+            <div className="h-16 bg-[#09091a] rounded-xl" />
+            <div className="h-16 bg-[#09091a] rounded-xl" />
+          </div>
+          <div className="h-10 bg-[#1c1c3a] rounded-xl" />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function Competitions() {
   const [activeTab, setActiveTab] = useState(0);
+  const [activeCompetitions, setActiveCompetitions] = useState<Competition[]>([]);
+  const [upcomingCompetitions, setUpcomingCompetitions] = useState<Competition[]>([]);
+  const [pastWinners, setPastWinners] = useState<CompetitionWinner[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadCompetitions() {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const [activeData, upcomingData, winnerData] = await Promise.all([
+          getActiveCompetitions(),
+          getUpcomingCompetitions(),
+          getPastCompetitionWinners(),
+        ]);
+        if (!isMounted) return;
+        setActiveCompetitions(activeData);
+        setUpcomingCompetitions(upcomingData);
+        setPastWinners(winnerData);
+      } catch (err) {
+        if (!isMounted) return;
+        const message = err instanceof Error ? err.message : 'Failed to load competitions.';
+        setError(message);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    }
+
+    loadCompetitions();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="min-h-screen pt-20">
@@ -101,9 +95,17 @@ export default function Competitions() {
         </div>
 
         {/* Active Competitions */}
-        {activeTab === 0 && (
+        {activeTab === 0 && isLoading && <CompetitionsSkeleton />}
+
+        {activeTab < 3 && error && !isLoading && (
+          <div className="bg-[#0f0f1e] border border-red-400/20 rounded-2xl p-6 text-red-300">
+            {error}
+          </div>
+        )}
+
+        {activeTab === 0 && !isLoading && !error && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {active.map((comp) => (
+            {activeCompetitions.map((comp) => (
               <div key={comp.title} className="bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-7 card-hover">
                 <div className="flex items-start justify-between mb-4">
                   <div>
@@ -127,7 +129,7 @@ export default function Competitions() {
                   </div>
                   <div className="bg-[#09091a] rounded-xl p-3">
                     <div className="text-xs text-gray-500 mb-1 flex items-center gap-1"><Clock size={10} /> Deadline</div>
-                    <div className="text-orange-400 text-sm font-medium">{comp.deadline}</div>
+                    <div className="text-orange-400 text-sm font-medium">{comp.deadline ?? 'TBD'}</div>
                   </div>
                   <div className="bg-[#09091a] rounded-xl p-3">
                     <div className="text-xs text-gray-500 mb-1 flex items-center gap-1"><Users size={10} /> Applicants</div>
@@ -152,13 +154,20 @@ export default function Competitions() {
                 </Link>
               </div>
             ))}
+            {activeCompetitions.length === 0 && (
+              <div className="lg:col-span-2 bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-6 text-gray-400">
+                No active competitions right now.
+              </div>
+            )}
           </div>
         )}
 
         {/* Upcoming */}
-        {activeTab === 1 && (
+        {activeTab === 1 && isLoading && <CompetitionsSkeleton />}
+
+        {activeTab === 1 && !isLoading && !error && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {upcoming.map((comp) => (
+            {upcomingCompetitions.map((comp) => (
               <div key={comp.title} className="bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-6 card-hover">
                 <div className={`inline-block px-3 py-1 text-xs font-semibold bg-gradient-to-r ${comp.color} text-black rounded-full mb-4`}>
                   {comp.sector}
@@ -167,21 +176,28 @@ export default function Competitions() {
                 <p className="text-gray-400 text-sm mb-2">By {comp.host}</p>
                 <p className="text-[#8b5cf6] font-semibold text-sm mb-3">{comp.prize}</p>
                 <div className="flex items-center gap-1.5 text-gray-400 text-sm mb-5">
-                  <Clock size={13} /> {comp.date}
+                  <Clock size={13} /> {comp.opensOn ?? 'TBD'}
                 </div>
                 <button className="w-full py-2.5 border border-[#1c1c3a] text-gray-300 hover:border-[#8b5cf6]/30 hover:text-white rounded-xl text-sm transition-all">
                   Get Notified
                 </button>
               </div>
             ))}
+            {upcomingCompetitions.length === 0 && (
+              <div className="md:col-span-3 bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-6 text-gray-400">
+                No upcoming competitions have been announced yet.
+              </div>
+            )}
           </div>
         )}
 
         {/* Past Winners */}
-        {activeTab === 2 && (
+        {activeTab === 2 && isLoading && <CompetitionsSkeleton />}
+
+        {activeTab === 2 && !isLoading && !error && (
           <div className="space-y-4">
             {pastWinners.map((w, i) => (
-              <div key={w.competition} className="flex items-center gap-5 bg-[#0f0f1e] border border-[#1c1c3a] rounded-xl px-6 py-5 card-hover">
+              <div key={w.id} className="flex items-center gap-5 bg-[#0f0f1e] border border-[#1c1c3a] rounded-xl px-6 py-5 card-hover">
                 <div className="text-2xl">{i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '🏆'}</div>
                 <div className="flex-1">
                   <div className="font-semibold text-white">{w.competition}</div>
@@ -193,6 +209,11 @@ export default function Competitions() {
                 </div>
               </div>
             ))}
+            {pastWinners.length === 0 && (
+              <div className="bg-[#0f0f1e] border border-[#1c1c3a] rounded-xl p-6 text-gray-400">
+                Winners will appear here once competitions are completed.
+              </div>
+            )}
           </div>
         )}
 
