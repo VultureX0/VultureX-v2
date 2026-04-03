@@ -8,7 +8,7 @@ export default function HeroSection({ startup }: Props) {
     <section className="bg-[#09091a] border border-[#1c1c3a] rounded-2xl p-6 sm:p-8 md:p-10">
       <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-8">
         <div className="flex-shrink-0">
-          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] flex items-center justify-center text-3xl sm:text-4xl font-bold text-white">
+          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] flex items-center justify-center text-3xl sm:text-4xl font-bold text-white shadow-[0_0_40px_rgba(139,92,246,0.3)]">
             {startup.logoLetter}
           </div>
         </div>

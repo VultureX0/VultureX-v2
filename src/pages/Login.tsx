@@ -53,6 +53,12 @@ export default function Login() {
 
   return (
     <div className="min-h-screen pt-24 pb-20 flex items-center justify-center bg-[#06060f] relative overflow-hidden">
+      {/* Background glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-32 -left-16 w-[480px] h-[480px] bg-[#8b5cf6]/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-[520px] h-[520px] bg-[#7c3aed]/20 rounded-full blur-3xl" />
+      </div>
+
       <div className="relative z-10 w-full max-w-md px-4 sm:px-6">
         <div className="mb-8 text-center">
           {message && (
@@ -81,7 +87,7 @@ export default function Login() {
 
         <form
           onSubmit={handleSubmit}
-          className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6 sm:p-7 space-y-5"
+          className="bg-[#0b0b18]/90 border border-[#1c1c3a] rounded-2xl p-6 sm:p-7 shadow-[0_0_40px_rgba(15,23,42,0.8)] backdrop-blur neon-border space-y-5"
         >
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1.5">
@@ -129,7 +135,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full mt-2 px-4 py-2.5 text-sm font-semibold rounded-xl bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-white hover:opacity-90 transition-all disabled:opacity-50"
+            className="w-full mt-2 px-4 py-2.5 text-sm font-semibold rounded-xl bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-white shadow-[0_0_30px_rgba(139,92,246,0.35)] hover:opacity-90 transition-all disabled:opacity-50"
           >
             {submitting ? 'Signing in...' : 'Continue'}
           </button>

@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import CustomCursor from './components/CustomCursor';
 import Home from './pages/Home';
 import ExploreStartups from './pages/ExploreStartups';
 import Trending from './pages/Trending';
@@ -24,11 +25,11 @@ import { StartupProvider } from './features/startups';
 import InvestorOnboarding from './pages/InvestorOnboarding';
 import InvestorDashboard from './pages/InvestorDashboard';
 import StartupOnboarding from './pages/StartupOnboarding';
-import AdminCompetitions from './pages/AdminCompetitions';
-import AdminLeaderboards from './pages/AdminLeaderboards';
-import AdminSeedTools from './pages/AdminSeedTools';
+import { StartupMandateProvider } from './context/StartupMandateContext';
+import StartupMandate from './pages/StartupMandate';
+import { ImpactVerificationProvider } from './context/ImpactVerificationContext';
+import ImpactVerification from './pages/ImpactVerification';
 
-/** Route /dashboard based on user role */
 function RoleDashboard() {
   const { user } = useAuth();
   if (user?.role === 'investor') return <Navigate to="/investor-dashboard" replace />;
@@ -38,7 +39,6 @@ function RoleDashboard() {
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
-    // Defer so the new route has painted; ensures Home is visible from the top
     requestAnimationFrame(() => {
       window.scrollTo({ top: 0, behavior: 'instant' });
     });
@@ -70,46 +70,16 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   return children;
 }
 
-function HiddenRouteFallback() {
-  return (
-    <div className="min-h-[60vh] flex items-center justify-center px-4">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-white mb-2">404</h1>
-        <p className="text-gray-400">Page not found.</p>
-      </div>
-    </div>
-  );
-}
-
-function RequireAdmin({ children }: { children: JSX.Element }) {
-  const { user, isAuthenticated, isLoading } = useAuth();
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#050511]">
-        <div className="w-8 h-8 border-2 border-[#8b5cf6] border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return <HiddenRouteFallback />;
-  }
-
-  if (user?.role !== 'admin') {
-    return <HiddenRouteFallback />;
-  }
-
-  return children;
-}
-
 function App() {
   return (
     <Router basename={import.meta.env.BASE_URL}>
       <AuthProvider>
         <InvestorProvider>
         <StartupProvider>
+        <StartupMandateProvider>
+        <ImpactVerificationProvider>
         <div className="min-h-screen bg-[#06060f] text-gray-100">
+          <CustomCursor />
           <Navbar />
           <main>
             <AnimationProvider>
@@ -127,7 +97,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route
-                  path="/dashboard"
+                  path="/dashboard/*"
                   element={
                     <RequireAuth>
                       <RoleDashboard />
@@ -153,35 +123,15 @@ function App() {
                 />
                 <Route path="/investor-onboarding" element={<InvestorOnboarding />} />
                 <Route path="/investor-dashboard/*" element={<InvestorDashboard />} />
-                <Route
-                  path="/workspace/sync-center"
-                  element={
-                    <RequireAdmin>
-                      <AdminCompetitions />
-                    </RequireAdmin>
-                  }
-                />
-                <Route
-                  path="/workspace/ranking-lab"
-                  element={
-                    <RequireAdmin>
-                      <AdminLeaderboards />
-                    </RequireAdmin>
-                  }
-                />
-                <Route
-                  path="/workspace/bootstrap-kit"
-                  element={
-                    <RequireAdmin>
-                      <AdminSeedTools />
-                    </RequireAdmin>
-                  }
-                />
+                <Route path="/startup-mandate" element={<StartupMandate />} />
+                <Route path="/impact-verification" element={<ImpactVerification />} />
               </Routes>
             </AnimationProvider>
           </main>
           <Footer />
         </div>
+        </ImpactVerificationProvider>
+        </StartupMandateProvider>
         </StartupProvider>
         </InvestorProvider>
       </AuthProvider>
@@ -190,5 +140,3 @@ function App() {
 }
 
 export default App;
-
-

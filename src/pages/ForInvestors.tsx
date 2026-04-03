@@ -1,51 +1,14 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, Filter, BarChart3, Shield, Target, Trophy, TrendingUp } from 'lucide-react';
-
-const investorTypes = [
-  { type: 'Angel Investor', desc: 'Individual investors seeking high-growth early-stage opportunities.', icon: '👼' },
-  { type: 'Venture Capital', desc: 'VC funds looking for institutional-grade deal flow across sectors.', icon: '🏦' },
-  { type: 'Impact Investor', desc: 'SDG-focused investors seeking measurable social & environmental returns.', icon: '🌱' },
-  { type: 'Corporate VC', desc: 'Corporates seeking strategic partnerships and innovation pipeline.', icon: '🏢' },
-  { type: 'CSR Arms', desc: 'Corporate social responsibility programs funding impact startups.', icon: '💼' },
-];
+import { useInvestor } from '../context/InvestorContext';
 
 const features = [
-  {
-    icon: Filter,
-    title: 'Structured Deal Flow',
-    desc: 'Filter startups by sector, stage, AI score, SDG alignment, and traction metrics. No more scrolling through random decks.',
-    color: 'text-[#8b5cf6]',
-  },
-  {
-    icon: BarChart3,
-    title: 'AI-Powered Rankings',
-    desc: 'Every startup is evaluated and ranked by our AI engine. Standardized, consistent, bias-free assessment.',
-    color: 'text-[#60a5fa]',
-  },
-  {
-    icon: Shield,
-    title: 'Verified Startups',
-    desc: 'All startup data is structured and validated. Impact startups undergo manual SDG verification.',
-    color: 'text-[#4ade80]',
-  },
-  {
-    icon: Target,
-    title: 'Smart Recommendations',
-    desc: 'Platform suggests startups based on your investment thesis, sector preferences, and historical behavior.',
-    color: 'text-[#a78bfa]',
-  },
-  {
-    icon: Trophy,
-    title: 'Host Competitions',
-    desc: 'Create themed challenges to generate curated, structured deal flow aligned to your investment focus.',
-    color: 'text-[#f472b6]',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Pipeline CRM',
-    desc: 'Save startups, add notes, track status from Interested → Due Diligence, and schedule meetings — all in one place.',
-    color: 'text-[#fb923c]',
-  },
+  { icon: Filter, title: 'Structured deal flow', desc: 'Filter by sector, stage, score, SDG alignment. No more random decks.' },
+  { icon: BarChart3, title: 'Standardized scoring', desc: 'Every startup evaluated consistently. Traction, team, market. Bias-free.' },
+  { icon: Shield, title: 'Verified startups', desc: 'All data structured and validated. Impact startups manually verified.' },
+  { icon: Target, title: 'Smart recommendations', desc: 'Suggestions based on your thesis, sector preferences, and past behavior.' },
+  { icon: Trophy, title: 'Host competitions', desc: 'Create themed challenges for curated deal flow aligned to your focus.' },
+  { icon: TrendingUp, title: 'Pipeline CRM', desc: 'Save, annotate, track status, schedule meetings. One place.' },
 ];
 
 const pricingTiers = [
@@ -53,91 +16,96 @@ const pricingTiers = [
     tier: 'Free',
     price: '$0',
     period: '/month',
-    desc: 'Browse and explore limited profiles',
-    features: [
-      'View top 20 startups',
-      'Basic sector filtering',
-      'View trending lists',
-      'Limited profile data access',
-    ],
-    cta: 'Start Free',
+    desc: 'Browse and explore',
+    features: ['View top 20 startups', 'Basic sector filtering', 'Trending lists', 'Limited profile data'],
+    cta: 'Start free',
     highlight: false,
   },
   {
     tier: 'Pro',
     price: '$149',
     period: '/month',
-    desc: 'Full discovery and deal flow management',
-    features: [
-      'Unlimited startup discovery',
-      'All filter capabilities',
-      'Full startup profile access',
-      'Download pitch decks',
-      'Contact request system',
-      'Pipeline CRM (shortlist + notes)',
-      'Advanced analytics access',
-      'Competition hosting (1/year)',
-    ],
-    cta: 'Join as Pro Investor',
+    desc: 'Full discovery and pipeline',
+    features: ['Unlimited discovery', 'All filters', 'Full profiles + pitch decks', 'Contact requests', 'Pipeline CRM', 'Analytics', 'Host 1 competition/year'],
+    cta: 'Join as Pro',
     highlight: true,
   },
   {
     tier: 'Enterprise',
     price: 'Custom',
     period: '',
-    desc: 'For funds and large organizations',
-    features: [
-      'Everything in Pro',
-      'Team member access',
-      'Unlimited competition hosting',
-      'API data access',
-      'White-labeled reports',
-      'Dedicated account manager',
-      'Custom sector analytics',
-    ],
-    cta: 'Contact Sales',
+    desc: 'For funds and orgs',
+    features: ['Everything in Pro', 'Team access', 'Unlimited competitions', 'API access', 'Custom reports', 'Dedicated support'],
+    cta: 'Contact us',
     highlight: false,
   },
 ];
 
 export default function ForInvestors() {
+  const { profile } = useInvestor();
+
   return (
-    <div className="min-h-screen pt-20">
+    <div className="min-h-screen pt-14">
       {/* Hero */}
-      <section className="bg-[#09091a] border-b border-[#1c1c3a] py-20 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-[#60a5fa] text-sm font-semibold uppercase tracking-widest mb-4">For Investors</div>
-          <h1 className="text-5xl font-bold text-white mb-6 max-w-2xl">
-            Smarter Deal Flow.<br />
-            <span className="gradient-text-blue">Structured Discovery.</span>
+      <section className="py-20 bg-[#06060f]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs text-gray-500 uppercase tracking-wider mb-4">For Investors</p>
+          <h1 className="text-3xl sm:text-4xl font-semibold text-white mb-4 max-w-lg leading-tight">
+            Better deal flow. Less noise.
           </h1>
-          <p className="text-xl text-gray-400 max-w-xl mb-10">
-            Stop swimming through unstructured decks. Vulture X delivers AI-ranked, filter-ready deal flow from a curated startup ecosystem.
+          <p className="text-gray-400 text-[15px] max-w-md mb-8 leading-relaxed">
+            Stop swimming through unstructured decks. Get scored, filtered, structured deal flow from a curated startup ecosystem.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link to="/investor-onboarding" className="flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-[#60a5fa] to-[#a78bfa] text-black font-bold rounded-xl hover:opacity-90 transition-opacity">
-              Join as Investor <ArrowRight size={18} />
+          <div className="flex flex-wrap gap-3 mb-10">
+            <Link
+              to={profile ? '/investor-dashboard' : '/investor-onboarding'}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-[#06060f] font-medium rounded-md text-sm hover:bg-gray-200 transition-colors"
+            >
+              {profile ? 'Open dashboard' : 'Join as investor'} <ArrowRight size={15} />
             </Link>
-            <Link to="/explore" className="flex items-center gap-2 px-7 py-3.5 bg-white/5 border border-[#1c1c3a] text-white font-semibold rounded-xl hover:bg-white/10 transition-all">
-              Browse Startups
-            </Link>
+            {profile ? (
+              <Link to="/investor-onboarding" className="inline-flex items-center gap-2 px-5 py-2.5 border border-[#2a2a3d] text-gray-300 font-medium rounded-md text-sm hover:border-gray-500 transition-colors">
+                Edit profile
+              </Link>
+            ) : (
+              <Link to="/explore" className="inline-flex items-center gap-2 px-5 py-2.5 border border-[#2a2a3d] text-gray-300 font-medium rounded-md text-sm hover:border-gray-500 transition-colors">
+                Browse startups
+              </Link>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-8 pt-6 border-t border-[#1c1c3a]/40">
+            {[
+              { value: '200+', label: 'Startups in discovery' },
+              { value: '50+', label: 'Verified investors' },
+              { value: '12', label: 'Competitions hosted' },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <div className="text-lg font-semibold text-white">{stat.value}</div>
+                <div className="text-xs text-gray-500">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Investor Types */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="text-[#60a5fa] text-sm font-semibold uppercase tracking-widest mb-3">Who It's For</div>
-            <h2 className="text-4xl font-bold text-white">Built for All Capital Providers</h2>
+      {/* Who it's for */}
+      <section className="py-20 bg-[#08081a] border-y border-[#1c1c3a]/40">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-10">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Who it's for</p>
+            <h2 className="text-2xl font-semibold text-white">All types of capital providers</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {investorTypes.map((t) => (
-              <div key={t.type} className="bg-[#0f0f1e] border border-[#1c1c3a] rounded-xl p-5 text-center card-hover">
-                <div className="text-3xl mb-3">{t.icon}</div>
-                <h4 className="font-semibold text-white text-sm mb-2">{t.type}</h4>
-                <p className="text-gray-500 text-xs leading-relaxed">{t.desc}</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            {[
+              { type: 'Angel Investors', desc: 'Early-stage, high-growth opportunities' },
+              { type: 'Venture Capital', desc: 'Institutional deal flow across sectors' },
+              { type: 'Impact Investors', desc: 'SDG-focused, measurable returns' },
+              { type: 'Corporate VC', desc: 'Strategic partnerships, innovation' },
+              { type: 'CSR Programs', desc: 'Funding impact startups' },
+            ].map((t) => (
+              <div key={t.type} className="bg-[#0a0a1a] border border-[#1c1c3a]/40 rounded-xl p-4">
+                <h4 className="text-xs font-medium text-white mb-1">{t.type}</h4>
+                <p className="text-[11px] text-gray-500 leading-relaxed">{t.desc}</p>
               </div>
             ))}
           </div>
@@ -145,113 +113,128 @@ export default function ForInvestors() {
       </section>
 
       {/* Features */}
-      <section className="py-20 bg-[#09091a]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="text-[#60a5fa] text-sm font-semibold uppercase tracking-widest mb-3">Platform Features</div>
-            <h2 className="text-4xl font-bold text-white">Your Deal Flow Command Center</h2>
+      <section className="py-20 bg-[#06060f]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-10">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Features</p>
+            <h2 className="text-2xl font-semibold text-white">Your deal flow dashboard</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[#1c1c3a]/30 rounded-xl overflow-hidden">
             {features.map((f) => (
-              <div key={f.title} className="bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-7 card-hover">
-                <f.icon size={28} className={`${f.color} mb-5`} />
-                <h3 className="text-xl font-bold text-white mb-3">{f.title}</h3>
-                <p className="text-gray-400 leading-relaxed">{f.desc}</p>
+              <div key={f.title} className="bg-[#0a0a1a] p-6">
+                <f.icon size={18} className="text-gray-500 mb-3" />
+                <h3 className="text-sm text-white font-medium mb-1.5">{f.title}</h3>
+                <p className="text-gray-500 text-xs leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Onboarding Flow */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="text-[#60a5fa] text-sm font-semibold uppercase tracking-widest mb-3">Onboarding</div>
-            <h2 className="text-4xl font-bold text-white">Set Up Your Investor Profile</h2>
+      {/* Onboarding */}
+      <section className="py-20 bg-[#08081a] border-y border-[#1c1c3a]/40">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-10">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Getting started</p>
+            <h2 className="text-2xl font-semibold text-white">Set up in 4 steps</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { step: '01', title: 'Sign Up', desc: 'Register via Email, LinkedIn, or institutional login.' },
-              { step: '02', title: 'Define Your Thesis', desc: 'Select investor type, sector interests, stage preference, ticket size, and geography.' },
-              { step: '03', title: 'Get Verified', desc: 'Complete our verification process (manual review or KYC-based) to access full platform.' },
-              { step: '04', title: 'Start Discovering', desc: 'Access your personalized deal flow dashboard, trending lists, and AI recommendations.' },
+              { num: '01', title: 'Sign up', desc: 'Email, LinkedIn, or institutional login.' },
+              { num: '02', title: 'Define your thesis', desc: 'Investor type, sectors, stage, ticket size, geography.' },
+              { num: '03', title: 'Get verified', desc: 'Manual review or KYC-based verification.' },
+              { num: '04', title: 'Start discovering', desc: 'Personalized deal flow, trending lists, recommendations.' },
             ].map((s) => (
-              <div key={s.step} className="bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-6 card-hover relative">
-                <div className="absolute top-4 right-4 text-4xl font-black text-[#1c1c3a]">{s.step}</div>
-                <h4 className="font-bold text-white mb-2 pr-10">{s.title}</h4>
-                <p className="text-gray-400 text-sm">{s.desc}</p>
+              <div key={s.num} className="bg-[#0a0a1a] border border-[#1c1c3a]/40 rounded-xl p-5">
+                <span className="text-xs text-gray-600 font-mono">{s.num}</span>
+                <h4 className="text-sm font-medium text-white mt-2 mb-1">{s.title}</h4>
+                <p className="text-xs text-gray-500">{s.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Impact Investors */}
-      <section className="py-16 bg-[#0a0f0a]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-[#0f2010] to-[#0f1a10] border border-[#4ade80]/20 rounded-3xl p-10">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
-              <div>
-                <div className="text-[#4ade80] text-sm font-semibold uppercase tracking-wider mb-2">🌱 Impact Investors</div>
-                <h3 className="text-3xl font-bold text-white mb-3">Dedicated SDG Discovery Layer</h3>
-                <p className="text-gray-300 max-w-lg">
-                  Impact investors get a dedicated filter for verified SDG-aligned startups. All impact startups display their SDG tags, impact metrics, and verified badge.
-                </p>
-              </div>
-              <Link to="/impact" className="flex-shrink-0 flex items-center gap-2 px-6 py-3 bg-[#4ade80] text-black font-bold rounded-xl hover:bg-[#22c55e] transition-colors whitespace-nowrap">
-                Explore Impact Startups <ArrowRight size={16} />
-              </Link>
+      {/* Impact */}
+      <section className="py-16 bg-[#06060f]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-[#0a110a] border border-[#1a2e1a]/50 rounded-xl p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <p className="text-xs text-emerald-500/70 uppercase tracking-wider mb-1.5">Impact investors</p>
+              <h3 className="text-lg font-semibold text-white mb-1.5">Dedicated SDG discovery</h3>
+              <p className="text-gray-400 text-sm max-w-md">
+                Filter for verified SDG-aligned startups. Impact metrics, verified badges, alignment tags.
+              </p>
             </div>
+            <Link to="/impact" className="flex-shrink-0 inline-flex items-center gap-1.5 text-sm text-emerald-400/80 hover:text-emerald-300 transition-colors whitespace-nowrap">
+              Explore impact startups <ArrowRight size={14} />
+            </Link>
           </div>
         </div>
       </section>
 
       {/* Pricing */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="text-[#60a5fa] text-sm font-semibold uppercase tracking-widest mb-3">Pricing</div>
-            <h2 className="text-4xl font-bold text-white">Investor Access Tiers</h2>
+      <section className="py-20 bg-[#08081a] border-y border-[#1c1c3a]/40">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-10">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Pricing</p>
+            <h2 className="text-2xl font-semibold text-white">Investor access tiers</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl">
             {pricingTiers.map((tier) => (
               <div
                 key={tier.tier}
-                className={`rounded-2xl p-7 ${
+                className={`rounded-xl p-6 ${
                   tier.highlight
-                    ? 'bg-gradient-to-br from-[#0d1a2e] to-[#0f0f1e] border border-[#60a5fa]/30'
-                    : 'bg-[#0f0f1e] border border-[#1c1c3a]'
+                    ? 'bg-[#0a0a1a] border border-[#2a2a4a] relative'
+                    : 'bg-[#0a0a1a] border border-[#1c1c3a]/40'
                 }`}
               >
                 {tier.highlight && (
-                  <div className="text-xs font-bold bg-gradient-to-r from-[#60a5fa] to-[#a78bfa] text-black px-2.5 py-1 rounded-full inline-block mb-4">
-                    MOST POPULAR
-                  </div>
+                  <span className="absolute top-4 right-4 text-[10px] bg-white text-[#06060f] font-medium px-2 py-0.5 rounded">Popular</span>
                 )}
-                <div className="text-gray-400 text-sm mb-1">{tier.tier}</div>
-                <div className="text-3xl font-bold text-white mb-1">
-                  {tier.price}
-                  <span className="text-gray-500 text-base font-normal">{tier.period}</span>
+                <div className="text-xs text-gray-500 mb-1">{tier.tier}</div>
+                <div className="text-2xl font-semibold text-white mb-0.5">
+                  {tier.price}<span className="text-gray-600 text-sm font-normal">{tier.period}</span>
                 </div>
-                <p className="text-gray-500 text-sm mb-6">{tier.desc}</p>
-                <ul className="space-y-2.5 mb-8">
+                <p className="text-xs text-gray-500 mb-5">{tier.desc}</p>
+                <ul className="space-y-2 mb-6">
                   {tier.features.map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-sm text-gray-300">
-                      <CheckCircle size={14} className={tier.highlight ? 'text-[#60a5fa]' : 'text-gray-600'} /> {f}
+                    <li key={f} className="flex items-center gap-2 text-xs text-gray-400">
+                      <CheckCircle size={12} className={tier.highlight ? 'text-gray-400' : 'text-gray-600'} /> {f}
                     </li>
                   ))}
                 </ul>
                 <Link
-                  to={tier.cta === 'Contact Sales' ? '/about' : '/investor-onboarding'}
-                  className={`block w-full py-3 rounded-xl font-semibold text-sm transition-all text-center ${
+                  to={tier.cta === 'Contact us' ? '/about' : '/investor-onboarding'}
+                  className={`block w-full py-2 rounded-md text-xs font-medium text-center transition-colors ${
                     tier.highlight
-                      ? 'bg-gradient-to-r from-[#60a5fa] to-[#a78bfa] text-black hover:opacity-90'
-                      : 'border border-[#1c1c3a] text-gray-300 hover:border-[#60a5fa]/30 hover:text-white'
+                      ? 'bg-white text-[#06060f] hover:bg-gray-200'
+                      : 'border border-[#1c1c3a] text-gray-400 hover:border-[#2a2a4a] hover:text-white'
                   }`}
                 >
                   {tier.cta}
                 </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-16 bg-[#06060f]">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-semibold text-white mb-8">Common questions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {[
+              { q: 'How are startups ranked?', a: 'Traction, competition performance, investor interest, and profile completeness.' },
+              { q: 'Can I filter by sector?', a: 'Yes. Sector, stage, geography, SDG alignment, and more.' },
+              { q: 'Do I need a paid plan to contact founders?', a: 'Pro unlocks full discovery, pitch deck access, and contact workflows.' },
+              { q: 'Can my team access one account?', a: 'Yes. Team access is available on Enterprise.' },
+            ].map((item) => (
+              <div key={item.q} className="bg-[#0a0a1a] border border-[#1c1c3a]/40 rounded-xl p-5">
+                <h3 className="text-sm text-white font-medium mb-1.5">{item.q}</h3>
+                <p className="text-xs text-gray-500 leading-relaxed">{item.a}</p>
               </div>
             ))}
           </div>
