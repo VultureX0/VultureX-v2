@@ -27,20 +27,20 @@ import { useImpactVerification } from '../context/ImpactVerificationContext';
 function EmptyDashboard() {
   const { user } = useAuth();
   return (
-    <div className="min-h-screen pt-20 bg-[#050511] text-gray-100 flex items-center justify-center px-4">
+    <div className="min-h-screen pt-20 bg-[#ffffff] text-[#111111] flex items-center justify-center px-4">
       <div className="max-w-md text-center">
-        <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#8b5cf6]/10 border border-[#8b5cf6]/30 flex items-center justify-center">
-          <Rocket size={36} className="text-[#8b5cf6]" />
+        <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#d14343]/10 border border-[#d14343]/30 flex items-center justify-center">
+          <Rocket size={36} className="text-[#d14343]" />
         </div>
-        <h1 className="text-2xl font-bold text-white mb-3">Welcome to your Dashboard</h1>
-        <p className="text-gray-400 text-sm mb-8">
-          You&apos;re signed in as <span className="text-white font-medium">{user?.email}</span>.
+        <h1 className="text-2xl font-bold text-[#111111] mb-3">Welcome to your Dashboard</h1>
+        <p className="text-gray-600 text-sm mb-8">
+          You&apos;re signed in as <span className="text-[#111111] font-medium">{user?.email}</span>.
           <br />
           Set up your startup profile so investors can discover you.
         </p>
         <Link
           to="/startup-onboarding"
-          className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-white shadow-[0_0_30px_rgba(139,92,246,0.35)] hover:opacity-90 transition-all"
+          className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-2xl bg-gradient-to-r from-[#d14343] to-[#b73535] text-white shadow-[0_0_30px_rgba(139,92,246,0.35)] hover:opacity-90 transition-all"
         >
           <Rocket size={18} /> Set Up Startup Profile
         </Link>
@@ -51,22 +51,22 @@ function EmptyDashboard() {
 
 function DashboardSkeleton() {
   return (
-    <div className="min-h-screen pt-20 bg-[#050511] text-gray-100 px-4 sm:px-6 lg:px-10 pb-10">
+    <div className="min-h-screen pt-20 bg-[#ffffff] text-[#111111] px-4 sm:px-6 lg:px-10 pb-10">
       <div className="animate-pulse space-y-6 max-w-5xl mx-auto mt-6">
-        <div className="h-8 w-48 bg-[#1c1c3a] rounded-lg" />
-        <div className="h-4 w-80 bg-[#1c1c3a] rounded" />
-        <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-8 space-y-4">
+        <div className="h-8 w-48 bg-[#e8e8e2] rounded-xl" />
+        <div className="h-4 w-80 bg-[#e8e8e2] rounded" />
+        <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-8 space-y-4">
           <div className="flex gap-4">
-            <div className="w-14 h-14 bg-[#1c1c3a] rounded-2xl" />
+            <div className="w-14 h-14 bg-[#e8e8e2] rounded-2xl" />
             <div className="flex-1 space-y-2">
-              <div className="h-6 w-1/3 bg-[#1c1c3a] rounded" />
-              <div className="h-4 w-2/3 bg-[#1c1c3a] rounded" />
+              <div className="h-6 w-1/3 bg-[#e8e8e2] rounded" />
+              <div className="h-4 w-2/3 bg-[#e8e8e2] rounded" />
             </div>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-6">
-          <div className="h-40 bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl" />
-          <div className="h-40 bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl" />
+          <div className="h-40 bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl" />
+          <div className="h-40 bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl" />
         </div>
       </div>
     </div>
@@ -106,17 +106,17 @@ function DashboardLayout() {
     : 'VX';
 
   return (
-    <div className="min-h-screen pt-20 bg-[#050511] text-gray-100 flex">
-      <aside className="w-64 bg-[#0b0b18] border-r border-[#1c1c3a] hidden md:flex flex-col flex-shrink-0">
-        <div className="px-5 py-4 border-b border-[#1c1c3a]">
-          <div className="text-xs uppercase tracking-[0.2em] text-gray-500 mb-2">Startup</div>
+    <div className="min-h-screen pt-20 bg-[#ffffff] text-[#111111] flex">
+      <aside className="w-64 bg-[#ffffff] border-r border-[#e8e8e2] hidden md:flex flex-col flex-shrink-0">
+        <div className="px-5 py-4 border-b border-[#e8e8e2]">
+          <div className="text-xs uppercase tracking-[0.2em] text-gray-600 mb-2">Startup</div>
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] flex items-center justify-center text-xs font-bold">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#d14343] to-[#b73535] flex items-center justify-center text-xs font-bold">
               {initials}
             </div>
             <div>
-              <div className="text-sm font-semibold text-white truncate max-w-[150px]">{profile?.companyName}</div>
-              <div className="text-xs text-gray-500 truncate max-w-[150px]">{profile?.tagline || profile?.sector}</div>
+              <div className="text-sm font-semibold text-[#111111] truncate max-w-[150px]">{profile?.companyName}</div>
+              <div className="text-xs text-gray-600 truncate max-w-[150px]">{profile?.tagline || profile?.sector}</div>
             </div>
           </div>
         </div>
@@ -130,7 +130,7 @@ function DashboardLayout() {
         </nav>
 
         <div className="px-3 pb-4">
-          <div className={`rounded-xl border p-3 text-xs ${mandate ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-200' : 'bg-amber-500/10 border-amber-500/30 text-amber-200'}`}>
+          <div className={`rounded-2xl border p-3 text-xs ${mandate ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-200' : 'bg-amber-500/10 border-amber-500/30 text-amber-200'}`}>
             <div className="font-medium mb-1">Mandate status</div>
             <div>{mandate ? 'Exclusive mandate active' : 'Exclusive mandate pending'}</div>
           </div>
@@ -170,22 +170,22 @@ function DashboardOverview() {
     <div>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-white">Dashboard</h1>
-          <p className="text-sm text-gray-400 mt-1">Your startup profile as seen by investors.</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-[#111111]">Dashboard</h1>
+          <p className="text-sm text-gray-600 mt-1">Your startup profile as seen by investors.</p>
         </div>
         <div className="flex items-center gap-3">
           <Link
             to="/startup-onboarding"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border border-[#1c1c3a] text-gray-300 hover:text-white hover:border-[#8b5cf6]/40 transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-medium border border-[#e8e8e2] text-gray-700 hover:text-[#111111] hover:border-[#d14343]/40 transition-all"
           >
             <Pencil size={14} /> Edit Profile
           </Link>
-          <div className="inline-flex items-center gap-3 px-3 py-2 rounded-full bg-[#09091a] border border-[#1c1c3a]">
-            <span className="text-xs text-gray-400">Investor View</span>
+          <div className="inline-flex items-center gap-3 px-3 py-2 rounded-full bg-[#f9f9f7] border border-[#e8e8e2]">
+            <span className="text-xs text-gray-600">Investor View</span>
             <button
               type="button"
               onClick={() => setInvestorView((v) => !v)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${investorView ? 'bg-[#8b5cf6]' : 'bg-gray-700'}`}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${investorView ? 'bg-[#d14343]' : 'bg-gray-700'}`}
             >
               <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${investorView ? 'translate-x-5' : 'translate-x-1'}`} />
             </button>
@@ -198,13 +198,13 @@ function DashboardOverview() {
           <MandateBanner mandate={mandate} />
           <ImpactBanner application={application} />
 
-          <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
+          <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6">
             <div className="flex flex-wrap items-center gap-4 mb-4">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] flex items-center justify-center text-xl font-bold">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#d14343] to-[#b73535] flex items-center justify-center text-xl font-bold">
                 {initials}
               </div>
               <div>
-                <div className="text-lg font-semibold text-white flex items-center gap-2">
+                <div className="text-lg font-semibold text-[#111111] flex items-center gap-2">
                   {profile?.companyName}
                   {investorView && (
                     <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[10px] text-emerald-300">
@@ -212,9 +212,9 @@ function DashboardOverview() {
                     </span>
                   )}
                 </div>
-                {profile?.tagline && <p className="text-sm text-gray-400">{profile.tagline}</p>}
+                {profile?.tagline && <p className="text-sm text-gray-600">{profile.tagline}</p>}
                 {profile?.sector && (
-                  <div className="mt-1 text-xs text-gray-500">
+                  <div className="mt-1 text-xs text-gray-600">
                     Industry: {profile.sector}
                     {profile.stage ? ` ? ${profile.stage}` : ''}
                   </div>
@@ -265,19 +265,19 @@ function DashboardOverview() {
                 {profile?.founderName && (
                   <div className="flex items-start justify-between">
                     <div>
-                      <div className="text-white font-medium">{profile.founderName}</div>
-                      <div className="text-xs text-gray-400">{profile.founderRole || 'Founder'}</div>
+                      <div className="text-[#111111] font-medium">{profile.founderName}</div>
+                      <div className="text-xs text-gray-600">{profile.founderRole || 'Founder'}</div>
                     </div>
                     {profile.founderBio && (
-                      <div className="text-xs text-gray-500 max-w-xs text-right">{profile.founderBio}</div>
+                      <div className="text-xs text-gray-600 max-w-xs text-right">{profile.founderBio}</div>
                     )}
                   </div>
                 )}
                 {profile?.team.map((member) => (
                   <div key={member.name + member.role} className="flex items-start justify-between">
                     <div>
-                      <div className="text-white font-medium">{member.name}</div>
-                      <div className="text-xs text-gray-400">{member.role}</div>
+                      <div className="text-[#111111] font-medium">{member.name}</div>
+                      <div className="text-xs text-gray-600">{member.role}</div>
                     </div>
                   </div>
                 ))}
@@ -294,23 +294,23 @@ function DashboardOverview() {
                   href={profile.pitchDeckUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm text-[#c4b5fd] hover:text-white transition-colors"
+                  className="inline-flex items-center gap-2 text-sm text-[#a24a4a] hover:text-[#111111] transition-colors"
                 >
                   <FileText size={14} /> View Pitch Deck ?
                 </a>
-                <p className="text-[11px] text-gray-500">
+                <p className="text-[11px] text-gray-600">
                   Update your deck URL in{' '}
-                  <Link to="/startup-onboarding" className="text-[#a78bfa] hover:text-white transition-colors">
+                  <Link to="/startup-onboarding" className="text-[#c35c5c] hover:text-[#111111] transition-colors">
                     Edit Profile
                   </Link>
                 </p>
               </div>
             ) : (
               <div className="text-center py-4">
-                <p className="text-xs text-gray-400 mb-3">No pitch deck linked yet.</p>
+                <p className="text-xs text-gray-600 mb-3">No pitch deck linked yet.</p>
                 <Link
                   to="/startup-onboarding"
-                  className="px-4 py-1.5 rounded-lg bg-[#8b5cf6] text-xs font-semibold text-white hover:opacity-90 transition-opacity"
+                  className="px-4 py-1.5 rounded-xl bg-[#d14343] text-xs font-semibold text-[#111111] hover:opacity-90 transition-opacity"
                 >
                   Add Deck URL
                 </Link>
@@ -326,12 +326,12 @@ function DashboardOverview() {
                 { name: 'Data room link', status: 'Optional' },
               ].map((doc) => (
                 <li key={doc.name} className="flex items-center justify-between">
-                  <span className="text-gray-300">{doc.name}</span>
+                  <span className="text-gray-700">{doc.name}</span>
                   <StatusBadge status={doc.status} />
                 </li>
               ))}
             </ul>
-            <Link to="/dashboard/documents" className="inline-flex items-center gap-2 text-sm text-[#8b5cf6] hover:text-[#c4b5fd] mt-4">
+            <Link to="/dashboard/documents" className="inline-flex items-center gap-2 text-sm text-[#d14343] hover:text-[#a24a4a] mt-4">
               Manage documents <Eye size={14} />
             </Link>
           </SectionCard>
@@ -339,17 +339,17 @@ function DashboardOverview() {
           <SectionCard title="Account" icon={Settings}>
             <div className="space-y-2 text-xs">
               <div className="flex items-center justify-between">
-                <span className="text-gray-400">Email</span>
-                <span className="text-gray-300">{user?.email}</span>
+                <span className="text-gray-600">Email</span>
+                <span className="text-gray-700">{user?.email}</span>
               </div>
               {profile?.website && (
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-400">Website</span>
+                  <span className="text-gray-600">Website</span>
                   <a
                     href={profile.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#a78bfa] hover:text-white transition-colors truncate max-w-[180px]"
+                    className="text-[#c35c5c] hover:text-[#111111] transition-colors truncate max-w-[180px]"
                   >
                     {profile.website.replace(/^https?:\/\//, '')}
                   </a>
@@ -357,8 +357,8 @@ function DashboardOverview() {
               )}
               {profile?.updatedAt && (
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-400">Last Updated</span>
-                  <span className="text-gray-300">
+                  <span className="text-gray-600">Last Updated</span>
+                  <span className="text-gray-700">
                     {new Date(profile.updatedAt).toLocaleDateString()}
                   </span>
                 </div>
@@ -388,9 +388,9 @@ function StartupInfoView() {
       <PageHeader title="Startup Info" description="Core profile details investors and internal team members rely on." />
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {cards.map((card) => (
-          <div key={card.label} className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-5">
-            <div className="text-xs text-gray-500 mb-1">{card.label}</div>
-            <div className="text-white font-medium">{card.value}</div>
+          <div key={card.label} className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-5">
+            <div className="text-xs text-gray-600 mb-1">{card.label}</div>
+            <div className="text-[#111111] font-medium">{card.value}</div>
           </div>
         ))}
       </div>
@@ -405,16 +405,16 @@ function StartupInfoView() {
       <SectionCard title="Founder Profiles" icon={Users}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {profile?.founderName && (
-            <div className="bg-[#09091a] border border-[#1c1c3a] rounded-xl p-5">
-              <div className="text-white font-medium">{profile.founderName}</div>
-              <div className="text-xs text-[#8b5cf6] mt-1">{profile.founderRole || 'Founder'}</div>
-              {profile.founderBio && <p className="text-sm text-gray-400 mt-3 leading-relaxed">{profile.founderBio}</p>}
+            <div className="bg-[#f9f9f7] border border-[#e8e8e2] rounded-2xl p-5">
+              <div className="text-[#111111] font-medium">{profile.founderName}</div>
+              <div className="text-xs text-[#d14343] mt-1">{profile.founderRole || 'Founder'}</div>
+              {profile.founderBio && <p className="text-sm text-gray-600 mt-3 leading-relaxed">{profile.founderBio}</p>}
             </div>
           )}
           {profile?.team.map((member) => (
-            <div key={member.name} className="bg-[#09091a] border border-[#1c1c3a] rounded-xl p-5">
-              <div className="text-white font-medium">{member.name}</div>
-              <div className="text-xs text-[#8b5cf6] mt-1">{member.role}</div>
+            <div key={member.name} className="bg-[#f9f9f7] border border-[#e8e8e2] rounded-2xl p-5">
+              <div className="text-[#111111] font-medium">{member.name}</div>
+              <div className="text-xs text-[#d14343] mt-1">{member.role}</div>
             </div>
           ))}
         </div>
@@ -464,7 +464,7 @@ function FinancialsView() {
             { item: 'Founder profile complete', done: !!profile?.founderName },
             { item: 'Data room index prepared', done: false },
           ].map((entry) => (
-            <div key={entry.item} className="flex items-center gap-2 text-gray-300">
+            <div key={entry.item} className="flex items-center gap-2 text-gray-700">
               <span className={`h-2.5 w-2.5 rounded-full ${entry.done ? 'bg-emerald-400' : 'bg-amber-400'}`} />
               {entry.item}
             </div>
@@ -512,10 +512,10 @@ function DocumentsView() {
           <SectionCard key={section.title} title={section.title} icon={FolderOpen}>
             <div className="space-y-3">
               {section.docs.map((doc) => (
-                <div key={doc.name} className="bg-[#09091a] border border-[#1c1c3a] rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+                <div key={doc.name} className="bg-[#f9f9f7] border border-[#e8e8e2] rounded-2xl px-4 py-3 flex items-center justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="text-sm text-white truncate">{doc.name}</div>
-                    <div className="text-xs text-gray-500 mt-1">Visible in investor room when unlocked</div>
+                    <div className="text-sm text-[#111111] truncate">{doc.name}</div>
+                    <div className="text-xs text-gray-600 mt-1">Visible in investor room when unlocked</div>
                   </div>
                   <StatusBadge status={doc.status} />
                 </div>
@@ -526,10 +526,10 @@ function DocumentsView() {
       </div>
 
       <SectionCard title="Upload Center" icon={Upload}>
-        <div className="border border-dashed border-[#2d2d4a] rounded-2xl p-8 text-center text-gray-400">
-          <p className="text-white mb-2">Drop files here or choose from your device</p>
-          <p className="text-sm text-gray-500 mb-4">PDF, PPTX, XLSX, CSV ? Max 25MB per file</p>
-          <button className="px-4 py-2 rounded-lg bg-[#8b5cf6] text-sm font-medium text-white hover:opacity-90 transition-opacity">
+        <div className="border border-dashed border-[#2d2d4a] rounded-2xl p-8 text-center text-gray-600">
+          <p className="text-[#111111] mb-2">Drop files here or choose from your device</p>
+          <p className="text-sm text-gray-600 mb-4">PDF, PPTX, XLSX, CSV ? Max 25MB per file</p>
+          <button className="px-4 py-2 rounded-xl bg-[#d14343] text-sm font-medium text-[#111111] hover:opacity-90 transition-opacity">
             Choose Files
           </button>
         </div>
@@ -564,7 +564,7 @@ function SettingsView() {
           <SimpleRow label="Success fee" value="3% on platform-originated closes" />
           <SimpleRow label="Conversation policy" value="All investor conversations should remain on-platform" />
           <div className="flex flex-wrap gap-4 pt-2">
-            <Link to="/startup-mandate" className="inline-flex items-center gap-2 text-[#8b5cf6] hover:text-[#c4b5fd]">
+            <Link to="/startup-mandate" className="inline-flex items-center gap-2 text-[#d14343] hover:text-[#a24a4a]">
               Review mandate and signature details <Eye size={14} />
             </Link>
             <Link to="/impact-verification" className="inline-flex items-center gap-2 text-[#4ade80] hover:text-[#86efac]">
@@ -575,10 +575,10 @@ function SettingsView() {
       </SectionCard>
 
       <SectionCard title="Notifications" icon={Bell}>
-        <div className="space-y-3 text-sm text-gray-300">
-          <div className="bg-[#09091a] border border-[#1c1c3a] rounded-xl p-4">Investor viewed your profile</div>
-          <div className="bg-[#09091a] border border-[#1c1c3a] rounded-xl p-4">Investor requested intro</div>
-          <div className="bg-[#09091a] border border-[#1c1c3a] rounded-xl p-4">Document review requested</div>
+        <div className="space-y-3 text-sm text-gray-700">
+          <div className="bg-[#f9f9f7] border border-[#e8e8e2] rounded-2xl p-4">Investor viewed your profile</div>
+          <div className="bg-[#f9f9f7] border border-[#e8e8e2] rounded-2xl p-4">Investor requested intro</div>
+          <div className="bg-[#f9f9f7] border border-[#e8e8e2] rounded-2xl p-4">Document review requested</div>
         </div>
       </SectionCard>
     </div>
@@ -605,14 +605,14 @@ function SidebarLink({
       to={to}
       end={end}
       className={({ isActive }) =>
-        `${compact ? 'inline-flex' : 'flex w-full'} items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors text-xs ${
-          isActive ? 'bg-[#8b5cf6]/10 text-[#e5deff]' : 'text-gray-400 hover:text-white hover:bg-white/5'
+        `${compact ? 'inline-flex' : 'flex w-full'} items-center gap-3 px-3 py-2.5 rounded-2xl text-left transition-colors text-xs ${
+          isActive ? 'bg-[#d14343]/10 text-[#e5deff]' : 'text-gray-600 hover:text-[#111111] hover:bg-white/5'
         }`
       }
     >
       {({ isActive }) => (
         <>
-          <Icon size={16} className={isActive ? 'text-[#8b5cf6]' : 'text-gray-500'} />
+          <Icon size={16} className={isActive ? 'text-[#d14343]' : 'text-gray-600'} />
           <span>{label}</span>
         </>
       )}
@@ -623,8 +623,8 @@ function SidebarLink({
 function PageHeader({ title, description }: { title: string; description: string }) {
   return (
     <div>
-      <h1 className="text-2xl md:text-3xl font-bold text-white">{title}</h1>
-      <p className="text-sm text-gray-400 mt-1">{description}</p>
+      <h1 className="text-2xl md:text-3xl font-bold text-[#111111]">{title}</h1>
+      <p className="text-sm text-gray-600 mt-1">{description}</p>
     </div>
   );
 }
@@ -634,10 +634,10 @@ function MandateBanner({ mandate }: { mandate: ReturnType<typeof useStartupManda
     <div className={`border rounded-2xl p-5 ${mandate ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-amber-500/10 border-amber-500/30'}`}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <div className="text-sm font-semibold text-white">
+          <div className="text-sm font-semibold text-[#111111]">
             {mandate ? 'Exclusive mandate signed' : 'Exclusive mandate pending'}
           </div>
-          <p className="text-sm mt-1 text-gray-300">
+          <p className="text-sm mt-1 text-gray-700">
             {mandate
               ? `Signed by ${mandate.founderName} on ${new Date(mandate.signedAt).toLocaleDateString()}. Vulture X now acts as the exclusive fundraising mandate with a 3% success fee on platform-originated closes.`
               : 'Sign your Vulture X exclusive mandate so all investor introductions and closes are contractually covered by the 3% success fee.'}
@@ -645,8 +645,8 @@ function MandateBanner({ mandate }: { mandate: ReturnType<typeof useStartupManda
         </div>
         <Link
           to="/startup-mandate"
-          className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors text-center ${
-            mandate ? 'bg-white/10 text-white hover:bg-white/15' : 'bg-amber-300 text-black hover:bg-amber-200'
+          className={`px-4 py-2 rounded-2xl text-sm font-medium transition-colors text-center ${
+            mandate ? 'bg-white/10 text-[#111111] hover:bg-white/15' : 'bg-amber-300 text-[#111111] hover:bg-amber-200'
           }`}
         >
           {mandate ? 'View mandate' : 'Sign now'}
@@ -666,12 +666,12 @@ function ImpactBanner({
       <div className="border rounded-2xl p-5 bg-[#0f1a0f] border-[#4ade80]/20">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <div className="text-sm font-semibold text-white">Impact verification available</div>
-            <p className="text-sm mt-1 text-gray-300">
+            <div className="text-sm font-semibold text-[#111111]">Impact verification available</div>
+            <p className="text-sm mt-1 text-gray-700">
               If your startup is aligned with measurable SDG outcomes, apply for free Pro access and 0% success fee.
             </p>
           </div>
-          <Link to="/impact-verification" className="px-4 py-2 rounded-xl text-sm font-medium bg-[#4ade80] text-black hover:bg-[#22c55e] transition-colors text-center">
+          <Link to="/impact-verification" className="px-4 py-2 rounded-2xl text-sm font-medium bg-[#4ade80] text-[#111111] hover:bg-[#22c55e] transition-colors text-center">
             Apply
           </Link>
         </div>
@@ -683,16 +683,16 @@ function ImpactBanner({
     <div className={`border rounded-2xl p-5 ${application.status === 'verified' ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-[#0f1a0f] border-[#4ade80]/20'}`}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <div className="text-sm font-semibold text-white">
+          <div className="text-sm font-semibold text-[#111111]">
             {application.status === 'verified' ? 'Impact verified' : 'Impact verification under review'}
           </div>
-          <p className="text-sm mt-1 text-gray-300">
+          <p className="text-sm mt-1 text-gray-700">
             {application.status === 'verified'
               ? 'Your startup is verified for SDG impact and eligible for free Pro access and 0% success fee.'
               : `Application submitted on ${new Date(application.submittedAt).toLocaleDateString()}. Our team will review your SDG alignment and evidence.`}
           </p>
         </div>
-        <Link to="/impact-verification" className="px-4 py-2 rounded-xl text-sm font-medium bg-white/10 text-white hover:bg-white/15 transition-colors text-center">
+        <Link to="/impact-verification" className="px-4 py-2 rounded-2xl text-sm font-medium bg-white/10 text-[#111111] hover:bg-white/15 transition-colors text-center">
           View application
         </Link>
       </div>
@@ -710,9 +710,9 @@ function SectionCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
-      <h2 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-        <Icon size={16} className="text-[#8b5cf6]" />
+    <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6">
+      <h2 className="text-sm font-semibold text-[#111111] mb-4 flex items-center gap-2">
+        <Icon size={16} className="text-[#d14343]" />
         {title}
       </h2>
       {children}
@@ -723,9 +723,9 @@ function SectionCard({
 function InfoBlock({ label, value, sub, accent }: { label: string; value: string; sub?: string; accent?: boolean }) {
   return (
     <div>
-      <div className="text-xs text-gray-500 mb-1">{label}</div>
-      <div className={`text-sm font-medium ${accent ? 'text-amber-300' : 'text-white'}`}>{value}</div>
-      {sub && <div className="text-xs text-gray-500 mt-1">{sub}</div>}
+      <div className="text-xs text-gray-600 mb-1">{label}</div>
+      <div className={`text-sm font-medium ${accent ? 'text-amber-300' : 'text-[#111111]'}`}>{value}</div>
+      {sub && <div className="text-xs text-gray-600 mt-1">{sub}</div>}
     </div>
   );
 }
@@ -733,17 +733,17 @@ function InfoBlock({ label, value, sub, accent }: { label: string; value: string
 function SimpleRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <span className="text-gray-400">{label}</span>
-      <span className="text-white font-medium text-right">{value}</span>
+      <span className="text-gray-600">{label}</span>
+      <span className="text-[#111111] font-medium text-right">{value}</span>
     </div>
   );
 }
 
 function MetricCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-5">
-      <div className="text-lg font-semibold text-white">{value}</div>
-      <div className="text-sm text-gray-500 mt-1">{label}</div>
+    <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-5">
+      <div className="text-lg font-semibold text-[#111111]">{value}</div>
+      <div className="text-sm text-gray-600 mt-1">{label}</div>
     </div>
   );
 }
@@ -771,15 +771,15 @@ function ToggleRow({
   onToggle: () => void;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 bg-[#09091a] border border-[#1c1c3a] rounded-xl p-4">
+    <div className="flex items-center justify-between gap-4 bg-[#f9f9f7] border border-[#e8e8e2] rounded-2xl p-4">
       <div>
-        <div className="text-white text-sm font-medium">{title}</div>
-        <div className="text-xs text-gray-500 mt-1">{description}</div>
+        <div className="text-[#111111] text-sm font-medium">{title}</div>
+        <div className="text-xs text-gray-600 mt-1">{description}</div>
       </div>
       <button
         type="button"
         onClick={onToggle}
-        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${enabled ? 'bg-[#8b5cf6]' : 'bg-gray-700'}`}
+        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${enabled ? 'bg-[#d14343]' : 'bg-gray-700'}`}
       >
         <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${enabled ? 'translate-x-5' : 'translate-x-1'}`} />
       </button>
@@ -789,10 +789,10 @@ function ToggleRow({
 
 function Metric({ label, value, trend, highlight }: { label: string; value: string; trend?: 'up' | 'down'; highlight?: boolean }) {
   return (
-    <div className="bg-[#09091a] rounded-xl p-3">
-      <div className="text-[11px] text-gray-500 mb-1">{label}</div>
+    <div className="bg-[#f9f9f7] rounded-2xl p-3">
+      <div className="text-[11px] text-gray-600 mb-1">{label}</div>
       <div className="flex items-center justify-between">
-        <span className={`text-sm font-semibold ${highlight ? 'text-[#c4b5fd]' : 'text-white'}`}>{value}</span>
+        <span className={`text-sm font-semibold ${highlight ? 'text-[#a24a4a]' : 'text-[#111111]'}`}>{value}</span>
         {trend && (
           <span className={`text-[11px] ${trend === 'up' ? 'text-emerald-400' : 'text-red-400'}`}>
             {trend === 'up' ? '?' : '?'}
@@ -806,8 +806,8 @@ function Metric({ label, value, trend, highlight }: { label: string; value: stri
 function TextBlock({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <div className="text-xs text-gray-500 mb-1.5">{label}</div>
-      <p className="text-gray-300 leading-relaxed">{value}</p>
+      <div className="text-xs text-gray-600 mb-1.5">{label}</div>
+      <p className="text-gray-700 leading-relaxed">{value}</p>
     </div>
   );
 }

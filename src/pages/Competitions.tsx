@@ -26,7 +26,7 @@ const active = [
     stage: 'Idea/MVP',
     applicants: 178,
     criteria: ['Technical Innovation (35%)', 'Market Potential (30%)', 'Team (20%)', 'Traction (15%)'],
-    color: 'from-[#60a5fa] to-[#a78bfa]',
+    color: 'from-[#60a5fa] to-[#c35c5c]',
     sdg: false,
   },
   {
@@ -38,7 +38,7 @@ const active = [
     stage: 'MVP/Revenue',
     applicants: 312,
     criteria: ['Product Quality (30%)', 'Revenue Growth (30%)', 'Market Size (20%)', 'Team (20%)'],
-    color: 'from-[#8b5cf6] to-[#7c3aed]',
+    color: 'from-[#d14343] to-[#b73535]',
     sdg: false,
   },
   {
@@ -56,9 +56,9 @@ const active = [
 ];
 
 const upcoming = [
-  { title: 'FinTech Revolution Cup', host: 'BankTech Fund', prize: '$35K + Pilot', date: 'Opens April 15, 2026', sector: 'FinTech', color: 'from-[#a78bfa] to-[#f59e0b]' },
+  { title: 'FinTech Revolution Cup', host: 'BankTech Fund', prize: '$35K + Pilot', date: 'Opens April 15, 2026', sector: 'FinTech', color: 'from-[#c35c5c] to-[#f59e0b]' },
   { title: 'HealthTech Innovation Award', host: 'MedVentures', prize: '$45K + Hospital Partnership', date: 'Opens May 1, 2026', sector: 'HealthTech', color: 'from-[#f472b6] to-[#ec4899]' },
-  { title: 'Student Founders Challenge', host: 'University Alliance Fund', prize: '$20K + Incubation', date: 'Opens April 20, 2026', sector: 'All Sectors', color: 'from-[#a78bfa] to-[#7c3aed]' },
+  { title: 'Student Founders Challenge', host: 'University Alliance Fund', prize: '$20K + Incubation', date: 'Opens April 20, 2026', sector: 'All Sectors', color: 'from-[#c35c5c] to-[#b73535]' },
 ];
 
 const pastWinners = [
@@ -74,25 +74,25 @@ export default function Competitions() {
 
   return (
     <div className="min-h-screen pt-20">
-      <div className="bg-[#09091a] border-b border-[#1c1c3a] py-12">
+      <div className="bg-[#f9f9f7] border-b border-[#e8e8e2] py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-[#8b5cf6] text-sm font-semibold uppercase tracking-widest mb-2">🏆 Challenges</div>
-          <h1 className="text-4xl font-bold text-white mb-2">Competitions</h1>
-          <p className="text-gray-400">Themed startup challenges. Win prizes, earn badges, boost your ranking, and get in front of serious investors.</p>
+          <div className="text-[#d14343] text-sm font-semibold uppercase tracking-widest mb-2">🏆 Challenges</div>
+          <h1 className="text-4xl font-bold text-[#111111] mb-2">Competitions</h1>
+          <p className="text-gray-600">Themed startup challenges. Win prizes, earn badges, boost your ranking, and get in front of serious investors.</p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Tabs */}
-        <div className="flex flex-wrap gap-2 mb-8 border-b border-[#1c1c3a] pb-4">
+        <div className="flex flex-wrap gap-2 mb-8 border-b border-[#e8e8e2] pb-4">
           {tabs.map((tab, i) => (
             <button
               key={tab}
               onClick={() => setActiveTab(i)}
-              className={`px-5 py-2 rounded-xl text-sm font-medium border transition-all ${
+              className={`px-5 py-2 rounded-2xl text-sm font-medium border transition-all ${
                 activeTab === i
-                  ? 'bg-[#8b5cf6]/10 border-[#8b5cf6]/30 text-[#8b5cf6]'
-                  : 'bg-transparent border-transparent text-gray-400 hover:text-white'
+                  ? 'bg-[#d14343]/10 border-[#d14343]/30 text-[#d14343]'
+                  : 'bg-transparent border-transparent text-gray-600 hover:text-[#111111]'
               }`}
             >
               {tab}
@@ -104,49 +104,49 @@ export default function Competitions() {
         {activeTab === 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {active.map((comp) => (
-              <div key={comp.title} className="bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-7 card-hover">
+              <div key={comp.title} className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-7 card-hover">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <div className={`inline-block px-3 py-1 text-xs font-semibold bg-gradient-to-r ${comp.color} text-black rounded-full mb-2`}>
+                    <div className={`inline-block px-3 py-1 text-xs font-semibold bg-gradient-to-r ${comp.color} text-[#111111] rounded-full mb-2`}>
                       {comp.sector}
                     </div>
-                    <h3 className="text-xl font-bold text-white">{comp.title}</h3>
-                    <p className="text-gray-400 text-sm mt-1">Hosted by {comp.host}</p>
+                    <h3 className="text-xl font-bold text-[#111111]">{comp.title}</h3>
+                    <p className="text-gray-600 text-sm mt-1">Hosted by {comp.host}</p>
                   </div>
                   {comp.sdg && <span className="px-2.5 py-1 text-xs bg-[#1a2e1a] text-[#4ade80] border border-[#4ade80]/20 rounded-full">🌱 SDG</span>}
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 mb-5">
-                  <div className="bg-[#09091a] rounded-xl p-3">
-                    <div className="text-xs text-gray-500 mb-1">Prize</div>
-                    <div className="text-[#8b5cf6] font-semibold text-sm">{comp.prize}</div>
+                  <div className="bg-[#f9f9f7] rounded-2xl p-3">
+                    <div className="text-xs text-gray-600 mb-1">Prize</div>
+                    <div className="text-[#d14343] font-semibold text-sm">{comp.prize}</div>
                   </div>
-                  <div className="bg-[#09091a] rounded-xl p-3">
-                    <div className="text-xs text-gray-500 mb-1">Stage Focus</div>
-                    <div className="text-white text-sm font-medium">{comp.stage}</div>
+                  <div className="bg-[#f9f9f7] rounded-2xl p-3">
+                    <div className="text-xs text-gray-600 mb-1">Stage Focus</div>
+                    <div className="text-[#111111] text-sm font-medium">{comp.stage}</div>
                   </div>
-                  <div className="bg-[#09091a] rounded-xl p-3">
-                    <div className="text-xs text-gray-500 mb-1 flex items-center gap-1"><Clock size={10} /> Deadline</div>
+                  <div className="bg-[#f9f9f7] rounded-2xl p-3">
+                    <div className="text-xs text-gray-600 mb-1 flex items-center gap-1"><Clock size={10} /> Deadline</div>
                     <div className="text-orange-400 text-sm font-medium">{comp.deadline}</div>
                   </div>
-                  <div className="bg-[#09091a] rounded-xl p-3">
-                    <div className="text-xs text-gray-500 mb-1 flex items-center gap-1"><Users size={10} /> Applicants</div>
-                    <div className="text-white text-sm font-medium">{comp.applicants}</div>
+                  <div className="bg-[#f9f9f7] rounded-2xl p-3">
+                    <div className="text-xs text-gray-600 mb-1 flex items-center gap-1"><Users size={10} /> Applicants</div>
+                    <div className="text-[#111111] text-sm font-medium">{comp.applicants}</div>
                   </div>
                 </div>
 
                 <div className="mb-5">
-                  <div className="text-xs text-gray-500 mb-2 font-semibold uppercase tracking-wider">Evaluation Criteria</div>
+                  <div className="text-xs text-gray-600 mb-2 font-semibold uppercase tracking-wider">Evaluation Criteria</div>
                   <div className="flex flex-wrap gap-2">
                     {comp.criteria.map((c) => (
-                      <span key={c} className="px-2.5 py-1 text-xs bg-[#1c1c3a] text-gray-300 rounded-full">{c}</span>
+                      <span key={c} className="px-2.5 py-1 text-xs bg-[#e8e8e2] text-gray-700 rounded-full">{c}</span>
                     ))}
                   </div>
                 </div>
 
                 <Link
                   to="/login"
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-semibold rounded-xl hover:opacity-90 transition-opacity"
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-[#d14343] to-[#b73535] text-white font-semibold rounded-2xl hover:opacity-90 transition-opacity"
                 >
                   Apply Now <ArrowRight size={16} />
                 </Link>
@@ -159,17 +159,17 @@ export default function Competitions() {
         {activeTab === 1 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {upcoming.map((comp) => (
-              <div key={comp.title} className="bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-6 card-hover">
-                <div className={`inline-block px-3 py-1 text-xs font-semibold bg-gradient-to-r ${comp.color} text-black rounded-full mb-4`}>
+              <div key={comp.title} className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6 card-hover">
+                <div className={`inline-block px-3 py-1 text-xs font-semibold bg-gradient-to-r ${comp.color} text-[#111111] rounded-full mb-4`}>
                   {comp.sector}
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">{comp.title}</h3>
-                <p className="text-gray-400 text-sm mb-2">By {comp.host}</p>
-                <p className="text-[#8b5cf6] font-semibold text-sm mb-3">{comp.prize}</p>
-                <div className="flex items-center gap-1.5 text-gray-400 text-sm mb-5">
+                <h3 className="text-lg font-bold text-[#111111] mb-2">{comp.title}</h3>
+                <p className="text-gray-600 text-sm mb-2">By {comp.host}</p>
+                <p className="text-[#d14343] font-semibold text-sm mb-3">{comp.prize}</p>
+                <div className="flex items-center gap-1.5 text-gray-600 text-sm mb-5">
                   <Clock size={13} /> {comp.date}
                 </div>
-                <button className="w-full py-2.5 border border-[#1c1c3a] text-gray-300 hover:border-[#8b5cf6]/30 hover:text-white rounded-xl text-sm transition-all">
+                <button className="w-full py-2.5 border border-[#e8e8e2] text-gray-700 hover:border-[#d14343]/30 hover:text-[#111111] rounded-2xl text-sm transition-all">
                   Get Notified
                 </button>
               </div>
@@ -181,14 +181,14 @@ export default function Competitions() {
         {activeTab === 2 && (
           <div className="space-y-4">
             {pastWinners.map((w, i) => (
-              <div key={w.competition} className="flex items-center gap-5 bg-[#0f0f1e] border border-[#1c1c3a] rounded-xl px-6 py-5 card-hover">
+              <div key={w.competition} className="flex items-center gap-5 bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl px-6 py-5 card-hover">
                 <div className="text-2xl">{i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '🏆'}</div>
                 <div className="flex-1">
-                  <div className="font-semibold text-white">{w.competition}</div>
-                  <div className="text-gray-400 text-sm">{w.winner} • {w.sector}</div>
+                  <div className="font-semibold text-[#111111]">{w.competition}</div>
+                  <div className="text-gray-600 text-sm">{w.winner} • {w.sector}</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-[#8b5cf6] font-semibold">{w.prize} Prize</div>
+                  <div className="text-[#d14343] font-semibold">{w.prize} Prize</div>
                   <div className="text-[#4ade80] text-sm">{w.raised}</div>
                 </div>
               </div>
@@ -199,9 +199,9 @@ export default function Competitions() {
         {/* Host a Competition */}
         {activeTab === 3 && (
           <div className="max-w-3xl">
-            <div className="bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-8 mb-6">
-              <h2 className="text-2xl font-bold text-white mb-4">Host a Competition on Vulture X</h2>
-              <p className="text-gray-400 mb-6">
+            <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-8 mb-6">
+              <h2 className="text-2xl font-bold text-[#111111] mb-4">Host a Competition on Vulture X</h2>
+              <p className="text-gray-600 mb-6">
                 Organizations, VC funds, corporates, and accelerators can create themed competitions to source structured deal flow from our curated startup ecosystem.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
@@ -217,28 +217,28 @@ export default function Competitions() {
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-2.5">
                     <CheckCircle size={16} className="text-[#4ade80] flex-shrink-0" />
-                    <span className="text-gray-300 text-sm">{item}</span>
+                    <span className="text-gray-700 text-sm">{item}</span>
                   </div>
                 ))}
               </div>
-              <div className="border-t border-[#1c1c3a] pt-6">
-                <h3 className="text-white font-semibold mb-4">Pricing</h3>
+              <div className="border-t border-[#e8e8e2] pt-6">
+                <h3 className="text-[#111111] font-semibold mb-4">Pricing</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {[
-                    { tier: 'Starter', price: '$499', features: 'Up to 100 applicants', color: 'border-[#1c1c3a]' },
-                    { tier: 'Growth', price: '$1,499', features: 'Up to 500 applicants + Analytics', color: 'border-[#8b5cf6]/30' },
+                    { tier: 'Starter', price: '$499', features: 'Up to 100 applicants', color: 'border-[#e8e8e2]' },
+                    { tier: 'Growth', price: '$1,499', features: 'Up to 500 applicants + Analytics', color: 'border-[#d14343]/30' },
                     { tier: 'Enterprise', price: 'Custom', features: 'Unlimited + Priority Placement', color: 'border-[#60a5fa]/30' },
                   ].map((tier) => (
-                    <div key={tier.tier} className={`bg-[#09091a] border ${tier.color} rounded-xl p-4 text-center`}>
-                      <div className="font-semibold text-white mb-1">{tier.tier}</div>
-                      <div className="text-[#8b5cf6] font-bold text-xl mb-2">{tier.price}</div>
-                      <div className="text-gray-400 text-xs">{tier.features}</div>
+                    <div key={tier.tier} className={`bg-[#f9f9f7] border ${tier.color} rounded-2xl p-4 text-center`}>
+                      <div className="font-semibold text-[#111111] mb-1">{tier.tier}</div>
+                      <div className="text-[#d14343] font-bold text-xl mb-2">{tier.price}</div>
+                      <div className="text-gray-600 text-xs">{tier.features}</div>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
-            <button className="flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-black font-semibold rounded-xl hover:opacity-90 transition-opacity">
+            <button className="flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-[#d14343] to-[#b73535] text-white font-semibold rounded-2xl hover:opacity-90 transition-opacity">
               Apply to Host a Competition <ArrowRight size={16} />
             </button>
           </div>

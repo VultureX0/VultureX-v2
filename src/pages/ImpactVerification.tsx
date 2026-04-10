@@ -93,12 +93,12 @@ export default function ImpactVerification() {
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-20 bg-[#050511]">
+    <div className="min-h-screen pt-20 pb-20 bg-[#ffffff]">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-8">
         <div>
           <p className="text-sm text-[#4ade80] font-medium mb-2">Impact Verification</p>
-          <h1 className="text-3xl font-bold text-white">Apply for SDG Impact Verification</h1>
-          <p className="text-gray-400 mt-2 max-w-3xl">
+          <h1 className="text-3xl font-bold text-[#111111]">Apply for SDG Impact Verification</h1>
+          <p className="text-gray-600 mt-2 max-w-3xl">
             Verified impact startups receive free Pro access, 0% success fee, and priority discovery in the impact investor layer.
           </p>
         </div>
@@ -116,7 +116,7 @@ export default function ImpactVerification() {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-6">
-          <form onSubmit={handleSubmit} className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6 sm:p-8 space-y-6">
+          <form onSubmit={handleSubmit} className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6 sm:p-8 space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <Field label="Startup name *" error={errors.startupName}>
                 <input value={form.startupName} onChange={(e) => update({ startupName: e.target.value })} className={inputClass} placeholder="SolarAI" />
@@ -136,17 +136,17 @@ export default function ImpactVerification() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Aligned SDGs *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Aligned SDGs *</label>
               <div className="flex flex-wrap gap-2">
                 {SDG_OPTIONS.map((sdg) => (
                   <button
                     key={sdg}
                     type="button"
                     onClick={() => toggleSdg(sdg)}
-                    className={`px-3 py-1.5 rounded-lg text-sm border transition-all ${
+                    className={`px-3 py-1.5 rounded-xl text-sm border transition-all ${
                       form.sdgs.includes(sdg)
-                        ? 'bg-[#4ade80]/10 border-[#4ade80]/40 text-white'
-                        : 'bg-[#09091a] border-[#1c1c3a] text-gray-400 hover:text-white'
+                        ? 'bg-[#4ade80]/10 border-[#4ade80]/40 text-[#111111]'
+                        : 'bg-[#f9f9f7] border-[#e8e8e2] text-gray-600 hover:text-[#111111]'
                     }`}
                   >
                     {sdg}
@@ -173,22 +173,22 @@ export default function ImpactVerification() {
             </Field>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <button type="submit" className="px-6 py-3 bg-[#4ade80] text-black font-semibold rounded-xl hover:bg-[#22c55e] transition-colors">
+              <button type="submit" className="px-6 py-3 bg-[#4ade80] text-[#111111] font-semibold rounded-2xl hover:bg-[#22c55e] transition-colors">
                 Submit for verification
               </button>
-              <Link to="/impact" className="px-6 py-3 border border-[#1c1c3a] text-gray-300 rounded-xl hover:text-white hover:border-[#4ade80]/40 transition-all text-center">
+              <Link to="/impact" className="px-6 py-3 border border-[#e8e8e2] text-gray-700 rounded-2xl hover:text-[#111111] hover:border-[#4ade80]/40 transition-all text-center">
                 Back to impact page
               </Link>
             </div>
           </form>
 
           <div className="space-y-6">
-            <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
+            <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6">
               <div className="flex items-center gap-2 text-[#4ade80] mb-3">
                 <Leaf size={18} />
-                <h3 className="text-white font-semibold">What we review</h3>
+                <h3 className="text-[#111111] font-semibold">What we review</h3>
               </div>
-              <ul className="space-y-3 text-sm text-gray-400">
+              <ul className="space-y-3 text-sm text-gray-600">
                 <li>Clear SDG alignment and measurable outcomes</li>
                 <li>Evidence that impact is core to the business model</li>
                 <li>Metrics you can report over time</li>
@@ -196,9 +196,9 @@ export default function ImpactVerification() {
               </ul>
             </div>
 
-            <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
-              <h3 className="text-white font-semibold mb-3">Benefits if approved</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
+            <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6">
+              <h3 className="text-[#111111] font-semibold mb-3">Benefits if approved</h3>
+              <ul className="space-y-2 text-sm text-gray-600">
                 <li>0% success fee on platform-originated fundraising</li>
                 <li>Free Pro subscription</li>
                 <li>Impact badge on your startup profile</li>
@@ -223,7 +223,7 @@ function Field({
 }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-300 mb-1.5">{label}</label>
+      <label className="block text-sm font-medium text-gray-700 mb-1.5">{label}</label>
       {children}
       {error && <p className="text-red-400 text-xs mt-1">{error}</p>}
     </div>
@@ -231,8 +231,8 @@ function Field({
 }
 
 const inputClass =
-  'w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#4ade80] focus:border-transparent';
+  'w-full px-3.5 py-2.5 rounded-2xl bg-[#f9f9f7] border border-[#e8e8e2] text-[#111111] placeholder-gray-500 focus:ring-2 focus:ring-[#4ade80] focus:border-transparent';
 
 const textareaClass =
-  'w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#4ade80] focus:border-transparent resize-none';
+  'w-full px-3.5 py-2.5 rounded-2xl bg-[#f9f9f7] border border-[#e8e8e2] text-[#111111] placeholder-gray-500 focus:ring-2 focus:ring-[#4ade80] focus:border-transparent resize-none';
 

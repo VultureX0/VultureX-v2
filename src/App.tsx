@@ -57,8 +57,8 @@ function RequireAuth({ children }: { children: JSX.Element }) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#050511]">
-        <div className="w-8 h-8 border-2 border-[#8b5cf6] border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-[#f6f6f2]">
+        <div className="w-8 h-8 border-2 border-[#111111] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -78,7 +78,7 @@ function App() {
         <StartupProvider>
         <StartupMandateProvider>
         <ImpactVerificationProvider>
-        <div className="min-h-screen bg-[#06060f] text-gray-100">
+        <div className="min-h-screen bg-[#f6f6f2] text-[#111111]">
           <CustomCursor />
           <Navbar />
           <main>

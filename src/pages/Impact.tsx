@@ -46,42 +46,40 @@ const impactInvestors = [
 export default function Impact() {
   return (
     <div className="min-h-screen pt-20">
-      {/* Hero */}
-      <section className="bg-gradient-to-b from-[#0a0f0a] to-[#06060f] border-b border-[#1c1c3a] py-20 relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[#4ade80]/5 rounded-full blur-[120px] pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <div className="text-5xl mb-6">🌱</div>
-          <div className="text-[#4ade80] text-sm font-semibold uppercase tracking-widest mb-4">Impact & SDG</div>
-          <h1 className="text-5xl font-bold text-white mb-6">
-            Capital for a <span className="text-[#4ade80]">Better World</span>
+      <section className="relative overflow-hidden border-b border-[#e8e8e2] py-20 bg-[linear-gradient(180deg,#f7fbf7_0%,#f3f0fa_100%)]">
+        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[620px] h-[420px] bg-[#4ade80]/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute -right-24 bottom-0 w-[460px] h-[300px] bg-[#8d7cf5]/15 rounded-full blur-[110px] pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+          <div className="text-sm font-semibold uppercase tracking-widest text-emerald-700 mb-4">Impact & SDG</div>
+          <h1 className="text-5xl font-bold text-[#111111] mb-5">
+            Build returns and <span className="bg-gradient-to-r from-emerald-700 to-[#5f68a3] bg-clip-text text-transparent">real impact</span>
           </h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-10">
-            Vulture X is committed to accelerating SDG-aligned startups. Impact founders pay zero success fee, get free Pro access, and are connected to a global network of impact investors.
+          <p className="text-lg text-gray-700 max-w-3xl mx-auto mb-10">
+            SDG-aligned startups get faster discovery, free Pro access, and 0% success fee after verification. Investors get a curated impact pipeline with measurable outcomes.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/impact-verification" className="flex items-center gap-2 px-7 py-3.5 bg-[#4ade80] text-black font-bold rounded-xl hover:bg-[#22c55e] transition-colors">
+            <Link to="/impact-verification" className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#111111] text-white font-semibold rounded-2xl hover:bg-[#222222] transition-colors">
               Apply for Impact Verification <ArrowRight size={18} />
             </Link>
-            <Link to="/explore" className="flex items-center gap-2 px-7 py-3.5 bg-white/5 border border-[#2d5a2d] text-white font-semibold rounded-xl hover:bg-white/10 transition-all">
+            <Link to="/explore" className="inline-flex items-center gap-2 px-7 py-3.5 bg-white/80 border border-[#d7e8d7] text-[#111111] font-semibold rounded-2xl hover:bg-white transition-colors">
               Browse Impact Startups
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Policy Highlights */}
-      <section className="py-16 bg-[#09091a]">
+      <section className="py-16 bg-[#f6f4fb]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { icon: '✅', title: '0% Success Fee', desc: 'Impact-verified startups pay zero when they raise capital through Vulture X. Forever.', color: 'border-[#4ade80]/30 bg-[#0f1a0f]' },
-              { icon: '🚀', title: 'Free Pro Access', desc: 'All verified impact startups receive full Pro subscription at no cost — unlimited competitions, advanced analytics, and priority discovery.', color: 'border-[#4ade80]/20 bg-[#0f1a0f]' },
-              { icon: '🎯', title: 'Dedicated Discovery', desc: 'Impact investors can filter exclusively for verified SDG startups. Stronger signal, better capital match.', color: 'border-[#4ade80]/20 bg-[#0f1a0f]' },
+              { icon: '✅', title: '0% Success Fee', desc: 'Impact-verified startups pay zero when they raise capital through Vulture X.', color: 'border-[#cfe7cf] bg-white' },
+              { icon: '🚀', title: 'Free Pro Access', desc: 'Verified impact startups unlock full Pro features with no subscription cost.', color: 'border-[#d9d3f3] bg-white' },
+              { icon: '🎯', title: 'Dedicated Discovery', desc: 'Impact investors can discover verified SDG startups in a focused feed.', color: 'border-[#d9d3f3] bg-white' },
             ].map((item) => (
-              <div key={item.title} className={`border rounded-2xl p-7 ${item.color}`}>
+              <div key={item.title} className={`border rounded-2xl p-7 shadow-[0_8px_24px_rgba(17,17,17,0.05)] ${item.color}`}>
                 <div className="text-3xl mb-4">{item.icon}</div>
-                <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
-                <p className="text-gray-300 text-sm leading-relaxed">{item.desc}</p>
+                <h3 className="text-xl font-bold text-[#111111] mb-2">{item.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -92,11 +90,11 @@ export default function Impact() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="text-[#4ade80] text-sm font-semibold uppercase tracking-widest mb-3">
+            <div className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-3">
               <Globe size={14} className="inline mr-1" /> SDG Framework
             </div>
-            <h2 className="text-4xl font-bold text-white">UN Sustainable Development Goals</h2>
-            <p className="text-gray-400 mt-3 max-w-xl mx-auto">
+            <h2 className="text-4xl font-bold text-[#111111]">UN Sustainable Development Goals</h2>
+            <p className="text-gray-600 mt-3 max-w-xl mx-auto">
               Startups can tag their SDG alignment during onboarding. Verification is available for startups with genuine, measurable impact.
             </p>
           </div>
@@ -104,59 +102,58 @@ export default function Impact() {
             {sdgs.map((sdg) => (
               <div
                 key={sdg.number}
-                className="aspect-square rounded-xl flex flex-col items-center justify-center p-3 text-center cursor-pointer hover:scale-105 transition-transform"
+                className="aspect-square rounded-2xl flex flex-col items-center justify-center p-3 text-center cursor-pointer hover:scale-105 transition-transform"
                 style={{ backgroundColor: `${sdg.color}15`, border: `1px solid ${sdg.color}30` }}
               >
                 <div className="text-2xl mb-1">{sdg.emoji}</div>
-                <div className="text-xs font-bold text-white">SDG {sdg.number}</div>
-                <div className="text-xs text-gray-400 leading-tight mt-0.5">{sdg.title}</div>
+                <div className="text-xs font-bold text-[#111111]">SDG {sdg.number}</div>
+                <div className="text-xs text-gray-600 leading-tight mt-0.5">{sdg.title}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Impact Startups */}
-      <section className="py-20 bg-[#0a0f0a]">
+      <section className="py-20 bg-[#f5f9f5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-10">
             <div>
-              <div className="text-[#4ade80] text-sm font-semibold uppercase tracking-widest mb-2">🌱 Verified Impact</div>
-              <h2 className="text-4xl font-bold text-white">Impact Startup Showcase</h2>
+              <div className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-2">Verified Impact</div>
+              <h2 className="text-4xl font-bold text-[#111111]">Impact Startup Showcase</h2>
             </div>
-            <Link to="/explore" className="flex items-center gap-1.5 text-[#4ade80] text-sm hover:underline">
+            <Link to="/explore" className="flex items-center gap-1.5 text-emerald-700 text-sm hover:underline">
               View All <ArrowRight size={14} />
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {impactStartups.map((startup) => (
-              <div key={startup.name} className="bg-[#0f0f1e] border border-[#4ade80]/20 rounded-2xl p-6 card-hover cursor-pointer">
+              <div key={startup.name} className="bg-white border border-[#d2e6d2] rounded-2xl p-6 card-hover cursor-pointer shadow-[0_8px_24px_rgba(17,17,17,0.05)]">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 bg-gradient-to-br from-[#4ade80]/20 to-[#22c55e]/20 border border-[#4ade80]/20 rounded-xl flex items-center justify-center text-[#4ade80] font-bold">
+                    <div className="w-11 h-11 bg-gradient-to-br from-[#4ade80]/20 to-[#22c55e]/20 border border-[#4ade80]/20 rounded-2xl flex items-center justify-center text-emerald-700 font-bold">
                       {startup.name[0]}
                     </div>
                     <div>
-                      <div className="font-bold text-white flex items-center gap-1.5">
+                      <div className="font-bold text-[#111111] flex items-center gap-1.5">
                         {startup.name}
-                        <span className={`text-xs px-1.5 py-0.5 rounded-full border ${startup.badge === 'Verified' ? 'bg-[#1a2e1a] text-[#4ade80] border-[#4ade80]/30' : 'bg-[#2a2a00] text-[#a78bfa] border-[#a78bfa]/30'}`}>
+                        <span className={`text-xs px-1.5 py-0.5 rounded-full border ${startup.badge === 'Verified' ? 'bg-[#ecf8ec] text-emerald-700 border-[#bde0bd]' : 'bg-[#fff3ec] text-[#c35c5c] border-[#f0cdc0]'}`}>
                           {startup.badge === 'Verified' ? '✅' : '⏳'} {startup.badge}
                         </span>
                       </div>
-                      <div className="text-gray-500 text-xs">{startup.sector} · {startup.stage}</div>
+                      <div className="text-gray-600 text-xs">{startup.sector} · {startup.stage}</div>
                     </div>
                   </div>
-                  <div className="text-[#8b5cf6] font-bold">{startup.score}</div>
+                  <div className="text-[#d14343] font-bold">{startup.score}</div>
                 </div>
-                <p className="text-gray-400 text-sm mb-4">{startup.desc}</p>
+                <p className="text-gray-600 text-sm mb-4">{startup.desc}</p>
                 <div className="flex flex-wrap gap-1.5 mb-4">
                   {startup.sdgs.map((sdg) => (
-                    <span key={sdg} className="px-2 py-0.5 text-xs bg-[#1a2e1a] text-[#4ade80] border border-[#4ade80]/20 rounded-full">{sdg}</span>
+                    <span key={sdg} className="px-2 py-0.5 text-xs bg-[#ecf8ec] text-emerald-700 border border-[#bde0bd] rounded-full">{sdg}</span>
                   ))}
                 </div>
-                <div className="flex items-center justify-between pt-3 border-t border-[#1c1c3a]">
-                  <span className="text-gray-400 text-sm">Raised</span>
-                  <span className="text-[#4ade80] font-semibold">{startup.raised}</span>
+                <div className="flex items-center justify-between pt-3 border-t border-[#e8e8e2]">
+                  <span className="text-gray-600 text-sm">Raised</span>
+                  <span className="text-emerald-700 font-semibold">{startup.raised}</span>
                 </div>
               </div>
             ))}
@@ -164,56 +161,54 @@ export default function Impact() {
         </div>
       </section>
 
-      {/* Verification Process */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="text-[#4ade80] text-sm font-semibold uppercase tracking-widest mb-3">Verification</div>
-            <h2 className="text-4xl font-bold text-white">How to Get Impact Verified</h2>
+            <div className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-3">Verification</div>
+            <h2 className="text-4xl font-bold text-[#111111]">How to Get Impact Verified</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-10">
             {verificationSteps.map((s) => (
-              <div key={s.step} className="bg-[#0f0f1e] border border-[#4ade80]/20 rounded-2xl p-6 relative">
-                <div className="absolute top-4 right-4 text-4xl font-black text-[#1c1c3a]">{s.step}</div>
-                <h4 className="font-bold text-white mb-2 pr-10">{s.title}</h4>
-                <p className="text-gray-400 text-sm">{s.desc}</p>
+              <div key={s.step} className="bg-white border border-[#d2e6d2] rounded-2xl p-6 relative shadow-[0_8px_24px_rgba(17,17,17,0.05)]">
+                <div className="absolute top-4 right-4 text-4xl font-black text-[#e8e8e2]">{s.step}</div>
+                <h4 className="font-bold text-[#111111] mb-2 pr-10">{s.title}</h4>
+                <p className="text-gray-600 text-sm">{s.desc}</p>
               </div>
             ))}
           </div>
           <div className="text-center">
-            <Link to="/impact-verification" className="inline-flex items-center gap-2 px-8 py-4 bg-[#4ade80] text-black font-bold rounded-xl hover:bg-[#22c55e] transition-colors mx-auto">
+            <Link to="/impact-verification" className="inline-flex items-center gap-2 px-8 py-4 bg-[#111111] text-white font-semibold rounded-2xl hover:bg-[#222222] transition-colors mx-auto">
               Apply for Impact Verification <ArrowRight size={18} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Impact Investors */}
-      <section className="py-20 bg-[#0a0f0a]">
+      <section className="py-20 bg-[#f6f4fb]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="text-[#4ade80] text-sm font-semibold uppercase tracking-widest mb-3">Impact Capital</div>
-            <h2 className="text-4xl font-bold text-white">Active Impact Investors</h2>
+            <div className="text-emerald-700 text-sm font-semibold uppercase tracking-widest mb-3">Impact Capital</div>
+            <h2 className="text-4xl font-bold text-[#111111]">Active Impact Investors</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {impactInvestors.map((inv) => (
-              <div key={inv.name} className="bg-[#0f0f1e] border border-[#4ade80]/20 rounded-2xl p-6 card-hover">
+              <div key={inv.name} className="bg-white border border-[#d2e6d2] rounded-2xl p-6 card-hover shadow-[0_8px_24px_rgba(17,17,17,0.05)]">
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-white font-bold">{inv.name}</h4>
-                  <span className="px-2.5 py-1 text-xs bg-[#1a2e1a] text-[#4ade80] border border-[#4ade80]/20 rounded-full">Active</span>
+                  <h4 className="text-[#111111] font-bold">{inv.name}</h4>
+                  <span className="px-2.5 py-1 text-xs bg-[#ecf8ec] text-emerald-700 border border-[#bde0bd] rounded-full">Active</span>
                 </div>
                 <div className="grid grid-cols-2 gap-3 text-sm">
                   <div>
-                    <div className="text-gray-500 text-xs mb-0.5">SDG Focus</div>
-                    <div className="text-gray-300">{inv.focus}</div>
+                    <div className="text-gray-600 text-xs mb-0.5">SDG Focus</div>
+                    <div className="text-gray-700">{inv.focus}</div>
                   </div>
                   <div>
-                    <div className="text-gray-500 text-xs mb-0.5">Ticket Size</div>
-                    <div className="text-[#8b5cf6] font-medium">{inv.tickets}</div>
+                    <div className="text-gray-600 text-xs mb-0.5">Ticket Size</div>
+                    <div className="text-[#d14343] font-medium">{inv.tickets}</div>
                   </div>
                 </div>
-                <div className="mt-3 pt-3 border-t border-[#1c1c3a]">
-                  <div className="flex items-center gap-1.5 text-[#4ade80] text-sm">
+                <div className="mt-3 pt-3 border-t border-[#e8e8e2]">
+                  <div className="flex items-center gap-1.5 text-emerald-700 text-sm">
                     <CheckCircle size={13} /> {inv.portfolio}
                   </div>
                 </div>

@@ -56,23 +56,23 @@ export default function StartupOnboarding() {
 
   if (!hydrated) {
     return (
-      <div className="min-h-screen pt-20 bg-[#050511] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-[#8b5cf6] animate-spin" />
+      <div className="min-h-screen pt-20 bg-[#ffffff] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-[#d14343] animate-spin" />
       </div>
     );
   }
 
   const inputClass =
-    'w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 text-sm focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all';
+    'w-full px-3.5 py-2.5 rounded-2xl bg-[#f9f9f7] border border-[#e8e8e2] text-[#111111] placeholder-gray-500 text-sm focus:ring-2 focus:ring-[#d14343] focus:border-transparent transition-all';
 
   return (
-    <div className="min-h-screen pt-20 pb-20 bg-[#050511]">
+    <div className="min-h-screen pt-20 pb-20 bg-[#ffffff]">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
         <div className="mb-10">
-          <h1 className="text-3xl font-bold text-white">
+          <h1 className="text-3xl font-bold text-[#111111]">
             {existing ? 'Edit Startup Profile' : 'Startup Onboarding'}
           </h1>
-          <p className="text-gray-400 mt-1">
+          <p className="text-gray-600 mt-1">
             {existing
               ? 'Update your startup details.'
               : 'Tell us about your startup. You can always update this later.'}
@@ -81,14 +81,14 @@ export default function StartupOnboarding() {
 
         <form onSubmit={handleSubmit} className="space-y-10">
           {/* Section 1: Company Info */}
-          <section className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6 sm:p-8">
-            <div className="flex items-center gap-2 text-[#8b5cf6] mb-6">
+          <section className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6 sm:p-8">
+            <div className="flex items-center gap-2 text-[#d14343] mb-6">
               <Building2 size={20} />
-              <h2 className="text-lg font-semibold text-white">Company Info</h2>
+              <h2 className="text-lg font-semibold text-[#111111]">Company Info</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Company Name *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Company Name *</label>
                 <input
                   required
                   value={form.companyName}
@@ -98,7 +98,7 @@ export default function StartupOnboarding() {
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Tagline</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Tagline</label>
                 <input
                   value={form.tagline}
                   onChange={(e) => update({ tagline: e.target.value })}
@@ -107,7 +107,7 @@ export default function StartupOnboarding() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Sector *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Sector *</label>
                 <select
                   required
                   value={form.sector}
@@ -121,7 +121,7 @@ export default function StartupOnboarding() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Stage *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Stage *</label>
                 <select
                   required
                   value={form.stage}
@@ -135,7 +135,7 @@ export default function StartupOnboarding() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Location</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Location</label>
                 <input
                   value={form.location}
                   onChange={(e) => update({ location: e.target.value })}
@@ -144,7 +144,7 @@ export default function StartupOnboarding() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Website</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Website</label>
                 <input
                   type="url"
                   value={form.website}
@@ -157,14 +157,14 @@ export default function StartupOnboarding() {
           </section>
 
           {/* Section 2: Founder */}
-          <section className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6 sm:p-8">
-            <div className="flex items-center gap-2 text-[#8b5cf6] mb-6">
+          <section className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6 sm:p-8">
+            <div className="flex items-center gap-2 text-[#d14343] mb-6">
               <User size={20} />
-              <h2 className="text-lg font-semibold text-white">Founder</h2>
+              <h2 className="text-lg font-semibold text-[#111111]">Founder</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Full Name *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name *</label>
                 <input
                   required
                   value={form.founderName}
@@ -174,7 +174,7 @@ export default function StartupOnboarding() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Role</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Role</label>
                 <input
                   value={form.founderRole}
                   onChange={(e) => update({ founderRole: e.target.value })}
@@ -183,7 +183,7 @@ export default function StartupOnboarding() {
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Short Bio</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Short Bio</label>
                 <textarea
                   value={form.founderBio}
                   onChange={(e) => update({ founderBio: e.target.value })}
@@ -192,7 +192,7 @@ export default function StartupOnboarding() {
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">LinkedIn</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">LinkedIn</label>
                 <input
                   type="url"
                   value={form.founderLinkedIn}
@@ -205,30 +205,30 @@ export default function StartupOnboarding() {
           </section>
 
           {/* Section 3: Team */}
-          <section className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6 sm:p-8">
+          <section className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6 sm:p-8">
             <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2 text-[#8b5cf6]">
+              <div className="flex items-center gap-2 text-[#d14343]">
                 <User size={20} />
-                <h2 className="text-lg font-semibold text-white">Team Members</h2>
+                <h2 className="text-lg font-semibold text-[#111111]">Team Members</h2>
               </div>
               <button
                 type="button"
                 onClick={addTeamMember}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#8b5cf6]/10 border border-[#8b5cf6]/30 text-[#c4b5fd] hover:bg-[#8b5cf6]/20 transition-colors"
+                className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-medium bg-[#d14343]/10 border border-[#d14343]/30 text-[#a24a4a] hover:bg-[#d14343]/20 transition-colors"
               >
                 <Plus size={14} /> Add Member
               </button>
             </div>
             {form.team.length === 0 && (
-              <p className="text-sm text-gray-500">No team members added yet. Click "Add Member" above.</p>
+              <p className="text-sm text-gray-600">No team members added yet. Click "Add Member" above.</p>
             )}
             <div className="space-y-4">
               {form.team.map((member, idx) => (
-                <div key={idx} className="relative bg-[#09091a] rounded-xl p-4 border border-[#1c1c3a]">
+                <div key={idx} className="relative bg-[#f9f9f7] rounded-2xl p-4 border border-[#e8e8e2]">
                   <button
                     type="button"
                     onClick={() => removeTeamMember(idx)}
-                    className="absolute top-3 right-3 text-gray-500 hover:text-red-400 transition-colors"
+                    className="absolute top-3 right-3 text-gray-600 hover:text-red-400 transition-colors"
                   >
                     <X size={16} />
                   </button>
@@ -252,14 +252,14 @@ export default function StartupOnboarding() {
           </section>
 
           {/* Section 4: Traction */}
-          <section className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6 sm:p-8">
-            <div className="flex items-center gap-2 text-[#8b5cf6] mb-6">
+          <section className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6 sm:p-8">
+            <div className="flex items-center gap-2 text-[#d14343] mb-6">
               <BarChart3 size={20} />
-              <h2 className="text-lg font-semibold text-white">Traction</h2>
+              <h2 className="text-lg font-semibold text-[#111111]">Traction</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">MRR</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">MRR</label>
                 <input
                   value={form.mrr}
                   onChange={(e) => update({ mrr: e.target.value })}
@@ -268,7 +268,7 @@ export default function StartupOnboarding() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Active Users</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Active Users</label>
                 <input
                   value={form.activeUsers}
                   onChange={(e) => update({ activeUsers: e.target.value })}
@@ -277,7 +277,7 @@ export default function StartupOnboarding() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Customers</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Customers</label>
                 <input
                   value={form.customers}
                   onChange={(e) => update({ customers: e.target.value })}
@@ -286,7 +286,7 @@ export default function StartupOnboarding() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Monthly Growth %</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Monthly Growth %</label>
                 <input
                   value={form.monthlyGrowthPercent}
                   onChange={(e) => update({ monthlyGrowthPercent: e.target.value })}
@@ -298,14 +298,14 @@ export default function StartupOnboarding() {
           </section>
 
           {/* Section 5: Financials */}
-          <section className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6 sm:p-8">
+          <section className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6 sm:p-8">
             <div className="flex items-center gap-2 text-emerald-400 mb-6">
               <DollarSign size={20} />
-              <h2 className="text-lg font-semibold text-white">Financials</h2>
+              <h2 className="text-lg font-semibold text-[#111111]">Financials</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Funding Raised</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Funding Raised</label>
                 <input
                   value={form.fundingRaised}
                   onChange={(e) => update({ fundingRaised: e.target.value })}
@@ -314,7 +314,7 @@ export default function StartupOnboarding() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Runway</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Runway</label>
                 <input
                   value={form.runway}
                   onChange={(e) => update({ runway: e.target.value })}
@@ -323,7 +323,7 @@ export default function StartupOnboarding() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Monthly Burn Rate</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Monthly Burn Rate</label>
                 <input
                   value={form.burnRate}
                   onChange={(e) => update({ burnRate: e.target.value })}
@@ -332,7 +332,7 @@ export default function StartupOnboarding() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Cash in Bank</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Cash in Bank</label>
                 <input
                   value={form.cashInBank}
                   onChange={(e) => update({ cashInBank: e.target.value })}
@@ -344,14 +344,14 @@ export default function StartupOnboarding() {
           </section>
 
           {/* Section 6: Pitch */}
-          <section className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6 sm:p-8">
-            <div className="flex items-center gap-2 text-[#8b5cf6] mb-6">
+          <section className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6 sm:p-8">
+            <div className="flex items-center gap-2 text-[#d14343] mb-6">
               <FileText size={20} />
-              <h2 className="text-lg font-semibold text-white">Pitch</h2>
+              <h2 className="text-lg font-semibold text-[#111111]">Pitch</h2>
             </div>
             <div className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Problem Statement</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Problem Statement</label>
                 <textarea
                   value={form.problemStatement}
                   onChange={(e) => update({ problemStatement: e.target.value })}
@@ -360,7 +360,7 @@ export default function StartupOnboarding() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Solution</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Solution</label>
                 <textarea
                   value={form.solutionDescription}
                   onChange={(e) => update({ solutionDescription: e.target.value })}
@@ -369,7 +369,7 @@ export default function StartupOnboarding() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Pitch Deck URL</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Pitch Deck URL</label>
                 <input
                   type="url"
                   value={form.pitchDeckUrl}
@@ -379,7 +379,7 @@ export default function StartupOnboarding() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Demo Video URL</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Demo Video URL</label>
                 <input
                   type="url"
                   value={form.demoVideoUrl}
@@ -392,7 +392,7 @@ export default function StartupOnboarding() {
           </section>
 
           {saveError && (
-            <div className="rounded-xl bg-red-500/10 border border-red-500/30 px-4 py-3 text-sm text-red-300">
+            <div className="rounded-2xl bg-red-500/10 border border-red-500/30 px-4 py-3 text-sm text-red-300">
               {saveError}
             </div>
           )}
@@ -400,7 +400,7 @@ export default function StartupOnboarding() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full px-4 py-3 text-sm font-semibold rounded-xl bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-white shadow-[0_0_30px_rgba(139,92,246,0.35)] hover:opacity-90 transition-all disabled:opacity-50"
+            className="w-full px-4 py-3 text-sm font-semibold rounded-2xl bg-gradient-to-r from-[#d14343] to-[#b73535] text-white shadow-[0_0_30px_rgba(139,92,246,0.35)] hover:opacity-90 transition-all disabled:opacity-50"
           >
             {submitting ? 'Saving...' : existing ? 'Save Changes' : 'Complete Setup'}
           </button>

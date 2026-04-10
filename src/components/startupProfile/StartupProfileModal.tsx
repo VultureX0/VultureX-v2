@@ -54,12 +54,12 @@ export default function StartupProfileModal({ startupId, onClose }: Props) {
         aria-hidden
       />
       <div className="relative w-full max-w-4xl mx-auto my-8 px-4 sm:px-6">
-        <div className="bg-[#050511] border border-[#1c1c3a] rounded-2xl shadow-2xl overflow-hidden">
-          <div className="sticky top-0 z-10 flex justify-end p-3 bg-[#050511]/95 border-b border-[#1c1c3a]">
+        <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl shadow-2xl overflow-hidden">
+          <div className="sticky top-0 z-10 flex justify-end p-3 bg-[#ffffff]/95 border-b border-[#e8e8e2]">
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+              className="p-2 rounded-xl text-gray-600 hover:text-[#111111] hover:bg-white/10 transition-colors"
               aria-label="Close"
             >
               <X size={22} />

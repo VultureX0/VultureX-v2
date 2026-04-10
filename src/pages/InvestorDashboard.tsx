@@ -35,21 +35,21 @@ const lookLabels: Record<string, string> = {
 
 function Sidebar() {
   const navClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors ${
-      isActive ? 'bg-[#60a5fa]/10 text-[#a5b4fc]' : 'text-gray-400 hover:text-white hover:bg-white/5'
+    `flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm transition-colors ${
+      isActive ? 'bg-[#60a5fa]/10 text-[#a5b4fc]' : 'text-gray-600 hover:text-[#111111] hover:bg-white/5'
     }`;
 
   return (
-    <aside className="w-64 bg-[#0b0b18] border-r border-[#1c1c3a] hidden md:flex flex-col flex-shrink-0">
-      <div className="px-5 py-4 border-b border-[#1c1c3a]">
-        <div className="text-xs uppercase tracking-wider text-gray-500 mb-2">Investor</div>
+    <aside className="w-64 bg-[#ffffff] border-r border-[#e8e8e2] hidden md:flex flex-col flex-shrink-0">
+      <div className="px-5 py-4 border-b border-[#e8e8e2]">
+        <div className="text-xs uppercase tracking-wider text-gray-600 mb-2">Investor</div>
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#60a5fa] to-[#a78bfa] flex items-center justify-center text-xs font-bold text-black">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#60a5fa] to-[#c35c5c] flex items-center justify-center text-xs font-bold text-[#111111]">
             VX
           </div>
           <div>
-            <div className="text-sm font-semibold text-white">Vulture X</div>
-            <div className="text-xs text-gray-500">Investor Portal</div>
+            <div className="text-sm font-semibold text-[#111111]">Vulture X</div>
+            <div className="text-xs text-gray-600">Investor Portal</div>
           </div>
         </div>
       </div>
@@ -78,7 +78,7 @@ function ProfileSummary() {
   const { profile } = useInvestor();
   if (!profile) {
     return (
-      <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-8 text-center text-gray-400">
+      <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-8 text-center text-gray-600">
         No profile data. Complete <NavLink to="/investor-onboarding" className="text-[#60a5fa] hover:underline">onboarding</NavLink> first.
       </div>
     );
@@ -92,29 +92,29 @@ function ProfileSummary() {
         <MetricCard label="Cold pitches" value={profile.openToColdPitches ? 'Open' : 'Closed'} icon={Bell} />
       </div>
 
-      <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
+      <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6">
         <div className="flex items-center gap-2 text-[#60a5fa] mb-4">
           <User size={20} />
-          <h3 className="text-lg font-semibold text-white">Profile Summary</h3>
+          <h3 className="text-lg font-semibold text-[#111111]">Profile Summary</h3>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
           <div>
-            <span className="text-gray-500 block mb-0.5">Full Name</span>
-            <span className="text-white">{profile.fullName}</span>
+            <span className="text-gray-600 block mb-0.5">Full Name</span>
+            <span className="text-[#111111]">{profile.fullName}</span>
           </div>
           <div>
-            <span className="text-gray-500 block mb-0.5">Email</span>
-            <span className="text-white">{profile.email}</span>
+            <span className="text-gray-600 block mb-0.5">Email</span>
+            <span className="text-[#111111]">{profile.email}</span>
           </div>
           {profile.phone && (
             <div>
-              <span className="text-gray-500 block mb-0.5">Phone</span>
-              <span className="text-white">{profile.phone}</span>
+              <span className="text-gray-600 block mb-0.5">Phone</span>
+              <span className="text-[#111111]">{profile.phone}</span>
             </div>
           )}
           {profile.linkedIn && (
             <div>
-              <span className="text-gray-500 block mb-0.5">LinkedIn</span>
+              <span className="text-gray-600 block mb-0.5">LinkedIn</span>
               <a href={profile.linkedIn} target="_blank" rel="noopener noreferrer" className="text-[#60a5fa] hover:underline truncate block">
                 {profile.linkedIn}
               </a>
@@ -122,33 +122,33 @@ function ProfileSummary() {
           )}
           {profile.location && (
             <div>
-              <span className="text-gray-500 block mb-0.5">Location</span>
-              <span className="text-white">{profile.location}</span>
+              <span className="text-gray-600 block mb-0.5">Location</span>
+              <span className="text-[#111111]">{profile.location}</span>
             </div>
           )}
         </div>
       </div>
 
-      <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
+      <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6">
         <div className="flex items-center gap-2 text-[#60a5fa] mb-4">
           <Target size={20} />
-          <h3 className="text-lg font-semibold text-white">Investment Preferences</h3>
+          <h3 className="text-lg font-semibold text-[#111111]">Investment Preferences</h3>
         </div>
         <div className="space-y-3 text-sm">
           <div>
-            <span className="text-gray-500 block mb-0.5">Investor Type</span>
-            <span className="text-white">{investorTypeLabels[profile.investorType] ?? profile.investorType}</span>
+            <span className="text-gray-600 block mb-0.5">Investor Type</span>
+            <span className="text-[#111111]">{investorTypeLabels[profile.investorType] ?? profile.investorType}</span>
           </div>
           <div>
-            <span className="text-gray-500 block mb-0.5">Check Size</span>
-            <span className="text-white">${profile.checkSizeMin}K – ${profile.checkSizeMax}K</span>
+            <span className="text-gray-600 block mb-0.5">Check Size</span>
+            <span className="text-[#111111]">${profile.checkSizeMin}K – ${profile.checkSizeMax}K</span>
           </div>
           {profile.preferredSectors.length > 0 && (
             <div>
-              <span className="text-gray-500 block mb-1">Preferred Sectors</span>
+              <span className="text-gray-600 block mb-1">Preferred Sectors</span>
               <div className="flex flex-wrap gap-2">
                 {profile.preferredSectors.map((s: string) => (
-                  <span key={s} className="px-2 py-0.5 rounded-lg bg-[#1c1c3a] text-gray-300 text-xs">
+                  <span key={s} className="px-2 py-0.5 rounded-xl bg-[#e8e8e2] text-gray-700 text-xs">
                     {s}
                   </span>
                 ))}
@@ -157,37 +157,37 @@ function ProfileSummary() {
           )}
           {profile.geographyFocus && (
             <div>
-              <span className="text-gray-500 block mb-0.5">Geography</span>
-              <span className="text-white">{profile.geographyFocus}</span>
+              <span className="text-gray-600 block mb-0.5">Geography</span>
+              <span className="text-[#111111]">{profile.geographyFocus}</span>
             </div>
           )}
           <div>
-            <span className="text-gray-500 block mb-0.5">Looking to</span>
-            <span className="text-white">{lookLabels[profile.lookingTo] ?? profile.lookingTo}</span>
+            <span className="text-gray-600 block mb-0.5">Looking to</span>
+            <span className="text-[#111111]">{lookLabels[profile.lookingTo] ?? profile.lookingTo}</span>
           </div>
           <div>
-            <span className="text-gray-500 block mb-0.5">Open to cold pitches</span>
-            <span className="text-white">{profile.openToColdPitches ? 'Yes' : 'No'}</span>
+            <span className="text-gray-600 block mb-0.5">Open to cold pitches</span>
+            <span className="text-[#111111]">{profile.openToColdPitches ? 'Yes' : 'No'}</span>
           </div>
         </div>
       </div>
 
       {(profile.investorType === 'vc' && (profile.firmName || profile.fundSize)) && (
-        <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
+        <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6">
           <div className="flex items-center gap-2 text-[#60a5fa] mb-4">
             <Building2 size={20} />
-            <h3 className="text-lg font-semibold text-white">Firm Details</h3>
+            <h3 className="text-lg font-semibold text-[#111111]">Firm Details</h3>
           </div>
           <div className="space-y-3 text-sm">
             {profile.firmName && (
               <div>
-                <span className="text-gray-500 block mb-0.5">Firm Name</span>
-                <span className="text-white">{profile.firmName}</span>
+                <span className="text-gray-600 block mb-0.5">Firm Name</span>
+                <span className="text-[#111111]">{profile.firmName}</span>
               </div>
             )}
             {profile.firmWebsite && (
               <div>
-                <span className="text-gray-500 block mb-0.5">Website</span>
+                <span className="text-gray-600 block mb-0.5">Website</span>
                 <a href={profile.firmWebsite} target="_blank" rel="noopener noreferrer" className="text-[#60a5fa] hover:underline">
                   {profile.firmWebsite}
                 </a>
@@ -195,16 +195,16 @@ function ProfileSummary() {
             )}
             {profile.fundSize && (
               <div>
-                <span className="text-gray-500 block mb-0.5">Fund Size</span>
-                <span className="text-white">{profile.fundSize}</span>
+                <span className="text-gray-600 block mb-0.5">Fund Size</span>
+                <span className="text-[#111111]">{profile.fundSize}</span>
               </div>
             )}
             {profile.stageFocus.length > 0 && (
               <div>
-                <span className="text-gray-500 block mb-1">Stage Focus</span>
+                <span className="text-gray-600 block mb-1">Stage Focus</span>
                 <div className="flex flex-wrap gap-2">
                   {profile.stageFocus.map((s: string) => (
-                    <span key={s} className="px-2 py-0.5 rounded-lg bg-[#1c1c3a] text-gray-300 text-xs">
+                    <span key={s} className="px-2 py-0.5 rounded-xl bg-[#e8e8e2] text-gray-700 text-xs">
                       {s}
                     </span>
                   ))}
@@ -216,17 +216,17 @@ function ProfileSummary() {
       )}
 
       {profile.investmentThesis && (
-        <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-3">Investment Thesis</h3>
-          <p className="text-gray-400 text-sm whitespace-pre-wrap">{profile.investmentThesis}</p>
+        <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6">
+          <h3 className="text-lg font-semibold text-[#111111] mb-3">Investment Thesis</h3>
+          <p className="text-gray-600 text-sm whitespace-pre-wrap">{profile.investmentThesis}</p>
         </div>
       )}
 
-      <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
+      <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6">
         <div className="flex items-center justify-between gap-4 mb-5">
           <div>
-            <h3 className="text-lg font-semibold text-white">Recommended Startups</h3>
-            <p className="text-sm text-gray-500 mt-1">Matched from your sector preferences and platform activity.</p>
+            <h3 className="text-lg font-semibold text-[#111111]">Recommended Startups</h3>
+            <p className="text-sm text-gray-600 mt-1">Matched from your sector preferences and platform activity.</p>
           </div>
           <Link to="/explore" className="text-sm text-[#60a5fa] hover:text-[#93c5fd] transition-colors inline-flex items-center gap-1">
             Explore all <ArrowRight size={14} />
@@ -237,17 +237,17 @@ function ProfileSummary() {
             <Link
               key={startup.id}
               to={`/startup/profile/${startup.id}`}
-              className="flex items-center justify-between gap-4 bg-[#09091a] border border-[#1c1c3a] rounded-xl px-4 py-3 hover:border-[#60a5fa]/30 hover:bg-[#101021] transition-all"
+              className="flex items-center justify-between gap-4 bg-[#f9f9f7] border border-[#e8e8e2] rounded-2xl px-4 py-3 hover:border-[#60a5fa]/30 hover:bg-[#101021] transition-all"
             >
               <div className="min-w-0">
-                <div className="text-white font-medium">{startup.name}</div>
-                <div className="text-xs text-gray-500 mt-0.5">
+                <div className="text-[#111111] font-medium">{startup.name}</div>
+                <div className="text-xs text-gray-600 mt-0.5">
                   {startup.sector} · {startup.stage} · {startup.location}
                 </div>
               </div>
               <div className="text-right shrink-0">
                 <div className="text-[#60a5fa] font-semibold">{startup.matchScore ?? startup.score}</div>
-                <div className="text-xs text-gray-500">match</div>
+                <div className="text-xs text-gray-600">match</div>
               </div>
             </Link>
           ))}
@@ -255,7 +255,7 @@ function ProfileSummary() {
       </div>
 
       {profile.submittedAt && (
-        <p className="text-gray-500 text-xs">
+        <p className="text-gray-600 text-xs">
           Profile submitted {new Date(profile.submittedAt).toLocaleDateString()}
         </p>
       )}
@@ -271,19 +271,19 @@ function InvestmentsView() {
   ];
 
   return (
-    <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
+    <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6">
       <div className="flex items-center gap-2 text-[#60a5fa] mb-5">
         <TrendingUp size={20} />
-        <h3 className="text-lg font-semibold text-white">My Investments</h3>
+        <h3 className="text-lg font-semibold text-[#111111]">My Investments</h3>
       </div>
       <div className="space-y-3">
         {items.map((item) => (
-          <div key={item.name} className="bg-[#09091a] border border-[#1c1c3a] rounded-xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div key={item.name} className="bg-[#f9f9f7] border border-[#e8e8e2] rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-              <div className="text-white font-medium">{item.name}</div>
-              <div className="text-xs text-gray-500 mt-0.5">{item.stage}</div>
+              <div className="text-[#111111] font-medium">{item.name}</div>
+              <div className="text-xs text-gray-600 mt-0.5">{item.stage}</div>
             </div>
-            <div className="text-sm text-gray-300">{item.value}</div>
+            <div className="text-sm text-gray-700">{item.value}</div>
             <span className="px-2.5 py-1 rounded-full text-xs bg-[#60a5fa]/10 text-[#93c5fd] border border-[#60a5fa]/20">
               {item.status}
             </span>
@@ -298,26 +298,26 @@ function SavedStartupsView() {
   const saved = STARTUP_PROFILES.slice(0, 4);
 
   return (
-    <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
+    <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6">
       <div className="flex items-center gap-2 text-[#60a5fa] mb-5">
         <Bookmark size={20} />
-        <h3 className="text-lg font-semibold text-white">Saved Startups</h3>
+        <h3 className="text-lg font-semibold text-[#111111]">Saved Startups</h3>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {saved.map((startup: StartupProfileData) => (
           <Link
             key={startup.id}
             to={`/startup/profile/${startup.id}`}
-            className="bg-[#09091a] border border-[#1c1c3a] rounded-xl p-5 hover:border-[#60a5fa]/30 hover:bg-[#101021] transition-all"
+            className="bg-[#f9f9f7] border border-[#e8e8e2] rounded-2xl p-5 hover:border-[#60a5fa]/30 hover:bg-[#101021] transition-all"
           >
             <div className="flex items-start justify-between gap-3 mb-2">
               <div>
-                <div className="text-white font-medium">{startup.name}</div>
-                <div className="text-xs text-gray-500">{startup.sector} · {startup.stage}</div>
+                <div className="text-[#111111] font-medium">{startup.name}</div>
+                <div className="text-xs text-gray-600">{startup.sector} · {startup.stage}</div>
               </div>
               <div className="text-[#60a5fa] text-sm font-semibold">{startup.matchScore ?? startup.score}</div>
             </div>
-            <p className="text-sm text-gray-400 leading-relaxed">{startup.tagline}</p>
+            <p className="text-sm text-gray-600 leading-relaxed">{startup.tagline}</p>
           </Link>
         ))}
       </div>
@@ -333,19 +333,19 @@ function MessagesView() {
   ];
 
   return (
-    <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
+    <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6">
       <div className="flex items-center gap-2 text-[#60a5fa] mb-5">
         <MessageSquare size={20} />
-        <h3 className="text-lg font-semibold text-white">Messages</h3>
+        <h3 className="text-lg font-semibold text-[#111111]">Messages</h3>
       </div>
       <div className="space-y-3">
         {messages.map((message) => (
-          <div key={message.subject} className="bg-[#09091a] border border-[#1c1c3a] rounded-xl p-4">
+          <div key={message.subject} className="bg-[#f9f9f7] border border-[#e8e8e2] rounded-2xl p-4">
             <div className="flex items-center justify-between gap-3">
-              <div className="text-sm text-white font-medium">{message.subject}</div>
-              <div className="text-xs text-gray-500">{message.from}</div>
+              <div className="text-sm text-[#111111] font-medium">{message.subject}</div>
+              <div className="text-xs text-gray-600">{message.from}</div>
             </div>
-            <p className="text-sm text-gray-400 mt-2">{message.preview}</p>
+            <p className="text-sm text-gray-600 mt-2">{message.preview}</p>
           </div>
         ))}
       </div>
@@ -358,10 +358,10 @@ function SettingsView() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
+      <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6">
         <div className="flex items-center gap-2 text-[#60a5fa] mb-5">
           <Settings size={20} />
-          <h3 className="text-lg font-semibold text-white">Settings</h3>
+          <h3 className="text-lg font-semibold text-[#111111]">Settings</h3>
         </div>
         <div className="space-y-4">
           <ToggleRow icon={Bell} title="Startup match alerts" description="Get notified when new startups fit your thesis." enabled />
@@ -370,15 +370,15 @@ function SettingsView() {
         </div>
       </div>
 
-      <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6">
-        <h3 className="text-lg font-semibold text-white mb-2">Reset investor profile</h3>
-        <p className="text-sm text-gray-400 mb-4">
+      <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6">
+        <h3 className="text-lg font-semibold text-[#111111] mb-2">Reset investor profile</h3>
+        <p className="text-sm text-gray-600 mb-4">
           This clears your saved onboarding data from the current browser.
         </p>
         <button
           type="button"
           onClick={clearProfile}
-          className="px-4 py-2 rounded-xl border border-red-500/30 text-red-300 hover:bg-red-500/10 transition-colors"
+          className="px-4 py-2 rounded-2xl border border-red-500/30 text-red-300 hover:bg-red-500/10 transition-colors"
         >
           Clear saved profile
         </button>
@@ -397,10 +397,10 @@ function MetricCard({
   icon: LucideIcon;
 }) {
   return (
-    <div className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-5">
+    <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-5">
       <Icon size={18} className="text-[#60a5fa] mb-3" />
-      <div className="text-lg font-semibold text-white">{value}</div>
-      <div className="text-sm text-gray-500 mt-1">{label}</div>
+      <div className="text-lg font-semibold text-[#111111]">{value}</div>
+      <div className="text-sm text-gray-600 mt-1">{label}</div>
     </div>
   );
 }
@@ -417,12 +417,12 @@ function ToggleRow({
   enabled: boolean;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 bg-[#09091a] border border-[#1c1c3a] rounded-xl p-4">
+    <div className="flex items-center justify-between gap-4 bg-[#f9f9f7] border border-[#e8e8e2] rounded-2xl p-4">
       <div className="flex items-start gap-3">
         <Icon size={18} className="text-[#60a5fa] mt-0.5" />
         <div>
-          <div className="text-white text-sm font-medium">{title}</div>
-          <div className="text-xs text-gray-500 mt-1">{description}</div>
+          <div className="text-[#111111] text-sm font-medium">{title}</div>
+          <div className="text-xs text-gray-600 mt-1">{description}</div>
         </div>
       </div>
       <div className={`relative inline-flex h-6 w-11 items-center rounded-full ${enabled ? 'bg-[#60a5fa]' : 'bg-gray-700'}`}>
@@ -442,28 +442,28 @@ function DashboardLayout() {
   const { profile } = useInvestor();
 
   return (
-    <div className="min-h-screen pt-20 bg-[#050511] text-gray-100 flex">
+    <div className="min-h-screen pt-20 bg-[#ffffff] text-[#111111] flex">
       <Sidebar />
       <main className="flex-1 overflow-auto">
         <div className="px-4 sm:px-6 lg:px-10 py-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-white">Investor Dashboard</h1>
-              <p className="text-gray-400 text-sm mt-0.5">
+              <h1 className="text-2xl font-bold text-[#111111]">Investor Dashboard</h1>
+              <p className="text-gray-600 text-sm mt-0.5">
                 {profile ? `Welcome back, ${profile.fullName}` : 'Manage your deal flow and profile.'}
               </p>
             </div>
             <div className="flex items-center gap-2">
               <NavLink
                 to="/investor-onboarding"
-                className="px-4 py-2 rounded-xl text-sm font-medium border border-[#1c1c3a] text-gray-300 hover:text-white hover:border-[#60a5fa]/40 transition-all"
+                className="px-4 py-2 rounded-2xl text-sm font-medium border border-[#e8e8e2] text-gray-700 hover:text-[#111111] hover:border-[#60a5fa]/40 transition-all"
               >
                 Edit Profile
               </NavLink>
               <button
                 type="button"
                 onClick={() => navigate('/for-investors')}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+                className="flex items-center gap-2 px-4 py-2 rounded-2xl text-sm text-gray-600 hover:text-[#111111] hover:bg-white/5 transition-all"
               >
                 <LogOut size={16} /> Back to site
               </button>

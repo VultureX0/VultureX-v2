@@ -53,11 +53,11 @@ export default function InvestorOnboarding() {
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-20 bg-[#050511]">
+    <div className="min-h-screen pt-20 pb-20 bg-[#ffffff]">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
         <div className="mb-10">
-          <h1 className="text-3xl font-bold text-white">Investor Onboarding</h1>
-          <p className="text-gray-400 mt-1">
+          <h1 className="text-3xl font-bold text-[#111111]">Investor Onboarding</h1>
+          <p className="text-gray-600 mt-1">
             {profile
               ? 'Update your investor profile, preferences, and contact details.'
               : 'Complete your profile to access deal flow and recommendations.'}
@@ -66,59 +66,59 @@ export default function InvestorOnboarding() {
 
         <form onSubmit={handleSubmit} className="space-y-10">
           {/* Section 1: Basic Info */}
-          <section className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6 sm:p-8">
+          <section className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6 sm:p-8">
             <div className="flex items-center gap-2 text-[#60a5fa] mb-6">
               <User size={20} />
-              <h2 className="text-lg font-semibold text-white">Basic Info</h2>
+              <h2 className="text-lg font-semibold text-[#111111]">Basic Info</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Full Name *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name *</label>
                 <input
                   value={form.fullName}
                   onChange={(e) => update({ fullName: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-[#f9f9f7] border border-[#e8e8e2] text-[#111111] placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
                   placeholder="Jane Smith"
                 />
                 {errors.fullName && <p className="text-red-400 text-xs mt-1">{errors.fullName}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Email *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Email *</label>
                 <input
                   type="email"
                   value={form.email}
                   onChange={(e) => update({ email: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-[#f9f9f7] border border-[#e8e8e2] text-[#111111] placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
                   placeholder="jane@example.com"
                 />
                 {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Phone Number</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone Number</label>
                 <input
                   type="tel"
                   value={form.phone}
                   onChange={(e) => update({ phone: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-[#f9f9f7] border border-[#e8e8e2] text-[#111111] placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
                   placeholder="+1 234 567 8900"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">LinkedIn Profile</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">LinkedIn Profile</label>
                 <input
                   type="url"
                   value={form.linkedIn}
                   onChange={(e) => update({ linkedIn: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-[#f9f9f7] border border-[#e8e8e2] text-[#111111] placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
                   placeholder="https://linkedin.com/in/..."
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Location</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Location</label>
                 <input
                   value={form.location}
                   onChange={(e) => update({ location: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-[#f9f9f7] border border-[#e8e8e2] text-[#111111] placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
                   placeholder="City, Country"
                 />
               </div>
@@ -126,10 +126,10 @@ export default function InvestorOnboarding() {
           </section>
 
           {/* Section 2: Investor Type */}
-          <section className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6 sm:p-8">
+          <section className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6 sm:p-8">
             <div className="flex items-center gap-2 text-[#60a5fa] mb-6">
               <Building2 size={20} />
-              <h2 className="text-lg font-semibold text-white">Investor Type</h2>
+              <h2 className="text-lg font-semibold text-[#111111]">Investor Type</h2>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
               {(
@@ -144,10 +144,10 @@ export default function InvestorOnboarding() {
                   key={id}
                   type="button"
                   onClick={() => update({ investorType: id })}
-                  className={`px-4 py-3 rounded-xl text-left text-sm border transition-all ${
+                  className={`px-4 py-3 rounded-2xl text-left text-sm border transition-all ${
                     form.investorType === id
-                      ? 'bg-[#60a5fa]/10 border-[#60a5fa]/40 text-white'
-                      : 'bg-[#09091a] border-[#1c1c3a] text-gray-400 hover:text-white hover:border-[#2d2d50]'
+                      ? 'bg-[#60a5fa]/10 border-[#60a5fa]/40 text-[#111111]'
+                      : 'bg-[#f9f9f7] border-[#e8e8e2] text-gray-600 hover:text-[#111111] hover:border-[#d5d5ce]'
                   }`}
                 >
                   {label}
@@ -156,48 +156,48 @@ export default function InvestorOnboarding() {
             </div>
 
             {form.investorType === 'vc' && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4 border-t border-[#1c1c3a]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4 border-t border-[#e8e8e2]">
                 <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-1.5">Firm Name *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Firm Name *</label>
                   <input
                     value={form.firmName}
                     onChange={(e) => update({ firmName: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
+                    className="w-full px-3.5 py-2.5 rounded-2xl bg-[#f9f9f7] border border-[#e8e8e2] text-[#111111] placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
                     placeholder="Acme Ventures"
                   />
                   {errors.firmName && <p className="text-red-400 text-xs mt-1">{errors.firmName}</p>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1.5">Website</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Website</label>
                   <input
                     type="url"
                     value={form.firmWebsite}
                     onChange={(e) => update({ firmWebsite: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
+                    className="w-full px-3.5 py-2.5 rounded-2xl bg-[#f9f9f7] border border-[#e8e8e2] text-[#111111] placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
                     placeholder="https://..."
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1.5">Fund Size</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Fund Size</label>
                   <input
                     value={form.fundSize}
                     onChange={(e) => update({ fundSize: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
+                    className="w-full px-3.5 py-2.5 rounded-2xl bg-[#f9f9f7] border border-[#e8e8e2] text-[#111111] placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
                     placeholder="e.g. $50M"
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Stage Focus</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Stage Focus</label>
                   <div className="flex flex-wrap gap-2">
                     {STAGES.map((s) => (
                       <button
                         key={s}
                         type="button"
                         onClick={() => toggleStage(s)}
-                        className={`px-3 py-1.5 rounded-lg text-sm border transition-all ${
+                        className={`px-3 py-1.5 rounded-xl text-sm border transition-all ${
                           form.stageFocus.includes(s)
-                            ? 'bg-[#60a5fa]/10 border-[#60a5fa]/40 text-white'
-                            : 'bg-[#09091a] border-[#1c1c3a] text-gray-400 hover:text-white'
+                            ? 'bg-[#60a5fa]/10 border-[#60a5fa]/40 text-[#111111]'
+                            : 'bg-[#f9f9f7] border-[#e8e8e2] text-gray-600 hover:text-[#111111]'
                         }`}
                       >
                         {s}
@@ -209,9 +209,9 @@ export default function InvestorOnboarding() {
             )}
 
             {form.investorType === 'angel' && (
-              <div className="pt-4 border-t border-[#1c1c3a] space-y-4">
+              <div className="pt-4 border-t border-[#e8e8e2] space-y-4">
                 <div className="flex items-center gap-3">
-                  <span className="text-sm text-gray-300">Investing as Individual?</span>
+                  <span className="text-sm text-gray-700">Investing as Individual?</span>
                   <button
                     type="button"
                     onClick={() => update({ investingAsIndividual: !form.investingAsIndividual })}
@@ -225,14 +225,14 @@ export default function InvestorOnboarding() {
                       }`}
                     />
                   </button>
-                  <span className="text-sm text-gray-500">{form.investingAsIndividual ? 'Yes' : 'No'}</span>
+                  <span className="text-sm text-gray-600">{form.investingAsIndividual ? 'Yes' : 'No'}</span>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1.5">Syndicate Member (optional)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Syndicate Member (optional)</label>
                   <input
                     value={form.syndicateMember}
                     onChange={(e) => update({ syndicateMember: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
+                    className="w-full px-3.5 py-2.5 rounded-2xl bg-[#f9f9f7] border border-[#e8e8e2] text-[#111111] placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
                     placeholder="e.g. AngelList syndicate name"
                   />
                 </div>
@@ -241,47 +241,47 @@ export default function InvestorOnboarding() {
           </section>
 
           {/* Section 3: Investment Preferences */}
-          <section className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6 sm:p-8">
+          <section className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6 sm:p-8">
             <div className="flex items-center gap-2 text-[#60a5fa] mb-6">
               <Target size={20} />
-              <h2 className="text-lg font-semibold text-white">Investment Preferences</h2>
+              <h2 className="text-lg font-semibold text-[#111111]">Investment Preferences</h2>
             </div>
             <div className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Typical Check Size (USD)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Typical Check Size (USD)</label>
                 <div className="flex items-center gap-3">
                   <input
                     type="number"
                     min={0}
                     value={form.checkSizeMin || ''}
                     onChange={(e) => update({ checkSizeMin: Number(e.target.value) || 0 })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
+                    className="w-full px-3.5 py-2.5 rounded-2xl bg-[#f9f9f7] border border-[#e8e8e2] text-[#111111] placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
                     placeholder="Min (e.g. 25)"
                   />
-                  <span className="text-gray-500">to</span>
+                  <span className="text-gray-600">to</span>
                   <input
                     type="number"
                     min={0}
                     value={form.checkSizeMax || ''}
                     onChange={(e) => update({ checkSizeMax: Number(e.target.value) || 0 })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
+                    className="w-full px-3.5 py-2.5 rounded-2xl bg-[#f9f9f7] border border-[#e8e8e2] text-[#111111] placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
                     placeholder="Max (e.g. 500)"
                   />
-                  <span className="text-gray-500 text-sm whitespace-nowrap">(K)</span>
+                  <span className="text-gray-600 text-sm whitespace-nowrap">(K)</span>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Preferred Sectors</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Preferred Sectors</label>
                 <div className="flex flex-wrap gap-2">
                   {SECTORS.map((s) => (
                     <button
                       key={s}
                       type="button"
                       onClick={() => toggleSector(s)}
-                      className={`px-3 py-1.5 rounded-lg text-sm border transition-all ${
+                      className={`px-3 py-1.5 rounded-xl text-sm border transition-all ${
                         form.preferredSectors.includes(s)
-                          ? 'bg-[#60a5fa]/10 border-[#60a5fa]/40 text-white'
-                          : 'bg-[#09091a] border-[#1c1c3a] text-gray-400 hover:text-white'
+                          ? 'bg-[#60a5fa]/10 border-[#60a5fa]/40 text-[#111111]'
+                          : 'bg-[#f9f9f7] border-[#e8e8e2] text-gray-600 hover:text-[#111111]'
                       }`}
                     >
                       {s}
@@ -290,21 +290,21 @@ export default function InvestorOnboarding() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Geography Focus</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Geography Focus</label>
                 <input
                   value={form.geographyFocus}
                   onChange={(e) => update({ geographyFocus: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-[#f9f9f7] border border-[#e8e8e2] text-[#111111] placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent"
                   placeholder="e.g. North America, Europe, Global"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Portfolio Companies (optional)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Portfolio Companies (optional)</label>
                 <textarea
                   value={form.portfolioCompanies}
                   onChange={(e) => update({ portfolioCompanies: e.target.value })}
                   rows={3}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent resize-none"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-[#f9f9f7] border border-[#e8e8e2] text-[#111111] placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent resize-none"
                   placeholder="List or describe current/prior portfolio companies"
                 />
               </div>
@@ -312,34 +312,34 @@ export default function InvestorOnboarding() {
           </section>
 
           {/* Section 4: Additional Details */}
-          <section className="bg-[#0b0b18] border border-[#1c1c3a] rounded-2xl p-6 sm:p-8">
+          <section className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-6 sm:p-8">
             <div className="flex items-center gap-2 text-[#60a5fa] mb-6">
               <FileText size={20} />
-              <h2 className="text-lg font-semibold text-white">Additional Details</h2>
+              <h2 className="text-lg font-semibold text-[#111111]">Additional Details</h2>
             </div>
             <div className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Investment Thesis</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Investment Thesis</label>
                 <textarea
                   value={form.investmentThesis}
                   onChange={(e) => update({ investmentThesis: e.target.value })}
                   rows={4}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#09091a] border border-[#1c1c3a] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent resize-none"
+                  className="w-full px-3.5 py-2.5 rounded-2xl bg-[#f9f9f7] border border-[#e8e8e2] text-[#111111] placeholder-gray-500 focus:ring-2 focus:ring-[#60a5fa] focus:border-transparent resize-none"
                   placeholder="Describe your investment focus and criteria"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Looking to</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Looking to</label>
                 <div className="flex flex-wrap gap-3">
                   {(['lead', 'co_invest', 'passive'] as const).map((opt) => (
                     <button
                       key={opt}
                       type="button"
                       onClick={() => update({ lookingTo: opt })}
-                      className={`px-4 py-2 rounded-xl text-sm border transition-all ${
+                      className={`px-4 py-2 rounded-2xl text-sm border transition-all ${
                         form.lookingTo === opt
-                          ? 'bg-[#60a5fa]/10 border-[#60a5fa]/40 text-white'
-                          : 'bg-[#09091a] border-[#1c1c3a] text-gray-400 hover:text-white'
+                          ? 'bg-[#60a5fa]/10 border-[#60a5fa]/40 text-[#111111]'
+                          : 'bg-[#f9f9f7] border-[#e8e8e2] text-gray-600 hover:text-[#111111]'
                       }`}
                     >
                       {opt === 'lead' ? 'Lead' : opt === 'co_invest' ? 'Co-invest' : 'Passive'}
@@ -348,7 +348,7 @@ export default function InvestorOnboarding() {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-sm text-gray-300">Open to cold pitches?</span>
+                <span className="text-sm text-gray-700">Open to cold pitches?</span>
                 <button
                   type="button"
                   onClick={() => update({ openToColdPitches: !form.openToColdPitches })}
@@ -362,7 +362,7 @@ export default function InvestorOnboarding() {
                     }`}
                   />
                 </button>
-                <span className="text-sm text-gray-500">{form.openToColdPitches ? 'Yes' : 'No'}</span>
+                <span className="text-sm text-gray-600">{form.openToColdPitches ? 'Yes' : 'No'}</span>
               </div>
             </div>
           </section>
@@ -370,7 +370,7 @@ export default function InvestorOnboarding() {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="px-8 py-3.5 bg-gradient-to-r from-[#60a5fa] to-[#a78bfa] text-black font-bold rounded-xl hover:opacity-90 transition-opacity"
+              className="px-8 py-3.5 bg-gradient-to-r from-[#60a5fa] to-[#c35c5c] text-[#111111] font-bold rounded-2xl hover:opacity-90 transition-opacity"
             >
               {profile ? 'Save Changes' : 'Complete Onboarding'}
             </button>

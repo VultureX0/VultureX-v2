@@ -23,26 +23,26 @@ export default function StartupDetail() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link
           to="/trending"
-          className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white mb-8 transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-[#111111] mb-8 transition-colors"
         >
           <ArrowLeft size={16} />
           Back to Trending
         </Link>
 
-        <div className="bg-[#0f0f1e] border border-[#1c1c3a] rounded-2xl p-8">
+        <div className="bg-white border border-[#e8e8e2] shadow-[0_8px_24px_rgba(17,17,17,0.06)] rounded-2xl p-8">
           <div className="flex items-start gap-4 mb-6">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] flex items-center justify-center text-2xl font-bold text-white">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#d14343] to-[#b73535] flex items-center justify-center text-2xl font-bold text-[#111111]">
               {displayName[0]}
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">{displayName}</h1>
+              <h1 className="text-2xl font-bold text-[#111111]">{displayName}</h1>
               {startup && (
                 <>
                   <div className="flex items-center gap-2 mt-2 flex-wrap">
-                    <span className="px-2 py-0.5 text-xs bg-[#1c1c3a] text-gray-400 rounded-full">
+                    <span className="px-2 py-0.5 text-xs bg-[#e8e8e2] text-gray-600 rounded-full">
                       {startup.sector}
                     </span>
-                    <span className="px-2 py-0.5 text-xs bg-[#1c1c3a] text-gray-400 rounded-full">
+                    <span className="px-2 py-0.5 text-xs bg-[#e8e8e2] text-gray-600 rounded-full">
                       {startup.stage}
                     </span>
                     {startup.sdg && (
@@ -51,42 +51,42 @@ export default function StartupDetail() {
                       </span>
                     )}
                   </div>
-                  <p className="text-gray-400 text-sm mt-2">{startup.desc}</p>
+                  <p className="text-gray-600 text-sm mt-2">{startup.desc}</p>
                 </>
               )}
             </div>
           </div>
 
           {startup && (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-[#1c1c3a]">
-              <div className="bg-[#09091a] rounded-xl p-4 text-center">
-                <div className="text-xs text-gray-500 mb-1">AI Score</div>
-                <div className="text-[#8b5cf6] font-bold text-xl">{startup.score}</div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-[#e8e8e2]">
+              <div className="bg-[#f9f9f7] rounded-2xl p-4 text-center">
+                <div className="text-xs text-gray-600 mb-1">AI Score</div>
+                <div className="text-[#d14343] font-bold text-xl">{startup.score}</div>
               </div>
-              <div className="bg-[#09091a] rounded-xl p-4 text-center">
-                <div className="text-xs text-gray-500 mb-1">Investors</div>
-                <div className="text-white font-semibold">{startup.investors}</div>
+              <div className="bg-[#f9f9f7] rounded-2xl p-4 text-center">
+                <div className="text-xs text-gray-600 mb-1">Investors</div>
+                <div className="text-[#111111] font-semibold">{startup.investors}</div>
               </div>
-              <div className="bg-[#09091a] rounded-xl p-4 text-center">
-                <div className="text-xs text-gray-500 mb-1">Rank Change</div>
+              <div className="bg-[#f9f9f7] rounded-2xl p-4 text-center">
+                <div className="text-xs text-gray-600 mb-1">Rank Change</div>
                 <div
                   className={`font-semibold ${
-                    startup.change > 0 ? 'text-[#4ade80]' : startup.change < 0 ? 'text-red-400' : 'text-gray-500'
+                    startup.change > 0 ? 'text-[#4ade80]' : startup.change < 0 ? 'text-red-400' : 'text-gray-600'
                   }`}
                 >
                   {startup.change > 0 ? `+${startup.change}` : startup.change === 0 ? '—' : startup.change}
                 </div>
               </div>
-              <div className="bg-[#09091a] rounded-xl p-4 text-center">
-                <div className="text-xs text-gray-500 mb-1">Stage</div>
-                <div className="text-white font-medium">{startup.stage}</div>
+              <div className="bg-[#f9f9f7] rounded-2xl p-4 text-center">
+                <div className="text-xs text-gray-600 mb-1">Stage</div>
+                <div className="text-[#111111] font-medium">{startup.stage}</div>
               </div>
             </div>
           )}
 
           {!startup && (
-            <p className="text-gray-500 text-sm pt-4">
-              View this startup from the <Link to="/trending" className="text-[#8b5cf6] hover:underline">Trending</Link> page to see full details.
+            <p className="text-gray-600 text-sm pt-4">
+              View this startup from the <Link to="/trending" className="text-[#d14343] hover:underline">Trending</Link> page to see full details.
             </p>
           )}
         </div>

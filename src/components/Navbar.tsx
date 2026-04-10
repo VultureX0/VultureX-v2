@@ -5,11 +5,11 @@ import { useAuth } from '../features/auth';
 import logo from '../assets/logo.png';
 
 const navLinks = [
-  { label: 'Explore', path: '/explore' },
+  { label: 'Startups', path: '/explore' },
   { label: 'Competitions', path: '/competitions' },
   { label: 'For Startups', path: '/for-startups' },
   { label: 'For Investors', path: '/for-investors' },
-  { label: 'About', path: '/about' },
+  { label: 'Impact', path: '/impact' },
 ];
 
 export default function Navbar() {
@@ -32,31 +32,26 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
         isScrolled
-          ? 'bg-[#06060f]/90 backdrop-blur-md border-b border-[#1c1c3a]/60'
-          : 'bg-transparent'
+          ? 'bg-[#f6f6f2]/95 backdrop-blur-md border-b border-[#e8e8e2]'
+          : 'bg-[#f6f6f2]/90 border-b border-[#ecece6]'
       }`}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14">
-          <Link to="/" className="flex items-center gap-2">
+        <div className="flex items-center justify-between h-16">
+          <Link to="/" className="flex items-center gap-2.5">
             <img src={logo} alt="Vulture X" className="w-7 h-7 rounded-md object-cover" />
-            <span className="text-[15px] font-semibold tracking-tight text-white">
-              Vulture X
+            <span className="text-[17px] font-semibold tracking-tight text-[#111111]">
+              vulturex<span className="text-[#d14343]">.</span>
             </span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-0.5">
+          <div className="hidden md:flex items-center gap-5">
             {navLinks.map((link) => {
-              const isActive = location.pathname === link.path;
               return (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`px-3 py-1.5 rounded-md text-[13px] transition-colors ${
-                    isActive
-                      ? 'text-white bg-white/[0.06]'
-                      : 'text-gray-400 hover:text-gray-200'
-                  }`}
+                  className="text-[13px] text-gray-600 hover:text-[#111111] transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -69,13 +64,13 @@ export default function Navbar() {
               <>
                 <Link
                   to="/dashboard"
-                  className="px-3 py-1.5 text-[13px] text-gray-300 hover:text-white transition-colors"
+                  className="px-3 py-1.5 text-[13px] text-gray-600 hover:text-[#111111] transition-colors"
                 >
                   Dashboard
                 </Link>
                 <button
                   onClick={signOut}
-                  className="flex items-center gap-1 px-3 py-1.5 text-[13px] text-gray-500 hover:text-gray-300 transition-colors"
+                  className="flex items-center gap-1 px-3 py-1.5 text-[13px] text-gray-600 hover:text-[#111111] transition-colors"
                 >
                   <LogOut size={13} /> Sign out
                 </button>
@@ -84,13 +79,13 @@ export default function Navbar() {
               <>
                 <Link
                   to="/login"
-                  className="px-3 py-1.5 text-[13px] text-gray-400 hover:text-white transition-colors"
+                  className="px-3 py-1.5 text-[13px] text-gray-600 hover:text-[#111111] transition-colors"
                 >
-                  Sign in
+                  Log in
                 </Link>
                 <Link
                   to="/signup"
-                  className="px-3.5 py-1.5 text-[13px] font-medium bg-white text-[#06060f] rounded-md hover:bg-gray-200 transition-colors"
+                  className="px-4.5 py-2 text-[13px] font-medium bg-[#111111] text-white rounded-full hover:bg-[#222222] transition-colors"
                 >
                   Get started
                 </Link>
@@ -99,7 +94,7 @@ export default function Navbar() {
           </div>
 
           <button
-            className="md:hidden p-1.5 text-gray-400 hover:text-white"
+            className="md:hidden p-1.5 text-gray-600 hover:text-[#111111]"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -108,7 +103,7 @@ export default function Navbar() {
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden bg-[#09091a]/98 backdrop-blur-md border-t border-[#1c1c3a]/60">
+        <div className="md:hidden bg-[#f6f6f2] border-t border-[#e8e8e2]">
           <div className="px-4 py-3 space-y-0.5">
             {navLinks.map((link) => (
               <Link
@@ -116,25 +111,25 @@ export default function Navbar() {
                 to={link.path}
                 className={`block px-3 py-2 rounded-md text-sm transition-colors ${
                   location.pathname === link.path
-                    ? 'text-white bg-white/[0.06]'
-                    : 'text-gray-400 hover:text-white'
+                    ? 'text-[#111111] bg-white'
+                    : 'text-gray-600 hover:text-[#111111]'
                 }`}
               >
                 {link.label}
               </Link>
             ))}
-            <div className="pt-3 border-t border-[#1c1c3a] mt-2 flex flex-col gap-1.5">
+            <div className="pt-3 border-t border-[#e8e8e2] mt-2 flex flex-col gap-1.5">
               {isAuthenticated ? (
                 <>
                   <Link
                     to="/dashboard"
-                    className="w-full px-3 py-2 text-sm font-medium bg-white text-[#06060f] rounded-md text-center"
+                    className="w-full px-3 py-2 text-sm font-medium bg-[#111111] text-white rounded-md text-center"
                   >
                     Dashboard
                   </Link>
                   <button
                     onClick={signOut}
-                    className="w-full px-3 py-2 text-sm text-gray-400 border border-[#1c1c3a] rounded-md text-center"
+                    className="w-full px-3 py-2 text-sm text-gray-600 border border-[#d9d9d2] rounded-md text-center"
                   >
                     Sign out
                   </button>
@@ -143,13 +138,13 @@ export default function Navbar() {
                 <>
                   <Link
                     to="/login"
-                    className="w-full px-3 py-2 text-sm text-gray-400 border border-[#1c1c3a] rounded-md text-center"
+                    className="w-full px-3 py-2 text-sm text-gray-600 border border-[#d9d9d2] rounded-md text-center"
                   >
                     Sign in
                   </Link>
                   <Link
                     to="/signup"
-                    className="w-full px-3 py-2 text-sm font-medium bg-white text-[#06060f] rounded-md text-center"
+                    className="w-full px-3 py-2 text-sm font-medium bg-[#111111] text-white rounded-md text-center"
                   >
                     Get started
                   </Link>
