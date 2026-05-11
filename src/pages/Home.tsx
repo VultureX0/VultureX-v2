@@ -1,11 +1,9 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, TrendingUp, Trophy, Users, Target, BarChart3, Shield, DollarSign, Zap, Check, ArrowUpRight, Star } from 'lucide-react';
-
-const trendingStartups = [
-  { name: 'SolarAI', sector: 'CleanTech', stage: 'Series A', raised: '$2.1M', logo: 'S', growth: '+124%' },
-  { name: 'NeuralPay', sector: 'FinTech', stage: 'Seed', raised: '$5.4M', logo: 'N', growth: '+89%' },
-  { name: 'AgriSense', sector: 'AgriTech', stage: 'Series B', raised: '$8.2M', logo: 'A', growth: '+156%' },
-];
+import { getPlatformStats, type PlatformStats } from '../services/platform-stats.service';
+import { getAllStartups } from '../services/startups';
+import type { StartupProfileData } from '../types';
 
 const competitions = [
   { title: 'Climate Innovation Challenge', prize: '$50K', deadline: '14 days left', entries: 234 },
@@ -27,7 +25,72 @@ const testimonials = [
   { name: 'Amina Adeyemi', role: 'Founder, GreenPath', quote: 'As an impact founder, getting free Pro access changed everything for us. Now we are Series A.', avatar: 'AA' },
 ];
 
+type TrendingStartup = {
+  id: number | string;
+  name: string;
+  sector: string;
+  stage: string;
+  raised: string;
+  logo: string;
+  growth: string;
+};
+
+function formatStat(value: number | null) {
+  return value === null ? '...' : new Intl.NumberFormat('en-US').format(value);
+}
+
+function formatGrowth(value: number) {
+  return `${value > 0 ? '+' : ''}${value}%`;
+}
+
+function getTrendingScore(startup: StartupProfileData) {
+  return startup.score + startup.interestedInvestorsCount + startup.monthlyGrowthPercent;
+}
+
+function toTrendingStartup(startup: StartupProfileData): TrendingStartup {
+  return {
+    id: startup.id,
+    name: startup.name,
+    sector: startup.sector,
+    stage: startup.stage,
+    raised: startup.fundingRaised,
+    logo: startup.logoLetter || startup.name.charAt(0),
+    growth: formatGrowth(startup.monthlyGrowthPercent),
+  };
+}
+
 export default function Home() {
+  const [stats, setStats] = useState<PlatformStats | null>(null);
+  const [trendingStartups, setTrendingStartups] = useState<TrendingStartup[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadLandingData() {
+      const [nextStats, startups] = await Promise.all([
+        getPlatformStats().catch(() => ({ activeFounders: 0, verifiedInvestors: 0, dealsClosed: 0 })),
+        getAllStartups().catch(() => []),
+      ]);
+
+      if (!isMounted) return;
+
+      setStats(nextStats);
+      setTrendingStartups(
+        startups
+          .slice()
+          .sort((a, b) => getTrendingScore(b) - getTrendingScore(a))
+          .slice(0, 3)
+          .map(toTrendingStartup),
+      );
+    }
+
+    loadLandingData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#f6f6f2]">
       {/* Hero Section */}
@@ -77,28 +140,14 @@ export default function Home() {
 
             <div className="grid grid-cols-3 gap-0 max-w-xl rounded-3xl border border-white/90 bg-gradient-to-br from-white/90 to-[#f3edff]/80 backdrop-blur-md shadow-[0_20px_40px_rgba(17,17,17,0.10)] overflow-hidden">
               {[
-                { value: '2,847', label: 'Active Founders' },
-                { value: '412', label: 'Verified Investors' },
-                { value: '89', label: 'Deals Closed' },
+                { value: formatStat(stats?.activeFounders ?? null), label: 'Active Founders' },
+                { value: formatStat(stats?.verifiedInvestors ?? null), label: 'Verified Investors' },
+                { value: formatStat(stats?.dealsClosed ?? null), label: 'Deals Closed' },
               ].map((stat) => (
                 <div key={stat.label} className="px-5 py-5 text-center border-r last:border-r-0 border-[#eceae5]">
                   <div className="text-4xl font-bold text-[#111111]">{stat.value}</div>
                   <div className="text-sm text-[#6b6b73] mt-1">{stat.label}</div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Trusted By */}
-      <section className="py-12 border-y border-[#e8e8e2] bg-[#f8f5fb]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            <p className="text-sm text-[#77777f]">Trusted by founders from</p>
-            <div className="flex flex-wrap items-center justify-center gap-8 md:gap-14">
-              {['Y Combinator', 'Techstars', '500 Global', 'Antler', 'Sequoia Scout'].map((name) => (
-                <span key={name} className="text-lg font-semibold text-[#9c9ca3]">{name}</span>
               ))}
             </div>
           </div>
