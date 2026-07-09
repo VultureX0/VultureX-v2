@@ -12,10 +12,14 @@ import { StartupTable } from "./startup-table";
 export default async function HomePage() {
   const session = await auth();
   if (session?.user) redirect("/dashboard");
-  const [startupCount] = await db.select({ count: sql<number>`count(*)` }).from(startups);
-  const [investorCount] = await db.select({ count: sql<number>`count(*)` }).from(investors);
-  const [connectionCount] = await db.select({ count: sql<number>`count(*)` }).from(interests);
-  const topStartups = await db.select().from(startups).orderBy(desc(startups.score)).limit(6);
+
+  // Run all queries in parallel
+  const [startupCount, investorCount, connectionCount, topStartups] = await Promise.all([
+    db.select({ count: sql<number>`count(*)` }).from(startups).then(r => r[0]),
+    db.select({ count: sql<number>`count(*)` }).from(investors).then(r => r[0]),
+    db.select({ count: sql<number>`count(*)` }).from(interests).then(r => r[0]),
+    db.select().from(startups).orderBy(desc(startups.score)).limit(6),
+  ]);
 
   return (
     <div>

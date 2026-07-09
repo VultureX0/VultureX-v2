@@ -1,0 +1,11 @@
+{
+  "regions": ["bom1"],
+  "functions": {
+    "app/**/*.tsx": {
+      "maxDuration": 10
+    },
+    "app/api/**/*.ts": {
+      "maxDuration": 10
+    }
+  }
+}
