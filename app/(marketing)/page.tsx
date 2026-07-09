@@ -1,0 +1,52 @@
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { redirect } from "next/navigation";
+import { db } from "@/db";
+import { startups, investors, interests } from "@/db/schema";
+import { desc, sql } from "drizzle-orm";
+import { auth } from "@/features/auth";
+import { HeroSection } from "./hero";
+import { FeatureGrid } from "./features";
+import { StartupTable } from "./startup-table";
+
+export default async function HomePage() {
+  const session = await auth();
+  if (session?.user) redirect("/dashboard");
+  const [startupCount] = await db.select({ count: sql<number>`count(*)` }).from(startups);
+  const [investorCount] = await db.select({ count: sql<number>`count(*)` }).from(investors);
+  const [connectionCount] = await db.select({ count: sql<number>`count(*)` }).from(interests);
+  const topStartups = await db.select().from(startups).orderBy(desc(startups.score)).limit(6);
+
+  return (
+    <div>
+      <HeroSection
+        stats={{ startups: Number(startupCount.count), investors: Number(investorCount.count), connections: Number(connectionCount.count) }}
+      />
+      <FeatureGrid />
+      <StartupTable startups={topStartups.map(s => ({
+        id: s.id,
+        slug: s.slug,
+        name: s.name,
+        tagline: s.tagline,
+        sector: s.sector,
+        stage: s.stage,
+        growth: s.monthlyGrowth || "0",
+        score: parseFloat(s.score || "0"),
+      }))} />
+
+      {/* CTA */}
+      <section className="px-6 py-24 md:py-32 border-t border-[var(--border)]">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-semibold mb-4">Ready to connect?</h2>
+          <p className="text-sm text-[var(--text-secondary)] mb-10 max-w-md mx-auto">
+            Free for startups. Free for investors. We only make money when you close a deal.
+          </p>
+          <Link href="/signup" className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium bg-[var(--accent)] text-[#050505] rounded-md hover:bg-[var(--accent-hover)] transition-colors">
+            Get started <ArrowRight size={14} />
+          </Link>
+          <p className="mt-4 text-xs text-[var(--text-muted)]">3% success fee on close · Impact startups: 0%</p>
+        </div>
+      </section>
+    </div>
+  );
+}
