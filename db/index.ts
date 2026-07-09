@@ -4,12 +4,10 @@ import * as schema from "./schema";
 
 const connectionString = process.env.DATABASE_URL!;
 
-// idle_timeout keeps connection alive between requests on serverless
-// prepare: false required for Neon pooled connections
+// Serverless: 1 connection per invocation, no prepare for pooled connections
 const client = postgres(connectionString, {
   prepare: false,
-  idle_timeout: 20,
-  max: 10,
+  max: 1,
   connect_timeout: 10,
 });
 
