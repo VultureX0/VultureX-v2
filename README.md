@@ -2,6 +2,12 @@
 
 A startup-investor connection platform. Startups show verified traction, get scored, generate pitch decks, and connect with investors directly.
 
+**Live**: https://vulturex-v2.vercel.app
+
+**Test credentials**:
+- Startup: `founder@greenpath.io` / `demo123`
+- Investor: `investor@horizon.vc` / `demo123`
+
 ## Stack
 
 | Layer | Tech |
