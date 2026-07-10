@@ -7,6 +7,9 @@ import { HeroSection } from "./hero";
 import { FeatureGrid } from "./features";
 import { StartupTable } from "./startup-table";
 
+// Don't prerender at build time - DB is in a different region than build server
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   // Run all queries in parallel
   const [startupCount, investorCount, connectionCount, topStartups] = await Promise.all([
