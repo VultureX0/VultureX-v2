@@ -15,12 +15,15 @@ A startup-investor connection platform. Startups show verified traction, get sco
 | Framework | Next.js 16 (App Router, Turbopack) |
 | Language | TypeScript |
 | Styling | Tailwind CSS v4 |
-| Database | PostgreSQL (Neon) |
+| Database | PostgreSQL (Supabase) |
 | ORM | Drizzle |
-| Auth | NextAuth v5 (credentials + Google OAuth ready) |
+| Auth | NextAuth v5 beta (credentials + Google OAuth ready) |
 | AI | OpenAI GPT-4o (deck generation) |
 | Email | Resend |
+| Charts | Recharts |
+| Icons | Lucide React |
 | Animations | Framer Motion |
+| Validation | Zod v4 |
 | Package manager | pnpm |
 
 ## Getting Started
@@ -31,7 +34,7 @@ pnpm install
 
 # Set up environment
 cp .env.example .env.local
-# Fill in: DATABASE_URL, NEXTAUTH_SECRET, OPENAI_API_KEY, RESEND_API_KEY
+# Fill in: DATABASE_URL, AUTH_SECRET, OPENAI_API_KEY, RESEND_API_KEY
 
 # Push schema to database
 pnpm db:push
@@ -43,10 +46,6 @@ pnpm tsx db/seed.ts
 pnpm dev
 ```
 
-Demo credentials:
-- Startup: `founder@greenpath.io` / `demo123`
-- Investor: `investor@horizon.vc` / `demo123`
-
 ## Architecture
 
 ```
@@ -54,42 +53,53 @@ VultureX/
 ├── middleware.ts              # Auth route protection (Next.js requires root placement)
 ├── app/
 │   ├── (auth)/                # Login, signup (centered card layout)
-│   ├── (marketing)/           # Landing page (public, redirects if logged in)
+│   ├── (marketing)/           # Landing page (public, Navbar + Footer layout)
+│   │   ├── page.tsx           # Home — live stats, hero, features, top startups
+│   │   ├── hero.tsx           # Animated hero section
+│   │   ├── features.tsx       # Feature grid
+│   │   └── startup-table.tsx  # Top startups preview
 │   ├── (platform)/            # Authenticated app (sidebar layout)
-│   │   ├── dashboard/         # Role-based home
-│   │   ├── explore/           # Browse startups with filters
-│   │   ├── rankings/          # Leaderboard by score
+│   │   ├── dashboard/         # Role-based home with score breakdown & activity
+│   │   ├── explore/           # Browse startups with filters + [slug] detail pages
+│   │   ├── rankings/          # Leaderboard by score with sector tabs
 │   │   ├── interests/         # Sent/received connection requests
 │   │   ├── saved/             # Bookmarked startups
-│   │   ├── deck/              # Pitch deck management
-│   │   ├── competitions/      # Sector challenges
-│   │   ├── settings/          # Profile editing
-│   │   └── onboarding/        # First-time setup forms
-│   ├── deck/view/[token]/     # Public deck viewer (no auth)
+│   │   ├── deck/              # Pitch deck list, [id] editor, /new generator
+│   │   ├── competitions/      # Sector challenges list + [id] detail/leaderboard
+│   │   ├── settings/          # Profile editing with dirty-state detection
+│   │   └── onboarding/        # startup/ and investor/ multi-step forms
+│   ├── deck/view/[token]/     # Public deck viewer (no auth required)
 │   └── api/                   # REST endpoints
 ├── components/
-│   ├── ui/index.tsx           # Shared UI kit (Button, Card, Input, etc.)
-│   ├── shared/                # App shell (Navbar, Sidebar, Footer)
+│   ├── ui/index.tsx           # Shared UI kit (Button, Card, Input, Badge, etc.)
+│   ├── shared/                # App shell (Navbar, Sidebar, Footer, Providers, ViewTracker)
 │   ├── startup/               # ProfileCard, ScoreBadge
 │   ├── investor/              # InterestButton, SaveButton
 │   ├── deck/                  # SlideCard, DeckEditor
 │   └── competition/           # EnterButton
 ├── features/
-│   ├── auth/                  # NextAuth configuration
+│   ├── auth/                  # NextAuth v5 configuration (auth.config.ts)
 │   ├── scoring/               # VultureScore engine (0-100)
-│   ├── deck/                  # OpenAI deck generator
+│   ├── deck/                  # OpenAI deck generator + types
 │   └── notifications/         # Resend email service
 ├── db/
-│   ├── schema.ts              # Drizzle table definitions
-│   ├── index.ts               # DB connection
-│   └── seed.ts                # Demo data
+│   ├── schema.ts              # Drizzle table definitions (10 tables)
+│   ├── index.ts               # DB connection (postgres driver)
+│   ├── seed.ts                # Demo data seeder
+│   └── migrations/            # Generated SQL migrations
 └── lib/
     └── utils.ts               # cn(), slugify()
 ```
 
 ## Database Schema
 
-10 tables: `users`, `startups`, `investors`, `decks`, `competitions`, `competition_entries`, `interests`, `profile_views`, `deck_views`, `bookmarks`
+10 tables: `users`, `startups`, `investors`, `decks`, `competitions`, `competition_entries`, `interests`, `profile_views`, `bookmarks`, `deck_views`
+
+Key relationships:
+- `users` → `startups` / `investors` (1:1 per role)
+- `startups` → `decks` (1:many)
+- `investors` → `interests` → `startups` (many:many via interests)
+- `competitions` → `competition_entries` → `startups` (many:many)
 
 ## VultureScore (0-100)
 
@@ -97,17 +107,21 @@ Transparent formula-based ranking:
 
 | Category | Max | Based on |
 |----------|-----|----------|
-| Traction | 35 | MRR, monthly growth, customer count |
-| Financial | 25 | Runway, burn efficiency, funding raised |
-| Team | 15 | Size, founder profile completeness, team depth |
-| Market | 15 | Sector hotness, stage-appropriate metrics |
-| Momentum | 10 | Profile views, investor interests, competition entries |
+| Traction | 35 | MRR thresholds, monthly growth rate, customer count |
+| Financial | 25 | Runway length, burn efficiency (MRR/burn ratio), total raised |
+| Team | 15 | Headcount, founder profile completeness, role coverage depth |
+| Market | 15 | Sector heat (hot/warm/normal), stage-appropriate traction validation |
+| Momentum | 10 | Profile views (30d), investor interests received, competition participation |
+
+Hot sectors: AI, ML, Climate, Fintech, HealthTech
+Warm sectors: SaaS, EdTech, BioTech, Cybersecurity
 
 ## API Routes
 
 | Method | Route | Purpose |
 |--------|-------|---------|
 | POST | `/api/auth/signup` | Create account |
+| GET/POST | `/api/auth/[...nextauth]` | NextAuth session handler |
 | GET/POST | `/api/startups` | List/create startup profiles |
 | GET/POST | `/api/investors` | List/create investor profiles |
 | GET/POST/PATCH | `/api/interest` | Express/list/accept/decline interests |
@@ -121,6 +135,12 @@ Transparent formula-based ranking:
 | GET | `/api/competitions/[id]` | Competition details + leaderboard |
 | POST | `/api/competitions/[id]/enter` | Enter a competition |
 
+## Protected Routes
+
+Middleware protects: `/dashboard`, `/deck`, `/onboarding`, `/settings`, `/saved`, `/interests`
+
+Auth check uses `authjs.session-token` or `__Secure-authjs.session-token` cookies. Unauthenticated users are redirected to `/login?callbackUrl=...`.
+
 ## Features - Working
 
 - [x] Email/password auth with session management
@@ -129,44 +149,52 @@ Transparent formula-based ranking:
 - [x] VultureScore computation on profile save
 - [x] Score auto-refresh endpoint (cron-compatible)
 - [x] Explore page with sector/stage/search filters
+- [x] Startup detail pages (`/explore/[slug]`)
 - [x] Rankings leaderboard with sector tabs
-- [x] Startup profile pages with score breakdown
-- [x] Express interest (investor to startup, with optional message)
+- [x] Express interest (investor → startup, with optional message)
 - [x] Accept/decline interests (startup side)
 - [x] Email notification on interest (via Resend)
 - [x] Bookmark/save startups
 - [x] Pitch deck generation (OpenAI GPT-4o)
 - [x] Deck list, editor, public sharing via token
-- [x] Competitions (list, detail, entry)
+- [x] Competitions (list, detail, entry, leaderboard)
 - [x] Settings with dirty-state detection
 - [x] View tracking (profile + deck)
 - [x] Dashboard with score breakdown, tips, activity feed
-- [x] Landing page with product mockup and animations
+- [x] Landing page with live stats, animated hero, feature grid, top startups table
 - [x] Framer Motion animations throughout
+- [x] Recharts for dashboard visualizations
 - [x] Reusable UI component kit
-- [x] SEO metadata with OG tags
-- [x] Accessibility (aria labels, htmlFor, aria-current)
+- [x] Zod validation (library included)
 
 ## Features - Not Built
 
 - [ ] Stripe OAuth for verified revenue metrics
-- [ ] Google OAuth button (provider configured, no UI)
+- [ ] Google OAuth button (provider configured in env, no UI)
 - [ ] Forgot password / reset flow
 - [ ] Deck PDF export
 - [ ] Messaging between users
 - [ ] Investor-startup matching algorithm
 - [ ] Mobile responsive sidebar (hamburger menu)
 - [ ] Rate limiting on API routes
-- [ ] Zod validation on API inputs
 
 ## Environment Variables
 
 ```
+# Required
 DATABASE_URL=postgresql://...
-NEXTAUTH_SECRET=random-string
+AUTH_SECRET=random-string
+AUTH_URL=http://localhost:3000
 OPENAI_API_KEY=sk-...
-RESEND_API_KEY=re_...          # Optional: falls back to console.log
-CRON_SECRET=random-string      # For /api/score/refresh
+
+# Optional
+RESEND_API_KEY=re_...                    # Falls back to console.log
+AUTH_GOOGLE_ID=                          # Google OAuth
+AUTH_GOOGLE_SECRET=
+STRIPE_CLIENT_ID=                        # Future: verified metrics
+STRIPE_SECRET_KEY=
+NEXT_PUBLIC_STRIPE_CONNECT_URL=
+CRON_SECRET=random-string                # For /api/score/refresh
 ```
 
 ## Scripts
@@ -175,6 +203,7 @@ CRON_SECRET=random-string      # For /api/score/refresh
 pnpm dev              # Start dev server (Turbopack)
 pnpm build            # Production build
 pnpm start            # Start production server
+pnpm lint             # ESLint
 pnpm db:push          # Push schema to database
 pnpm db:generate      # Generate migration files
 pnpm db:migrate       # Run migrations
@@ -184,12 +213,13 @@ pnpm tsx db/seed.ts   # Seed demo data
 
 ## Deploy
 
-Designed for Vercel:
+Designed for Vercel (region: `bom1` via `vercel.json`):
+
 ```bash
 vercel deploy
 ```
 
-Required env vars on Vercel: `DATABASE_URL`, `NEXTAUTH_SECRET`, `OPENAI_API_KEY`, `RESEND_API_KEY`, `CRON_SECRET`
+Required env vars on Vercel: `DATABASE_URL`, `AUTH_SECRET`, `AUTH_URL`, `OPENAI_API_KEY`
 
 Optional: Set up Vercel Cron to hit `GET /api/score/refresh` with `Authorization: Bearer $CRON_SECRET` header daily.
 
@@ -198,7 +228,7 @@ Optional: Set up Vercel Cron to hit `GET /api/score/refresh` with `Authorization
 - Background: `#171717` (warm dark, not pitch black)
 - Cards: `#1c1c1c`
 - Borders: `#2e2e2e`
-- Accent: `#3ecf8e` (emerald green, Supabase-inspired)
+- Accent: `#3ecf8e` (emerald green)
 - Text: `#ededed` / `#b3b3b3` / `#707070`
 - Radius: `rounded-md` (buttons/inputs), `rounded-xl` (cards)
 - Font: Inter, system-ui
