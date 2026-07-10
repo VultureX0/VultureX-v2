@@ -1,23 +1,13 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { startups, investors, interests } from "@/db/schema";
 import { desc, sql } from "drizzle-orm";
-import { auth } from "@/features/auth";
 import { HeroSection } from "./hero";
 import { FeatureGrid } from "./features";
 import { StartupTable } from "./startup-table";
 
 export default async function HomePage() {
-  // Non-blocking auth check - don't let auth failures break the landing page
-  try {
-    const session = await auth();
-    if (session?.user) redirect("/dashboard");
-  } catch {
-    // Auth check failed - show landing page anyway
-  }
-
   // Run all queries in parallel
   const [startupCount, investorCount, connectionCount, topStartups] = await Promise.all([
     db.select({ count: sql<number>`count(*)` }).from(startups).then(r => r[0]),
