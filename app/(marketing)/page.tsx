@@ -10,8 +10,13 @@ import { FeatureGrid } from "./features";
 import { StartupTable } from "./startup-table";
 
 export default async function HomePage() {
-  const session = await auth();
-  if (session?.user) redirect("/dashboard");
+  // Non-blocking auth check - don't let auth failures break the landing page
+  try {
+    const session = await auth();
+    if (session?.user) redirect("/dashboard");
+  } catch {
+    // Auth check failed - show landing page anyway
+  }
 
   // Run all queries in parallel
   const [startupCount, investorCount, connectionCount, topStartups] = await Promise.all([
