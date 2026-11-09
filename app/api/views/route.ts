@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { profileViews, deckViews } from "@/db/schema";
 import { auth } from "@/features/auth";
+import { isUuid } from "@/lib/utils";
 
 // Records a profile or deck view, optionally linking the authenticated viewer
 export async function POST(request: Request) {
@@ -20,9 +21,9 @@ export async function POST(request: Request) {
     const viewerId = session?.user?.id ?? null;
 
     if (type === "profile") {
-      if (!startupId) {
+      if (!isUuid(startupId)) {
         return NextResponse.json(
-          { error: "startupId is required for profile views" },
+          { error: "startupId must be a valid id for profile views" },
           { status: 400 }
         );
       }
@@ -36,9 +37,9 @@ export async function POST(request: Request) {
     }
 
     if (type === "deck") {
-      if (!deckId) {
+      if (!isUuid(deckId)) {
         return NextResponse.json(
-          { error: "deckId is required for deck views" },
+          { error: "deckId must be a valid id for deck views" },
           { status: 400 }
         );
       }

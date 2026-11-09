@@ -80,7 +80,7 @@ export default async function PublicDeckPage({ params }: Props) {
           </p>
           <Link
             href="/signup"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--accent)] text-white font-semibold rounded-full hover:opacity-90 transition-opacity"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--accent-fill)] text-white font-semibold rounded-full hover:opacity-90 transition-opacity"
           >
             Get Started on VultureX
           </Link>

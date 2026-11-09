@@ -24,4 +24,10 @@ export type DeckInput = {
   founderName: string | null;
   founderRole: string | null;
   founderBio: string | null;
+  // Optional SDG alignment. When present, a deterministic impact slide is
+  // appended using only this profile data.
+  sdgGoals?: number[];
+  sdgPrimary?: number | null;
+  impactDescription?: string | null;
+  impactVerified?: boolean;
 };

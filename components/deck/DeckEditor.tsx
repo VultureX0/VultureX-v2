@@ -51,7 +51,7 @@ export function DeckEditor({ deckId, initialSlides }: { deckId: string; initialS
           </button>
         </div>
         <button onClick={handleSave} disabled={saving || saved}
-          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium bg-[var(--accent)] text-[#171717] rounded-md hover:bg-[var(--accent-hover)] disabled:opacity-50 transition-colors">
+          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium bg-[var(--accent-fill)] text-[var(--accent-foreground)] rounded-md hover:bg-[var(--accent-hover)] disabled:opacity-50 transition-colors">
           <Save size={14} />
           {saving ? "Saving..." : saved ? "Saved" : "Save"}
         </button>

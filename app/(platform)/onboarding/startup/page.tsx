@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, ArrowLeft, Check } from "lucide-react";
+import { SdgPicker } from "@/components/sdg/SdgPicker";
 
 const SECTORS = [
   "SaaS", "Fintech", "AI/ML", "Healthtech", "Edtech", "Climate",
@@ -38,6 +39,14 @@ type FormData = {
   runwayMonths: number;
   problem: string;
   solution: string;
+  // Optional matchmaking signals (comma-separated, stored as arrays).
+  offerings: string;
+  needs: string;
+  targetCustomers: string;
+  // Optional SDG alignment (official goal ids).
+  sdgGoals: number[];
+  sdgPrimary: number | null;
+  impactDescription: string;
 };
 
 const defaultData: FormData = {
@@ -61,6 +70,12 @@ const defaultData: FormData = {
   runwayMonths: 0,
   problem: "",
   solution: "",
+  offerings: "",
+  needs: "",
+  targetCustomers: "",
+  sdgGoals: [],
+  sdgPrimary: null,
+  impactDescription: "",
 };
 
 const STEPS = ["Company", "Founder & Team", "Traction", "Pitch"];
@@ -129,7 +144,7 @@ export default function StartupOnboardingPage() {
           <div key={label} className="flex-1">
             <div
               className={`h-1.5 rounded-full transition-colors ${
-                i <= step ? "bg-[var(--accent)]" : "bg-[var(--border)]"
+                i <= step ? "bg-[var(--accent-fill)]" : "bg-[var(--border)]"
               }`}
             />
             <p className={`text-xs mt-1.5 ${i === step ? "font-medium" : "text-[var(--text-muted)]"}`}>
@@ -162,7 +177,7 @@ export default function StartupOnboardingPage() {
             <button
               onClick={next}
               disabled={step === 0 && (!data.name || !data.sector)}
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium bg-[var(--accent)] text-[#171717] rounded-md hover:bg-[var(--accent-hover)] disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium bg-[var(--accent-fill)] text-[var(--accent-foreground)] rounded-md hover:bg-[var(--accent-hover)] disabled:opacity-50 transition-colors"
             >
               Next <ArrowRight size={16} />
             </button>
@@ -170,7 +185,7 @@ export default function StartupOnboardingPage() {
             <button
               onClick={submit}
               disabled={loading}
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium bg-[var(--accent)] text-[#171717] rounded-md hover:bg-[var(--accent-hover)] disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium bg-[var(--accent-fill)] text-[var(--accent-foreground)] rounded-md hover:bg-[var(--accent-hover)] disabled:opacity-50 transition-colors"
             >
               {loading ? "Saving..." : "Complete Profile"}
               <Check size={16} />
@@ -461,6 +476,70 @@ function PitchStep({ data, update }: { data: FormData; update: (d: Partial<FormD
           className="w-full px-3 py-2 text-sm rounded-md border border-[var(--border)] bg-[var(--bg)] text-[var(--text)] placeholder:text-[var(--text-muted)]/50 focus:outline-none focus:border-[var(--border-hover)] transition-colors resize-none"
           placeholder="How does your product solve this? What's unique about your approach?"
         />
+      </div>
+
+      <div className="rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)]/40 p-4">
+        <p className="text-[11px] font-medium mb-1">Sustainable Development Goals (optional)</p>
+        <p className="text-[10px] text-[var(--text-muted)] mb-4">
+          Share which UN goals your business contributes to. You can change this
+          any time in Settings; your profile works without it.
+        </p>
+        <SdgPicker
+          value={data.sdgGoals}
+          primary={data.sdgPrimary}
+          onChange={(sdgGoals, sdgPrimary) => update({ sdgGoals, sdgPrimary })}
+          hideHint
+        />
+        <div className="mt-4">
+          <label className="block text-[10px] text-[var(--text-muted)] mb-1">Impact description (optional)</label>
+          <textarea
+            value={data.impactDescription}
+            onChange={(e) => update({ impactDescription: e.target.value })}
+            rows={3}
+            maxLength={4000}
+            className="w-full px-3 py-2 text-sm rounded-md border border-[var(--border)] bg-[var(--bg)] text-[var(--text)] placeholder:text-[var(--text-muted)]/50 focus:outline-none focus:border-[var(--border-hover)] transition-colors resize-none"
+            placeholder="What impact does your business create? Be specific and avoid unsupported claims."
+          />
+        </div>
+      </div>
+
+      <div className="rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)]/40 p-4">
+        <p className="text-[11px] font-medium mb-1">Business connections (optional)</p>
+        <p className="text-[10px] text-[var(--text-muted)] mb-4">
+          Used to recommend startups that could buy from you, supply you, or partner with you. You can add this later in Settings.
+        </p>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-[10px] text-[var(--text-muted)] mb-1">What you offer</label>
+            <input
+              type="text"
+              value={data.offerings}
+              onChange={(e) => update({ offerings: e.target.value })}
+              className="w-full px-3 py-2 text-sm rounded-md border border-[var(--border)] bg-[var(--bg)] text-[var(--text)] placeholder:text-[var(--text-muted)]/50 focus:outline-none focus:border-[var(--border-hover)] transition-colors"
+              placeholder="sustainable packaging, labels (comma-separated)"
+            />
+          </div>
+          <div>
+            <label className="block text-[10px] text-[var(--text-muted)] mb-1">What you need</label>
+            <input
+              type="text"
+              value={data.needs}
+              onChange={(e) => update({ needs: e.target.value })}
+              className="w-full px-3 py-2 text-sm rounded-md border border-[var(--border)] bg-[var(--bg)] text-[var(--text)] placeholder:text-[var(--text-muted)]/50 focus:outline-none focus:border-[var(--border-hover)] transition-colors"
+              placeholder="logistics, distribution (comma-separated)"
+            />
+          </div>
+          <div>
+            <label className="block text-[10px] text-[var(--text-muted)] mb-1">Target customers</label>
+            <input
+              type="text"
+              value={data.targetCustomers}
+              onChange={(e) => update({ targetCustomers: e.target.value })}
+              className="w-full px-3 py-2 text-sm rounded-md border border-[var(--border)] bg-[var(--bg)] text-[var(--text)] placeholder:text-[var(--text-muted)]/50 focus:outline-none focus:border-[var(--border-hover)] transition-colors"
+              placeholder="food brands, retailers, consumers (comma-separated)"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

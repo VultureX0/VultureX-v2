@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { TrendingUp, Eye, Heart, FileText, Trophy, ArrowRight, Zap, Search, Sparkles, Target, Users, BarChart3 } from "lucide-react";
+import { RecommendationWidget } from "@/components/matchmaking/RecommendationWidget";
+import type { RecommendationItem } from "@/features/matchmaking/service";
+import { TrendingUp, Eye, Heart, FileText, Trophy, ArrowRight, Zap, Search, Sparkles, Target, Users, BarChart3, Presentation, MessageSquare } from "lucide-react";
 
 type StartupData = {
   name: string;
@@ -15,6 +17,7 @@ type StartupData = {
   mrr: number;
   growth: string;
   recentInterests: number;
+  connections: { items: RecommendationItem[]; total: number };
 };
 
 type InvestorData = {
@@ -66,6 +69,11 @@ function StartupDashboard({ data }: { data: StartupData }) {
         <StatCard icon={Trophy} label="Competitions" value={data.stats.competitions} delay={0.15} />
       </motion.div>
 
+      {/* Business matchmaking: persisted, personalized recommendations */}
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.15 }}>
+        <RecommendationWidget items={data.connections.items} total={data.connections.total} />
+      </motion.div>
+
       {/* Main grid - fills remaining space */}
       <div className="flex-1 grid lg:grid-cols-5 gap-4 min-h-0">
         {/* Left: Score + Metrics */}
@@ -95,7 +103,7 @@ function StartupDashboard({ data }: { data: StartupData }) {
                   <div className="flex-1 h-1.5 rounded-full bg-[var(--bg-elevated)] overflow-hidden">
                     <motion.div initial={{ width: 0 }} animate={{ width: `${(item.value / item.max) * 100}%` }}
                       transition={{ duration: 0.6, delay: 0.4 + i * 0.08, ease: "easeOut" }}
-                      className="h-full rounded-full bg-[var(--accent)]" />
+                      className="h-full rounded-full bg-[var(--accent-fill)]" />
                   </div>
                   <span className="text-[11px] text-[var(--text-muted)] w-8 text-right tabular-nums">{item.value}/{item.max}</span>
                 </motion.div>
@@ -147,8 +155,12 @@ function StartupDashboard({ data }: { data: StartupData }) {
           <div className="rounded-xl border border-[var(--border)] p-4">
             <p className="text-[11px] font-medium text-[var(--text-muted)] mb-3">Quick actions</p>
             <div className="space-y-2">
+              <ActionCard href="/pitch-decks" icon={Presentation} label="Create Your Pitch Deck" />
+              <ActionCard href="/messages" icon={MessageSquare} label="Messages" />
+              <ActionCard href="/interests" icon={Heart} label="Interest+ requests" />
               <ActionCard href="/deck/new" icon={Zap} label="Generate pitch deck" />
               <ActionCard href="/explore" icon={Search} label="Explore startups" />
+              <ActionCard href="/investors" icon={Users} label="Browse investors" />
               <ActionCard href="/settings" icon={TrendingUp} label="Update metrics" />
               <ActionCard href="/rankings" icon={BarChart3} label="View rankings" />
             </div>
@@ -187,9 +199,20 @@ function InvestorDashboard({ data }: { data: InvestorData }) {
   return (
     <div className="h-full flex flex-col gap-4">
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-        <h1 className="text-lg font-semibold">{data.name}</h1>
-        <p className="text-xs text-[var(--text-muted)]">{data.firmName || "Angel Investor"} · {data.sectors.slice(0, 3).join(", ")}</p>
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
+        className="flex items-start justify-between gap-3">
+        <div>
+          <h1 className="text-lg font-semibold">{data.name}</h1>
+          <p className="text-xs text-[var(--text-muted)]">{data.firmName || "Angel Investor"} · {data.sectors.slice(0, 3).join(", ")}</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Link href="/messages" className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium bg-[var(--accent-fill)] text-[var(--accent-foreground)] rounded-md hover:bg-[var(--accent-hover)] transition-colors">
+            <MessageSquare size={11} /> Messages
+          </Link>
+          <Link href="/interests" className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] border border-[var(--border)] text-[var(--text-muted)] rounded-md hover:text-[var(--text-secondary)] hover:border-[var(--border-hover)] transition-colors">
+            <Heart size={11} /> Interest+
+          </Link>
+        </div>
       </motion.div>
 
       {/* Stats */}

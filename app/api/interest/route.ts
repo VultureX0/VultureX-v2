@@ -4,6 +4,7 @@ import { auth } from "@/features/auth";
 import { db } from "@/db";
 import { interests, investors, startups, users } from "@/db/schema";
 import { sendInterestNotification } from "@/features/notifications";
+import { isUuid } from "@/lib/utils";
 
 // GET: Fetch interests (investor sees sent, startup sees received)
 export async function GET() {
@@ -69,8 +70,8 @@ export async function POST(request: Request) {
   }
 
   const { startupId, message } = await request.json();
-  if (!startupId) {
-    return NextResponse.json({ error: "startupId required" }, { status: 400 });
+  if (!isUuid(startupId)) {
+    return NextResponse.json({ error: "startupId must be a valid id" }, { status: 400 });
   }
 
   const [investor] = await db.select().from(investors).where(eq(investors.userId, session.user.id)).limit(1);
@@ -107,7 +108,7 @@ export async function PATCH(request: Request) {
   }
 
   const { interestId, status } = await request.json();
-  if (!interestId || !["accepted", "declined"].includes(status)) {
+  if (!isUuid(interestId) || !["accepted", "declined"].includes(status)) {
     return NextResponse.json({ error: "interestId and status (accepted/declined) required" }, { status: 400 });
   }
 

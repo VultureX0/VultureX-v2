@@ -59,7 +59,7 @@ export function InterestButton({ startupId, startupName }: { startupId: string; 
         <button
           onClick={() => (showMessage ? handleInterest() : setShowMessage(true))}
           disabled={loading}
-          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium bg-[var(--accent)] text-[#171717] rounded-md hover:bg-[var(--accent-hover)] disabled:opacity-50 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium bg-[var(--accent-fill)] text-[var(--accent-foreground)] rounded-md hover:bg-[var(--accent-hover)] disabled:opacity-50 transition-colors"
         >
           <Heart size={12} />
           {loading ? "Sending..." : "I'm Interested"}

@@ -1,38 +1,125 @@
 @import "tailwindcss";
 
+/*
+ * VultureX global design system.
+ *
+ * One token set drives light and dark mode. Every surface, control and page
+ * reads these variables (directly or through the classes below), so a new
+ * section cannot drift into its own palette.
+ *
+ * Light and dark are not separate pages: `.dark` on <html> re-points the same
+ * variables, and the theme bootstrap in app/layout.tsx applies the class before
+ * first paint.
+ */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  /* Supabase-derived dark palette — NOT pitch black, warm near-blacks */
-  --bg: #171717;
-  --bg-card: #1c1c1c;
-  --bg-card-hover: #222222;
-  --bg-elevated: #262626;
+  --vx-font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --vx-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+    "Liberation Mono", monospace;
 
-  --border: #2e2e2e;
-  --border-hover: #3a3a3a;
+  /* Surfaces */
+  --bg: #ffffff;
+  --bg-secondary: #f7f6fc;
+  --surface: #f7f6fc;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8f7fd;
+  --bg-elevated: #f2effc;
 
-  --text: #ededed;
-  --text-secondary: #b3b3b3;
-  --text-muted: #707070;
+  /* Lines */
+  --border: #e6e1f3;
+  --border-hover: #d3cbea;
+  --divider: #efecf8;
 
-  /* Signature emerald — ONE chromatic event */
-  --accent: #3ecf8e;
-  --accent-hover: #24b47e;
-  --accent-muted: rgba(62, 207, 142, 0.12);
+  /* Type */
+  --text: #20212a;
+  --text-secondary: #4b4c59;
+  --text-muted: #6e6f7d;
 
-  --green: #3ecf8e;
-  --green-muted: rgba(62, 207, 142, 0.12);
-  --amber: #f5a623;
-  --amber-muted: rgba(245, 166, 35, 0.12);
-  --red: #f56565;
-  --red-muted: rgba(239, 68, 68, 0.12);
+  /* Accent. `--accent` is for text/icons; `--accent-fill` is the solid
+     button/progress surface that always pairs with `--accent-foreground`. */
+  --accent: #7c3aed;
+  --accent-hover: #6d28d9;
+  --accent-fill: #7c3aed;
+  --accent-fill-hover: #6d28d9;
+  --accent-foreground: #ffffff;
+  --accent-muted: rgba(124, 58, 237, 0.09);
+  --accent-soft: #f1ebfe;
+
+  /* Form controls */
+  --input-bg: #ffffff;
+  --input-border: #e1dbf2;
+  --ring: rgba(124, 58, 237, 0.45);
+
+  /* Semantic colours stay distinct from the brand accent so status is never
+     misread as navigation. */
+  --green: #15803d;
+  --green-muted: rgba(21, 128, 61, 0.1);
+  --amber: #b45309;
+  --amber-muted: rgba(180, 83, 9, 0.1);
+  --red: #dc2626;
+  --red-muted: rgba(220, 38, 38, 0.1);
+
+  --shadow-sm: 0 1px 2px rgba(32, 33, 42, 0.06);
+  --shadow-md: 0 18px 40px -24px rgba(32, 33, 42, 0.35);
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 16px;
+
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #111318;
+  --bg-secondary: #15181f;
+  --surface: #1b1e27;
+  --bg-card: #1b1e27;
+  --bg-card-hover: #222631;
+  --bg-elevated: #222631;
+
+  --border: #2a2e3a;
+  --border-hover: #3a3f4f;
+  --divider: #232732;
+
+  --text: #f3f2f8;
+  --text-secondary: #c4c5d2;
+  --text-muted: #8e90a0;
+
+  --accent: #a78bfa;
+  --accent-hover: #8b5cf6;
+  --accent-fill: #7c3aed;
+  --accent-fill-hover: #8b5cf6;
+  --accent-foreground: #ffffff;
+  --accent-muted: rgba(167, 139, 250, 0.14);
+  --accent-soft: #241e38;
+
+  --input-bg: #15181f;
+  --input-border: #2f3341;
+  --ring: rgba(167, 139, 250, 0.5);
+
+  --green: #4ade80;
+  --green-muted: rgba(74, 222, 128, 0.12);
+  --amber: #fbbf24;
+  --amber-muted: rgba(251, 191, 36, 0.12);
+  --red: #f87171;
+  --red-muted: rgba(248, 113, 113, 0.12);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 22px 48px -24px rgba(0, 0, 0, 0.75);
+
+  color-scheme: dark;
 }
 
 body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--vx-font-sans);
   background-color: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  transition: background-color 0.18s ease, color 0.18s ease;
 }
 
 * {
@@ -44,12 +131,108 @@ body {
   color: var(--accent);
 }
 
-input, textarea, select {
-  color-scheme: dark;
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+input,
+textarea,
+select {
+  color-scheme: inherit;
 }
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #444; border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: #666; }
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-hover);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+@layer components {
+  /* Monospaced eyebrow/annotation used across the dashboard and hub. */
+  .vx-label {
+    font-family: var(--vx-font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .vx-mono {
+    font-family: var(--vx-font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .vx-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .vx-card-interactive {
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+  .vx-card-interactive:hover {
+    border-color: var(--border-hover);
+    background-color: var(--bg-card-hover);
+  }
+
+  /* Recessed slot used for nested lists and quiet data blocks. */
+  .vx-inset {
+    background-color: var(--surface);
+    border: 1px solid var(--divider);
+    border-radius: var(--radius);
+  }
+
+  .vx-skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--bg-elevated) 0%,
+      var(--bg-card-hover) 50%,
+      var(--bg-elevated) 100%
+    );
+    background-size: 200% 100%;
+    animation: vx-shimmer 1.4s ease-in-out infinite;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Full-bleed horizontal scroller for section navigation. */
+  .vx-scroll-x {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .vx-scroll-x::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes vx-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vx-skeleton {
+    animation: none;
+  }
+  * {
+    scroll-behavior: auto !important;
+  }
+}

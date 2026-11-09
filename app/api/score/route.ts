@@ -9,6 +9,7 @@ import {
   competitionEntries,
 } from "@/db/schema";
 import { computeVultureScore } from "@/features/scoring";
+import { isUuid } from "@/lib/utils";
 
 // Recomputes the VultureScore for the authenticated user's startup (or a specific startupId for admin use)
 export async function POST(request: Request) {
@@ -20,6 +21,14 @@ export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => ({}));
     const targetStartupId = body.startupId;
+    // Absent means "my own startup"; present but malformed is a bad request, not
+    // something that should reach a uuid column and fail as a 500.
+    if (targetStartupId !== undefined && !isUuid(targetStartupId)) {
+      return NextResponse.json(
+        { error: "startupId must be a valid id" },
+        { status: 400 }
+      );
+    }
 
     let startup;
     if (targetStartupId) {

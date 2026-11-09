@@ -63,7 +63,7 @@ export function EmptyState({ icon: Icon, title, description, action }: {
       <p className="text-sm font-medium mb-1">{title}</p>
       <p className="text-xs text-[var(--text-muted)] max-w-xs">{description}</p>
       {action && (
-        <Link href={action.href} className="mt-5 text-xs font-medium px-4 py-2 bg-[var(--accent)] text-[#171717] rounded-md hover:bg-[var(--accent-hover)] transition-colors">
+        <Link href={action.href} className="mt-5 text-xs font-medium px-4 py-2 bg-[var(--accent-fill)] text-[var(--accent-foreground)] rounded-md hover:bg-[var(--accent-hover)] transition-colors">
           {action.label}
         </Link>
       )}
@@ -82,7 +82,7 @@ export function Button({ children, onClick, href, variant = "primary", size = "m
   const base = "inline-flex items-center justify-center gap-2 font-medium rounded-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed";
   const sizes = { sm: "px-3 py-1.5 text-xs", md: "px-4 py-2 text-xs" };
   const variants = {
-    primary: "bg-[var(--accent)] text-[#171717] hover:bg-[var(--accent-hover)]",
+    primary: "bg-[var(--accent-fill)] text-[var(--accent-foreground)] hover:bg-[var(--accent-hover)]",
     secondary: "border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:border-[var(--border-hover)] hover:bg-[var(--bg-card)]",
     ghost: "text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-card)]",
   };
@@ -163,7 +163,7 @@ export function ProgressBar({ value, max, delay = 0 }: { value: number; max: num
     <div className="h-1.5 rounded-full bg-[var(--bg-elevated)] overflow-hidden">
       <motion.div initial={{ width: 0 }} animate={{ width: `${(value / max) * 100}%` }}
         transition={{ duration: 0.6, delay, ease: "easeOut" }}
-        className="h-full rounded-full bg-[var(--accent)]" />
+        className="h-full rounded-full bg-[var(--accent-fill)]" />
     </div>
   );
 }

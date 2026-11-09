@@ -30,7 +30,7 @@ export function HeroSection({ stats }: Props) {
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.2 }}
             className="mt-8 flex items-center gap-4">
-            <Link href="/signup" className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-[var(--accent)] text-[#171717] rounded-md hover:bg-[var(--accent-hover)] transition-colors">
+            <Link href="/signup" className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-[var(--accent-fill)] text-[var(--accent-foreground)] rounded-md hover:bg-[var(--accent-hover)] transition-colors">
               Get started <ArrowRight size={14} />
             </Link>
             <Link href="/explore" className="text-sm text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors">
@@ -91,7 +91,7 @@ export function HeroSection({ stats }: Props) {
                   <div className="flex-1 h-1 rounded-full bg-[var(--bg-elevated)] overflow-hidden">
                     <motion.div initial={{ width: 0 }} animate={{ width: `${bar.pct}%` }}
                       transition={{ duration: 0.8, delay: 0.5 + i * 0.1, ease: "easeOut" }}
-                      className="h-full rounded-full bg-[var(--accent)]" />
+                      className="h-full rounded-full bg-[var(--accent-fill)]" />
                   </div>
                 </div>
               ))}

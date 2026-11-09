@@ -3,12 +3,15 @@ import { eq } from "drizzle-orm";
 import { auth } from "@/features/auth";
 import { db } from "@/db";
 import { decks, startups } from "@/db/schema";
+import { isUuid } from "@/lib/utils";
 
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
+  if (!isUuid(id)) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
   const [deck] = await db.select().from(decks).where(eq(decks.id, id)).limit(1);
   if (!deck) return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json(deck);
@@ -22,6 +25,7 @@ export async function PUT(
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await params;
+  if (!isUuid(id)) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   // Verify ownership: deck belongs to user's startup
   const [deck] = await db.select().from(decks).where(eq(decks.id, id)).limit(1);

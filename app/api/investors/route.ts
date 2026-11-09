@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm";
 import { auth } from "@/features/auth";
 import { db } from "@/db";
 import { investors } from "@/db/schema";
+import { sanitizeSdgIds } from "@/features/sdg/taxonomy";
 
 // Creates or updates the investor profile for the authenticated user
 export async function POST(request: Request) {
@@ -30,6 +31,12 @@ export async function POST(request: Request) {
       checkSizeMax: data.checkSizeMax || 0,
       stageFocus: data.stageFocus || [],
       sectorFocus: data.sectorFocus || [],
+      // Only rewrite when the payload carries the field so older forms and
+      // partial clients cannot wipe an investor's saved interests.
+      sdgPreferences:
+        "sdgPreferences" in data
+          ? sanitizeSdgIds(data.sdgPreferences)
+          : (existing?.sdgPreferences ?? []),
       investmentThesis: data.investmentThesis || null,
       linkedin: data.linkedin || null,
     };

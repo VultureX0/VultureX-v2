@@ -2,9 +2,13 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
-import { startups } from "@/db/schema";
+import { startups, startupImpactClaims } from "@/db/schema";
 import { auth } from "@/features/auth";
-import { InterestButton } from "@/components/investor/InterestButton";
+import { getInterestStatus } from "@/features/connections";
+import { SdgChips } from "@/components/sdg/SdgChips";
+import { effectiveImpactStatus } from "@/features/sdg/verification";
+import { IMPACT_METHODOLOGY_NOTE } from "@/features/sdg/status";
+import { InterestPlusButton } from "@/components/connections/InterestPlusButton";
 import { SaveButton } from "@/components/investor/SaveButton";
 import { ProfileAnimations, AnimatedSection, AnimatedMetric, AnimatedBar } from "./animations";
 import { ViewTracker } from "@/components/shared/ViewTracker";
@@ -17,8 +21,20 @@ export default async function StartupProfilePage({ params }: Props) {
   const [startup] = await db.select().from(startups).where(eq(startups.slug, slug)).limit(1);
   if (!startup) notFound();
 
+  const [impactClaim] = await db
+    .select()
+    .from(startupImpactClaims)
+    .where(eq(startupImpactClaims.startupId, startup.id))
+    .limit(1);
+  const impactStatus = effectiveImpactStatus(startup, impactClaim);
+  const sdgGoals = startup.sdgGoals ?? [];
+
   const session = await auth();
   const isInvestor = (session?.user as { role?: string })?.role === "investor";
+  const interest =
+    session?.user?.id && startup.userId
+      ? await getInterestStatus(session.user.id, startup.userId)
+      : null;
   const score = parseFloat(startup.score || "0");
   const breakdown = startup.scoreBreakdown as { traction: number; financial: number; team: number; market: number; momentum: number } | null;
   const mrrDollars = (startup.mrr || 0) / 100;
@@ -69,9 +85,14 @@ export default async function StartupProfilePage({ params }: Props) {
             <span className="inline-flex items-center gap-1"><Users size={12} /> {startup.teamSize} members</span>
           </div>
 
-          {isInvestor && (
+          {isInvestor && startup.userId && (
             <div className="mb-8 flex items-center gap-3">
-              <InterestButton startupId={startup.id} startupName={startup.name} />
+              <InterestPlusButton
+                targetUserId={startup.userId}
+                targetName={startup.name}
+                initialState={interest}
+                authenticated
+              />
               <SaveButton startupId={startup.id} />
             </div>
           )}
@@ -141,6 +162,52 @@ export default async function StartupProfilePage({ params }: Props) {
           </AnimatedSection>
         </div>
 
+        {/* SDG alignment + verified impact (optional) */}
+        {(sdgGoals.length > 0 || startup.impactDescription) && (
+          <AnimatedSection delay={0.285} className="rounded-xl border border-[var(--border)] p-5 mb-8">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <p className="text-xs font-medium text-[var(--text-muted)]">Sustainable Development Goals</p>
+              {impactStatus === "verified" ? (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-[var(--green)]/40 bg-[var(--green-muted)] text-[10px] text-[var(--green)]">
+                  Verified impact
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-[var(--border)] bg-[var(--bg-elevated)]/40 text-[10px] text-[var(--text-muted)]">
+                  Self-declared alignment
+                </span>
+              )}
+            </div>
+
+            {sdgGoals.length > 0 ? (
+              <SdgChips goals={sdgGoals} primary={startup.sdgPrimary} />
+            ) : (
+              <p className="text-xs text-[var(--text-muted)]">No goals selected.</p>
+            )}
+
+            {startup.impactDescription && (
+              <p className="text-sm text-[var(--text-secondary)] leading-relaxed mt-3">
+                {startup.impactDescription}
+              </p>
+            )}
+
+            <p className="text-[9px] text-[var(--text-muted)] leading-relaxed mt-3">
+              {IMPACT_METHODOLOGY_NOTE}
+            </p>
+          </AnimatedSection>
+        )}
+
+        {/* Business fit signals (optional, founder-provided) */}
+        {(startup.offerings?.length || startup.needs?.length) && (
+          <AnimatedSection delay={0.28} className="grid sm:grid-cols-2 gap-4 mb-8">
+            {!!startup.offerings?.length && (
+              <SignalCard title="What they offer" items={startup.offerings} />
+            )}
+            {!!startup.needs?.length && (
+              <SignalCard title="What they need" items={startup.needs} />
+            )}
+          </AnimatedSection>
+        )}
+
         {/* Founder */}
         {startup.founderName && (
           <AnimatedSection delay={0.3} className="rounded-xl border border-[var(--border)] p-5 mb-8">
@@ -186,6 +253,24 @@ export default async function StartupProfilePage({ params }: Props) {
         )}
       </div>
     </ProfileAnimations>
+  );
+}
+
+function SignalCard({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div className="rounded-xl border border-[var(--border)] p-5">
+      <p className="text-xs font-medium text-[var(--text-muted)] mb-3">{title}</p>
+      <div className="flex flex-wrap gap-1.5">
+        {items.map((item) => (
+          <span
+            key={item}
+            className="px-2 py-0.5 rounded-md bg-[var(--bg-elevated)] text-[10px] font-medium text-[var(--text-secondary)] border border-[var(--border)]"
+          >
+            {item}
+          </span>
+        ))}
+      </div>
+    </div>
   );
 }
 

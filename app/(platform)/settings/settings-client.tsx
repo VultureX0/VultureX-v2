@@ -2,14 +2,23 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle, Loader2, User, Building2, Link2, Mail } from "lucide-react";
+import { CheckCircle, Loader2, User, Building2, Link2, Mail, Sparkles, Globe2 } from "lucide-react";
+import { SdgPicker } from "@/components/sdg/SdgPicker";
+import { ImpactVerificationCard } from "@/components/sdg/ImpactVerificationCard";
+import type { ImpactStatus } from "@/features/sdg/status";
 
 type UserProps = { id: string; email: string; name: string | null; role: string };
-type StartupProps = { name: string; tagline: string | null; sector: string; stage: string; location: string | null; website: string | null; founderName: string | null; founderRole: string | null; founderBio: string | null; founderLinkedin: string | null; tags: string[] | null } | null;
-type InvestorProps = { fullName: string; firmName: string | null; investorType: string; location: string | null; linkedin: string | null; sectorFocus: string[] | null; stageFocus: string[] | null; investmentThesis: string | null } | null;
+type StartupProps = { name: string; tagline: string | null; sector: string; stage: string; location: string | null; website: string | null; founderName: string | null; founderRole: string | null; founderBio: string | null; founderLinkedin: string | null; tags: string[] | null; offerings: string[] | null; needs: string[] | null; targetCustomers: string[] | null; sdgGoals: number[]; sdgPrimary: number | null; impactDescription: string | null } | null;
+type InvestorProps = { fullName: string; firmName: string | null; investorType: string; location: string | null; linkedin: string | null; sectorFocus: string[] | null; stageFocus: string[] | null; investmentThesis: string | null; sdgPreferences: number[] } | null;
+type ImpactProps = {
+  status: ImpactStatus;
+  reviewNote: string | null;
+  submittedAt: string | null;
+  successFee: { eligible: boolean; label: string; reason: string };
+} | null;
 type Status = "idle" | "loading" | "success" | "error";
 
-export function SettingsClient({ user, startup, investor }: { user: UserProps; startup: StartupProps; investor: InvestorProps }) {
+export function SettingsClient({ user, startup, investor, impact }: { user: UserProps; startup: StartupProps; investor: InvestorProps; impact: ImpactProps }) {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
 
@@ -19,6 +28,12 @@ export function SettingsClient({ user, startup, investor }: { user: UserProps; s
     founderName: startup?.founderName ?? "", founderRole: startup?.founderRole ?? "",
     founderBio: startup?.founderBio ?? "", founderLinkedin: startup?.founderLinkedin ?? "",
     tags: startup?.tags?.join(", ") ?? "",
+    offerings: startup?.offerings?.join(", ") ?? "",
+    needs: startup?.needs?.join(", ") ?? "",
+    targetCustomers: startup?.targetCustomers?.join(", ") ?? "",
+    sdgGoals: startup?.sdgGoals ?? [],
+    sdgPrimary: startup?.sdgPrimary ?? null,
+    impactDescription: startup?.impactDescription ?? "",
   };
 
   const investorInitial = {
@@ -26,14 +41,20 @@ export function SettingsClient({ user, startup, investor }: { user: UserProps; s
     investorType: investor?.investorType ?? "", location: investor?.location ?? "",
     linkedin: investor?.linkedin ?? "", sectorFocus: investor?.sectorFocus?.join(", ") ?? "",
     stageFocus: investor?.stageFocus?.join(", ") ?? "", investmentThesis: investor?.investmentThesis ?? "",
+    sdgPreferences: investor?.sdgPreferences ?? [],
   };
 
   const [startupForm, setStartupForm] = useState(startupInitial);
   const [investorForm, setInvestorForm] = useState(investorInitial);
+  // Baseline updated after a successful save so the form (and the impact
+  // verification action) become clean without a page reload.
+  const [savedStartupForm, setSavedStartupForm] = useState(startupInitial);
+  const [savedInvestorForm, setSavedInvestorForm] = useState(investorInitial);
 
+  const startupDirty = JSON.stringify(startupForm) !== JSON.stringify(savedStartupForm);
   const isDirty = user.role === "startup"
-    ? JSON.stringify(startupForm) !== JSON.stringify(startupInitial)
-    : JSON.stringify(investorForm) !== JSON.stringify(investorInitial);
+    ? startupDirty
+    : JSON.stringify(investorForm) !== JSON.stringify(savedInvestorForm);
 
   const save = async () => {
     setStatus("loading");
@@ -41,10 +62,26 @@ export function SettingsClient({ user, startup, investor }: { user: UserProps; s
     try {
       const endpoint = user.role === "startup" ? "/api/startups" : "/api/investors";
       const body = user.role === "startup"
-        ? { ...startupForm, tags: startupForm.tags.split(",").map(t => t.trim()).filter(Boolean) }
-        : { ...investorForm, sectorFocus: investorForm.sectorFocus.split(",").map(s => s.trim()).filter(Boolean), stageFocus: investorForm.stageFocus.split(",").map(s => s.trim()).filter(Boolean) };
+        ? {
+            ...startupForm,
+            tags: startupForm.tags.split(",").map(t => t.trim()).filter(Boolean),
+            offerings: startupForm.offerings.split(",").map(t => t.trim()).filter(Boolean),
+            needs: startupForm.needs.split(",").map(t => t.trim()).filter(Boolean),
+            targetCustomers: startupForm.targetCustomers.split(",").map(t => t.trim()).filter(Boolean),
+            sdgGoals: startupForm.sdgGoals,
+            sdgPrimary: startupForm.sdgPrimary,
+            impactDescription: startupForm.impactDescription,
+          }
+        : {
+            ...investorForm,
+            sectorFocus: investorForm.sectorFocus.split(",").map(s => s.trim()).filter(Boolean),
+            stageFocus: investorForm.stageFocus.split(",").map(s => s.trim()).filter(Boolean),
+            sdgPreferences: investorForm.sdgPreferences,
+          };
       const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       if (!res.ok) throw new Error((await res.json()).error || "Failed");
+      setSavedStartupForm(startupForm);
+      setSavedInvestorForm(investorForm);
       setStatus("success");
       setTimeout(() => setStatus("idle"), 3000);
     } catch (e) { setStatus("error"); setError(e instanceof Error ? e.message : "Something went wrong"); }
@@ -83,7 +120,7 @@ export function SettingsClient({ user, startup, investor }: { user: UserProps; s
 
           {/* Save button */}
           <button onClick={save} disabled={status === "loading" || !isDirty}
-            className="w-full py-2.5 text-xs font-medium bg-[var(--accent)] text-[#171717] rounded-md hover:bg-[var(--accent-hover)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+            className="w-full py-2.5 text-xs font-medium bg-[var(--accent-fill)] text-[var(--accent-foreground)] rounded-md hover:bg-[var(--accent-hover)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2">
             {status === "loading" ? <><Loader2 size={12} className="animate-spin" /> Saving...</> : isDirty ? "Save changes" : "No changes"}
           </button>
           {status === "success" && (
@@ -144,6 +181,60 @@ export function SettingsClient({ user, startup, investor }: { user: UserProps; s
                 </div>
                 <Field label="Tags" value={startupForm.tags} onChange={v => setStartupForm(f => ({ ...f, tags: v }))} placeholder="ai, saas, b2b (comma-separated)" />
               </div>
+
+              <div className="border-t border-[var(--border)] pt-5 mt-5">
+                <div className="flex items-center gap-2 mb-1">
+                  <Sparkles size={14} className="text-[var(--accent)]" />
+                  <p className="text-sm font-medium">Business connections</p>
+                </div>
+                <p className="text-[10px] text-[var(--text-muted)] mb-4">
+                  Optional. Used to recommend startups that could buy from you, supply you, or partner with you.
+                </p>
+                <div className="space-y-4">
+                  <Field label="What you offer" value={startupForm.offerings} onChange={v => setStartupForm(f => ({ ...f, offerings: v }))} placeholder="sustainable packaging, labels (comma-separated)" />
+                  <Field label="What you need" value={startupForm.needs} onChange={v => setStartupForm(f => ({ ...f, needs: v }))} placeholder="logistics, distribution (comma-separated)" />
+                  <Field label="Target customers" value={startupForm.targetCustomers} onChange={v => setStartupForm(f => ({ ...f, targetCustomers: v }))} placeholder="food brands, retailers, consumers (comma-separated)" />
+                </div>
+              </div>
+
+              <div className="border-t border-[var(--border)] pt-5 mt-5">
+                <div className="flex items-center gap-2 mb-1">
+                  <Globe2 size={14} className="text-[var(--accent)]" />
+                  <p className="text-sm font-medium">Sustainable Development Goals</p>
+                </div>
+                <p className="text-[10px] text-[var(--text-muted)] mb-4">
+                  Optional. Used in Explore filters, SDG rankings and impact review. Existing profiles stay valid with no goals selected.
+                </p>
+                <SdgPicker
+                  value={startupForm.sdgGoals}
+                  primary={startupForm.sdgPrimary}
+                  onChange={(sdgGoals, sdgPrimary) => setStartupForm(f => ({ ...f, sdgGoals, sdgPrimary }))}
+                />
+                <div className="mt-4">
+                  <TextareaField
+                    label="Impact description (optional)"
+                    value={startupForm.impactDescription}
+                    onChange={v => setStartupForm(f => ({ ...f, impactDescription: v }))}
+                    placeholder="Describe the measurable impact your business creates for the goals you selected. Avoid claims you cannot support."
+                  />
+                  <p className="text-[10px] text-[var(--text-muted)] mt-1">
+                    Required only if you request admin verification. Never presented as a verified outcome until approved.
+                  </p>
+                </div>
+                {impact && (
+                  <div className="mt-4">
+                    <ImpactVerificationCard
+                      status={impact.status}
+                      reviewNote={impact.reviewNote}
+                      submittedAt={impact.submittedAt}
+                      successFee={impact.successFee}
+                      hasGoals={startupForm.sdgGoals.length > 0}
+                      descriptionLength={startupForm.impactDescription.trim().length}
+                      dirty={startupDirty}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
@@ -166,6 +257,22 @@ export function SettingsClient({ user, startup, investor }: { user: UserProps; s
               <Field label="Sector focus" value={investorForm.sectorFocus} onChange={v => setInvestorForm(f => ({ ...f, sectorFocus: v }))} placeholder="ai, fintech, climate (comma-separated)" />
               <Field label="Stage focus" value={investorForm.stageFocus} onChange={v => setInvestorForm(f => ({ ...f, stageFocus: v }))} placeholder="pre-seed, seed (comma-separated)" />
               <TextareaField label="Investment thesis" value={investorForm.investmentThesis} onChange={v => setInvestorForm(f => ({ ...f, investmentThesis: v }))} placeholder="What you look for in startups" />
+
+              <div className="border-t border-[var(--border)] pt-5 mt-5">
+                <div className="flex items-center gap-2 mb-1">
+                  <Globe2 size={14} className="text-[var(--accent)]" />
+                  <p className="text-sm font-medium">Impact interests</p>
+                </div>
+                <p className="text-[10px] text-[var(--text-muted)] mb-4">
+                  Optional. Used to surface SDG-aligned startups in Explore. These goals express interest, not a commitment to invest.
+                </p>
+                <SdgPicker
+                  value={investorForm.sdgPreferences}
+                  primary={null}
+                  onChange={(sdgPreferences) => setInvestorForm(f => ({ ...f, sdgPreferences }))}
+                  hideHint
+                />
+              </div>
             </div>
           )}
         </motion.div>

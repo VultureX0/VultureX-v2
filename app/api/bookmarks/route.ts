@@ -3,6 +3,7 @@ import { eq, and, desc } from "drizzle-orm";
 import { auth } from "@/features/auth";
 import { db } from "@/db";
 import { bookmarks, startups } from "@/db/schema";
+import { isUuid, sqlStateOf } from "@/lib/utils";
 
 // Returns all bookmarked startups for the authenticated user, newest first
 export async function GET() {
@@ -46,14 +47,29 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { startupId } = await request.json();
-  if (!startupId)
-    return NextResponse.json({ error: "startupId required" }, { status: 400 });
+  if (!isUuid(startupId))
+    return NextResponse.json({ error: "startupId must be a valid id" }, { status: 400 });
 
   try {
     await db.insert(bookmarks).values({ userId: session.user.id, startupId });
-  } catch {
-    // Unique constraint violation means already bookmarked
-    return NextResponse.json({ message: "Already bookmarked" });
+  } catch (error) {
+    const state = sqlStateOf(error);
+
+    // Unique violation — already saved, which is idempotent for the caller.
+    if (state === "23505") {
+      return NextResponse.json({ message: "Already bookmarked" });
+    }
+
+    // Foreign key violation — a well-formed id that matches no startup.
+    if (state === "23503") {
+      return NextResponse.json({ error: "Startup not found" }, { status: 404 });
+    }
+
+    console.error("Failed to create bookmark:", error);
+    return NextResponse.json(
+      { error: "Failed to create bookmark" },
+      { status: 500 }
+    );
   }
 
   return NextResponse.json({ success: true });
@@ -67,9 +83,9 @@ export async function DELETE(request: Request) {
 
   try {
     const { startupId } = await request.json();
-    if (!startupId)
+    if (!isUuid(startupId))
       return NextResponse.json(
-        { error: "startupId required" },
+        { error: "startupId must be a valid id" },
         { status: 400 }
       );
 

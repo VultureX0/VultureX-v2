@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { auth } from "@/features/auth";
 import { db } from "@/db";
-import { startups, decks } from "@/db/schema";
+import { startups, decks, startupImpactClaims } from "@/db/schema";
 import { generateDeck } from "@/features/deck";
+import { hasVerifiedImpact } from "@/features/sdg/verification";
 import crypto from "crypto";
 
 // Generates a pitch deck from the authenticated user's startup profile using AI
@@ -27,6 +28,12 @@ export async function POST() {
       );
     }
 
+    const [impactClaim] = await db
+      .select()
+      .from(startupImpactClaims)
+      .where(eq(startupImpactClaims.startupId, startup.id))
+      .limit(1);
+
     const slides = await generateDeck({
       name: startup.name,
       tagline: startup.tagline,
@@ -45,6 +52,10 @@ export async function POST() {
       founderName: startup.founderName,
       founderRole: startup.founderRole,
       founderBio: startup.founderBio,
+      sdgGoals: startup.sdgGoals ?? [],
+      sdgPrimary: startup.sdgPrimary,
+      impactDescription: startup.impactDescription,
+      impactVerified: hasVerifiedImpact(startup, impactClaim),
     });
 
     // Token for unauthenticated deck sharing via public link

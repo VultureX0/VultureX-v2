@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Check } from "lucide-react";
+import { SdgPicker } from "@/components/sdg/SdgPicker";
 
 const INVESTOR_TYPES = [
   { value: "angel", label: "Angel Investor" },
@@ -39,6 +40,7 @@ export default function InvestorOnboardingPage() {
   const [sectorFocus, setSectorFocus] = useState<string[]>([]);
   const [investmentThesis, setInvestmentThesis] = useState("");
   const [linkedin, setLinkedin] = useState("");
+  const [sdgPreferences, setSdgPreferences] = useState<number[]>([]);
 
   function toggleStage(value: string) {
     setStageFocus((prev) =>
@@ -74,6 +76,7 @@ export default function InvestorOnboardingPage() {
           checkSizeMax,
           stageFocus,
           sectorFocus: sectorFocus.map((s) => s.toLowerCase()),
+          sdgPreferences,
           investmentThesis,
           linkedin,
         }),
@@ -236,6 +239,23 @@ export default function InvestorOnboardingPage() {
           </div>
         </div>
 
+        {/* Impact interests (optional) */}
+        <div>
+          <label className="block text-[10px] text-[var(--text-muted)] mb-1">
+            SDG Interests (optional, select all that apply)
+          </label>
+          <SdgPicker
+            value={sdgPreferences}
+            primary={null}
+            onChange={(goals) => setSdgPreferences(goals)}
+            hideHint
+          />
+          <p className="text-[10px] text-[var(--text-muted)] mt-1">
+            Used to surface impact-aligned startups. Expressing interest is not a
+            commitment to invest.
+          </p>
+        </div>
+
         {/* Thesis */}
         <div>
           <label className="block text-[10px] text-[var(--text-muted)] mb-1">Investment Thesis</label>
@@ -253,7 +273,7 @@ export default function InvestorOnboardingPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-medium bg-[var(--accent)] text-[#171717] rounded-md hover:bg-[var(--accent-hover)] disabled:opacity-50 transition-colors"
+          className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-medium bg-[var(--accent-fill)] text-[var(--accent-foreground)] rounded-md hover:bg-[var(--accent-hover)] disabled:opacity-50 transition-colors"
         >
           {loading ? "Saving..." : "Complete Setup"} <Check size={16} />
         </button>

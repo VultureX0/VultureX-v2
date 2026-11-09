@@ -1,163 +1,408 @@
-import { notFound } from "next/navigation";
-import { eq, desc } from "drizzle-orm";
-import { db } from "@/db";
-import { competitions, competitionEntries, startups, decks } from "@/db/schema";
-import { auth } from "@/features/auth";
-import { Trophy, Clock, Users } from "lucide-react";
-import { ScoreBadge } from "@/components/startup/ScoreBadge";
-import { EnterCompetitionButton } from "@/components/competition/EnterButton";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import {
+  ArrowLeft,
+  Award,
+  CalendarClock,
+  CheckCircle2,
+  Scale,
+  ShieldCheck,
+  Trophy,
+  Users,
+} from "lucide-react";
+import { Badge } from "@/components/ui";
+import { ApplyPanel } from "@/components/competitions/ApplyPanel";
+import { StatusChip } from "@/components/competitions/StatusChip";
+import { getCompetitionActor, getCompetitionDetail } from "@/features/competitions";
+import { formatDate, formatDateTime } from "@/features/competitions/format";
+import { sdgLabel } from "@/features/competitions/types";
 
-type Props = {
-  params: Promise<{ id: string }>;
-};
+type Props = { params: Promise<{ id: string }> };
+
+export async function generateMetadata({ params }: Props) {
+  const { id } = await params;
+  const actor = await getCompetitionActor();
+  const detail = await getCompetitionDetail(id, actor);
+  return { title: detail?.competition.title ?? "Competition" };
+}
+
+function placementLabel(placement: number): string {
+  if (placement === 1) return "1st place";
+  if (placement === 2) return "2nd place";
+  if (placement === 3) return "3rd place";
+  return `#${placement}`;
+}
 
 export default async function CompetitionDetailPage({ params }: Props) {
   const { id } = await params;
+  const actor = await getCompetitionActor();
+  const detail = await getCompetitionDetail(id, actor);
+  if (!detail) notFound();
 
-  const [competition] = await db
-    .select()
-    .from(competitions)
-    .where(eq(competitions.id, id))
-    .limit(1);
-
-  if (!competition) notFound();
-
-  // Get entries with startup data
-  const entries = await db
-    .select({
-      entry: competitionEntries,
-      startup: startups,
-      deck: decks,
-    })
-    .from(competitionEntries)
-    .innerJoin(startups, eq(startups.id, competitionEntries.startupId))
-    .leftJoin(decks, eq(decks.id, competitionEntries.deckId))
-    .where(eq(competitionEntries.competitionId, id))
-    .orderBy(desc(startups.score));
-
-  const session = await auth();
-  const role = (session?.user as { role?: string })?.role;
-  const userId = session?.user?.id;
-
-  // Check if user's startup is already entered
-  let userStartup = null;
-  let alreadyEntered = false;
-  if (role === "startup" && userId) {
-    const [s] = await db
-      .select()
-      .from(startups)
-      .where(eq(startups.userId, userId))
-      .limit(1);
-    userStartup = s || null;
-    if (userStartup) {
-      alreadyEntered = entries.some((e) => e.startup.id === userStartup!.id);
-    }
-  }
-
-  const deadline = new Date(competition.deadline);
-  const now = new Date();
-  const daysLeft = Math.max(0, Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
-  const isActive = competition.status === "active" && daysLeft > 0;
+  const { competition, winners, application, eligibility } = detail;
+  const publishedWinners = winners.filter(
+    (winner) => winner.status === "approved"
+  );
+  const privateWinners = winners.filter((winner) => winner.status !== "approved");
+  const showPrivateWinners =
+    privateWinners.length > 0 && (detail.canManage || detail.canReview);
 
   return (
-    <div className="max-w-4xl">
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-3">
-          <Trophy className="w-8 h-8 text-[var(--amber)]" />
-          <h1 className="text-xl font-semibold">{competition.title}</h1>
-        </div>
-        {competition.description && (
-          <p className="text-xs text-[var(--text-muted)] mb-4">{competition.description}</p>
-        )}
-        <div className="flex flex-wrap items-center gap-5 text-xs text-[var(--text-muted)]">
-          {competition.prize && (
-            <span className="px-3 py-1 font-semibold bg-[var(--amber-muted)] text-[var(--amber)] rounded-full">
-              Prize: {competition.prize}
-            </span>
+    <div className="max-w-5xl">
+      <Link
+        href="/competitions"
+        className="inline-flex items-center gap-1.5 text-[11px] text-[var(--text-muted)] hover:text-[var(--text-secondary)] mb-4 transition-colors"
+      >
+        <ArrowLeft size={11} /> Back to competitions
+      </Link>
+
+      <div className="mb-6">
+        <div className="flex items-center gap-2 flex-wrap mb-2">
+          <StatusChip status={competition.status} />
+          {competition.category && <Badge>{competition.category}</Badge>}
+          {competition.phase === "upcoming" && (
+            <Badge variant="accent">
+              Opens {formatDate(competition.opensAt)}
+            </Badge>
           )}
-          {competition.sector && (
-            <span className="px-2 py-0.5 rounded-full bg-[var(--bg-elevated)] text-xs font-medium">
-              {competition.sector}
-            </span>
-          )}
-          <span className="inline-flex items-center gap-1.5">
-            <Users size={14} /> {entries.length} entries
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Clock size={14} />
-            {isActive ? `${daysLeft} days left` : "Completed"}
-          </span>
-        </div>
-      </div>
-
-      {/* Enter button */}
-      {isActive && role === "startup" && userStartup && !alreadyEntered && (
-        <div className="mb-8">
-          <EnterCompetitionButton
-            competitionId={competition.id}
-            startupId={userStartup.id}
-          />
-        </div>
-      )}
-      {alreadyEntered && (
-        <div className="mb-8 px-4 py-3 bg-[var(--green-muted)] text-[var(--green)] text-sm font-medium rounded-md">
-          You&apos;re in this competition! Your live VultureScore determines your rank.
-        </div>
-      )}
-
-      {/* Leaderboard */}
-      <h2 className="text-lg font-semibold mb-4">Leaderboard</h2>
-      {entries.length === 0 ? (
-        <div className="text-center py-12 text-[var(--text-muted)]">
-          No entries yet. Be the first to enter!
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {entries.map(({ startup: s, deck: d }, i) => (
-            <div
-              key={s.id}
-              className="flex items-center gap-4 p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-card)]"
-            >
-              {/* Rank */}
-              <div className="w-8 text-center">
-                <span className={`text-lg font-bold ${i < 3 ? "text-[var(--amber)]" : "text-[var(--text-muted)]"}`}>
-                  #{i + 1}
-                </span>
-              </div>
-
-              {/* Logo */}
-              <div className="w-10 h-10 rounded-md bg-[var(--bg-elevated)] flex items-center justify-center text-lg font-bold shrink-0">
-                {s.name.charAt(0)}
-              </div>
-
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <Link href={`/explore/${s.slug}`} className="font-semibold hover:text-[var(--accent)]">
-                  {s.name}
-                </Link>
-                <p className="text-xs text-[var(--text-muted)]">
-                  {s.stage} • {s.location || "Remote"}
-                </p>
-              </div>
-
-              {/* Deck link */}
-              {d?.shareToken && (
-                <Link
-                  href={`/deck/view/${d.shareToken}`}
-                  className="text-xs text-[var(--accent)] hover:underline hidden sm:block"
-                >
-                  View Deck
-                </Link>
-              )}
-
-              {/* Score */}
-              <ScoreBadge score={parseFloat(s.score || "0")} />
-            </div>
+          {competition.sdgGoals.map((goal) => (
+            <Badge key={goal} variant={competition.sdgPrimary === goal ? "accent" : "green"}>
+              SDG {goal} · {sdgLabel(goal)}
+              {competition.sdgPrimary === goal ? " (primary)" : ""}
+            </Badge>
           ))}
         </div>
+        <h1 className="text-xl font-semibold tracking-tight">
+          {competition.title}
+        </h1>
+        <p className="text-xs text-[var(--text-muted)] mt-1">
+          Hosted by{" "}
+          {competition.hostInvestorUserId ? (
+            <Link
+              href={`/investors/${competition.hostInvestorUserId}`}
+              className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+            >
+              {competition.host}
+            </Link>
+          ) : (
+            competition.host
+          )}
+        </p>
+        {competition.summary && (
+          <p className="text-sm text-[var(--text-secondary)] mt-3 max-w-3xl leading-relaxed">
+            {competition.summary}
+          </p>
+        )}
+      </div>
+
+      {detail.canManage &&
+        competition.status === "changes_requested" &&
+        competition.adminFeedback && (
+          <div className="mb-4 rounded-lg border border-[var(--amber)]/30 bg-[var(--amber-muted)] px-4 py-3">
+            <p className="text-[11px] font-medium text-[var(--amber)] mb-1">
+              VultureX requested changes
+            </p>
+            <p className="text-[11px] text-[var(--text-secondary)]">
+              {competition.adminFeedback}
+            </p>
+            <Link
+              href={`/competitions/host/${competition.id}`}
+              className="inline-block mt-2 text-[10px] text-[var(--accent)] hover:underline"
+            >
+              Edit and resubmit →
+            </Link>
+          </div>
+        )}
+
+      {detail.canManage &&
+        competition.status === "rejected" &&
+        competition.rejectionReason && (
+          <div className="mb-4 rounded-lg border border-[var(--red)]/30 bg-[var(--red-muted)] px-4 py-3">
+            <p className="text-[11px] font-medium text-[var(--red)] mb-1">
+              Proposal rejected
+            </p>
+            <p className="text-[11px] text-[var(--text-secondary)]">
+              {competition.rejectionReason}
+            </p>
+          </div>
+        )}
+
+      {competition.bannerUrl && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={competition.bannerUrl}
+          alt=""
+          className="w-full h-44 object-cover rounded-xl border border-[var(--border)] mb-5"
+        />
       )}
+
+      <div className="grid lg:grid-cols-3 gap-5">
+        <div className="lg:col-span-2 space-y-5">
+          {competition.description && (
+            <section className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5">
+              <h2 className="text-xs font-medium text-[var(--text-muted)] mb-2">
+                About this competition
+              </h2>
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">
+                {competition.description}
+              </p>
+            </section>
+          )}
+
+          <section className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5">
+            <h2 className="text-xs font-medium text-[var(--text-muted)] mb-3 flex items-center gap-1.5">
+              <Trophy size={12} /> Prize &amp; benefits
+            </h2>
+            {competition.prize ? (
+              <p className="text-sm font-medium text-[var(--amber)]">
+                {competition.prize}
+              </p>
+            ) : (
+              <p className="text-xs text-[var(--text-muted)]">
+                Non-monetary recognition and access.
+              </p>
+            )}
+            <div className="flex flex-wrap gap-2 mt-3">
+              {competition.benefits.mentorship && <Badge>Mentorship</Badge>}
+              {competition.benefits.incubation && <Badge>Incubation</Badge>}
+              {competition.benefits.pilotPartnership && (
+                <Badge>Pilot partnership</Badge>
+              )}
+              {competition.benefits.investorVisibility && (
+                <Badge>Investor visibility</Badge>
+              )}
+              {competition.benefits.other && (
+                <Badge>{competition.benefits.other}</Badge>
+              )}
+            </div>
+          </section>
+
+          <section className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5">
+            <h2 className="text-xs font-medium text-[var(--text-muted)] mb-3 flex items-center gap-1.5">
+              <ShieldCheck size={12} /> Eligibility
+            </h2>
+            <div className="flex flex-wrap gap-2 mb-3">
+              {competition.eligibilityLines.map((line) => (
+                <Badge key={line}>{line}</Badge>
+              ))}
+            </div>
+            {competition.eligibility.requirements && (
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">
+                {competition.eligibility.requirements}
+              </p>
+            )}
+            {detail.eligibility && (
+              <div
+                className={`mt-3 rounded-lg border px-3 py-2.5 ${
+                  detail.eligibility.status === "ineligible"
+                    ? "border-[var(--red)]/30 bg-[var(--red-muted)]"
+                    : detail.eligibility.status === "needs_info"
+                      ? "border-[var(--amber)]/30 bg-[var(--amber-muted)]"
+                      : "border-[var(--green)]/30 bg-[var(--green-muted)]"
+                }`}
+              >
+                <p className="text-[10px] font-medium text-[var(--text)] flex items-center gap-1.5">
+                  <CheckCircle2 size={11} /> Based on your profile:{" "}
+                  {detail.eligibility.status === "ineligible"
+                    ? "appears ineligible"
+                    : detail.eligibility.status === "needs_info"
+                      ? "needs more information"
+                      : "appears eligible"}
+                </p>
+                {detail.eligibility.reasons.map((reason) => (
+                  <p
+                    key={reason}
+                    className="text-[10px] text-[var(--text-secondary)] mt-1"
+                  >
+                    {reason}
+                  </p>
+                ))}
+              </div>
+            )}
+          </section>
+
+          <section className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5">
+            <h2 className="text-xs font-medium text-[var(--text-muted)] mb-3 flex items-center gap-1.5">
+              <Scale size={12} /> Evaluation criteria
+            </h2>
+            {competition.criteria.length === 0 ? (
+              <p className="text-xs text-[var(--text-muted)]">
+                No criteria have been published.
+              </p>
+            ) : (
+              <div className="space-y-2.5">
+                {competition.criteria.map((criterion) => (
+                  <div key={criterion.key}>
+                    <div className="flex items-center justify-between text-[11px] mb-1">
+                      <span>{criterion.label}</span>
+                      <span className="text-[var(--text-muted)] tabular-nums">
+                        {Math.round(criterion.weight)}%
+                      </span>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-[var(--bg-elevated)] overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-[var(--accent-fill)]"
+                        style={{ width: `${Math.min(100, criterion.weight)}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          {competition.rules && (
+            <section className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5">
+              <h2 className="text-xs font-medium text-[var(--text-muted)] mb-2">
+                Rules &amp; requirements
+              </h2>
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">
+                {competition.rules}
+              </p>
+            </section>
+          )}
+
+          {publishedWinners.length > 0 && (
+            <section className="rounded-xl border border-[var(--green)]/25 bg-[var(--green-muted)]/30 p-5">
+              <h2 className="text-xs font-medium text-[var(--green)] mb-3 flex items-center gap-1.5">
+                <Award size={12} /> Winners
+              </h2>
+              <div className="space-y-2">
+                {publishedWinners.map((winner) => (
+                  <div
+                    key={winner.id}
+                    className="flex flex-wrap items-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--bg-card)] px-3 py-2.5"
+                  >
+                    <span className="w-16 text-[10px] font-semibold text-[var(--amber)]">
+                      {placementLabel(winner.placement)}
+                    </span>
+                    <Link
+                      href={`/explore/${winner.startupSlug}`}
+                      className="text-xs font-medium hover:text-[var(--accent)]"
+                    >
+                      {winner.startupName}
+                    </Link>
+                    {winner.awardLabel && (
+                      <span className="text-[10px] text-[var(--text-muted)]">
+                        {winner.awardLabel}
+                      </span>
+                    )}
+                    {winner.prizeNote && (
+                      <span className="text-[10px] text-[var(--text-secondary)] ml-auto">
+                        {winner.prizeNote}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {showPrivateWinners && (
+            <section className="rounded-xl border border-[var(--amber)]/30 bg-[var(--amber-muted)]/30 p-5">
+              <h2 className="text-xs font-medium text-[var(--amber)] mb-2">
+                Proposed winners — private, awaiting admin approval
+              </h2>
+              <div className="space-y-2">
+                {privateWinners.map((winner) => (
+                  <div
+                    key={winner.id}
+                    className="flex items-center gap-3 text-[11px]"
+                  >
+                    <span className="w-16 font-semibold text-[var(--amber)]">
+                      {placementLabel(winner.placement)}
+                    </span>
+                    <span>{winner.startupName}</span>
+                    <span className="text-[var(--text-muted)] ml-auto">
+                      {winner.status === "changes_requested"
+                        ? "Changes requested"
+                        : "Pending approval"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+
+        <aside className="space-y-4">
+          <ApplyPanel
+            competitionId={competition.id}
+            role={detail.viewerRole}
+            canApply={detail.canApply}
+            application={application}
+            eligibility={eligibility}
+            deadline={competition.deadline}
+            opensAt={competition.opensAt}
+            phase={competition.phase}
+            status={competition.status}
+          />
+
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-4">
+            <p className="text-xs font-medium mb-3 flex items-center gap-1.5">
+              <CalendarClock size={12} /> Key dates
+            </p>
+            <dl className="space-y-2 text-[10px]">
+              <div className="flex justify-between gap-3">
+                <dt className="text-[var(--text-muted)]">Opens</dt>
+                <dd>{formatDateTime(competition.opensAt)}</dd>
+              </div>
+              <div className="flex justify-between gap-3">
+                <dt className="text-[var(--text-muted)]">Deadline</dt>
+                <dd>{formatDateTime(competition.deadline)}</dd>
+              </div>
+              <div className="flex justify-between gap-3">
+                <dt className="text-[var(--text-muted)]">Evaluation ends</dt>
+                <dd>{formatDateTime(competition.evaluationEndsAt)}</dd>
+              </div>
+              <div className="flex justify-between gap-3">
+                <dt className="text-[var(--text-muted)]">Winners announced</dt>
+                <dd>{formatDate(competition.winnerAnnouncementAt)}</dd>
+              </div>
+              <div className="flex justify-between gap-3">
+                <dt className="text-[var(--text-muted)]">Completed</dt>
+                <dd>{formatDate(competition.completionAt)}</dd>
+              </div>
+              <div className="flex justify-between gap-3 pt-2 border-t border-[var(--border)]">
+                <dt className="text-[var(--text-muted)] flex items-center gap-1">
+                  <Users size={9} /> Applications
+                </dt>
+                <dd className="tabular-nums">{competition.applicationCount}</dd>
+              </div>
+            </dl>
+          </div>
+
+          {(detail.canManage || detail.canReview) && (
+            <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-4 space-y-2">
+              <p className="text-xs font-medium mb-1">Management</p>
+              {detail.canEdit && (
+                <Link
+                  href={`/competitions/host/${competition.id}`}
+                  className="block text-center px-3 py-2 text-[11px] font-medium border border-[var(--border)] rounded-md text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:border-[var(--border-hover)] transition-colors"
+                >
+                  Edit proposal
+                </Link>
+              )}
+              {detail.canManage && (
+                <Link
+                  href={`/competitions/manage/${competition.id}`}
+                  className="block text-center px-3 py-2 text-[11px] font-medium bg-[var(--bg-elevated)] rounded-md hover:bg-[var(--bg-card-hover)] transition-colors"
+                >
+                  Review applicants
+                </Link>
+              )}
+              {detail.canReview && (
+                <Link
+                  href={`/admin/competitions/${competition.id}`}
+                  className="block text-center px-3 py-2 text-[11px] font-medium bg-[var(--accent-fill)] text-[var(--accent-foreground)] rounded-md hover:bg-[var(--accent-hover)] transition-colors"
+                >
+                  Open admin review
+                </Link>
+              )}
+            </div>
+          )}
+        </aside>
+      </div>
     </div>
   );
 }

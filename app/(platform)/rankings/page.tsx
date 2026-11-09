@@ -1,18 +1,24 @@
 import { db } from "@/db";
 import { startups } from "@/db/schema";
 import { eq, desc, and, ilike } from "drizzle-orm";
+import { sanitizeSdgIds } from "@/features/sdg/taxonomy";
+import { startupSdgCondition } from "@/features/sdg/filters";
 import { RankingsClient } from "./rankings-client";
 
 export const metadata = { title: "Rankings" };
 
-type Props = { searchParams: Promise<{ sector?: string }> };
+type Props = { searchParams: Promise<{ sector?: string; sdg?: string }> };
 
 export default async function RankingsPage({ searchParams }: Props) {
   const params = await searchParams;
   const sector = params.sector;
+  // Rankings are ranked by the existing VultureScore only. Selecting a goal
+  // filters the list; it never adds or changes a startup's score.
+  const sdgId = sanitizeSdgIds(params.sdg ?? "")[0] ?? null;
 
   const conditions = [eq(startups.isPublic, true)];
   if (sector && sector.toLowerCase() !== "all") conditions.push(ilike(startups.sector, `%${sector}%`));
+  if (sdgId) conditions.push(startupSdgCondition(startups.sdgGoals, [sdgId]));
 
   const results = await db.select().from(startups).where(and(...conditions)).orderBy(desc(startups.score)).limit(50);
 
@@ -20,7 +26,8 @@ export default async function RankingsPage({ searchParams }: Props) {
     id: s.id, slug: s.slug, name: s.name, tagline: s.tagline,
     sector: s.sector, stage: s.stage, score: parseFloat(s.score || "0"),
     monthlyGrowth: s.monthlyGrowth || "0",
+    sdgGoals: s.sdgGoals ?? [], sdgPrimary: s.sdgPrimary,
   }));
 
-  return <RankingsClient startups={mapped} currentSector={sector} />;
+  return <RankingsClient startups={mapped} currentSector={sector} currentSdg={sdgId} />;
 }

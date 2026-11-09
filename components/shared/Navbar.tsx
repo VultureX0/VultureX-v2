@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { Menu, X } from "lucide-react";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -20,36 +21,44 @@ export function Navbar() {
 
           <nav role="navigation" aria-label="Main" className="hidden md:flex items-center gap-6">
             <Link href="/explore" className="text-xs text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">Explore</Link>
+            <Link href="/competitions" className="text-xs text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">Competitions</Link>
             <Link href="/rankings" className="text-xs text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">Rankings</Link>
+            <Link href="/knowledge-hub" className="text-xs text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">Knowledge Hub</Link>
           </nav>
 
-          <div className="hidden md:flex items-center gap-4">
-            {isLoggedIn ? (
-              <>
-                <Link href="/dashboard" className="text-xs text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">Dashboard</Link>
-                <button onClick={() => signOut({ callbackUrl: "/" })} className="text-xs text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">
-                  Sign out
-                </button>
-              </>
-            ) : (
-              <>
-                <Link href="/login" className="text-xs text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">Sign in</Link>
-                <Link href="/signup" className="text-xs font-medium px-3 py-1.5 bg-[var(--text)] text-[var(--bg)] rounded-md hover:opacity-90 transition-opacity">
-                  Get started
-                </Link>
-              </>
-            )}
-          </div>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
 
-          <button className="md:hidden p-1" onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open}>
-            {open ? <X size={16} /> : <Menu size={16} />}
-          </button>
+            <div className="hidden md:flex items-center gap-4">
+              {isLoggedIn ? (
+                <>
+                  <Link href="/dashboard" className="text-xs text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">Dashboard</Link>
+                  <button onClick={() => signOut({ callbackUrl: "/" })} className="text-xs text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">
+                    Sign out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link href="/login" className="text-xs text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">Sign in</Link>
+                  <Link href="/signup" className="text-xs font-medium px-3 py-1.5 bg-[var(--text)] text-[var(--bg)] rounded-md hover:opacity-90 transition-opacity">
+                    Get started
+                  </Link>
+                </>
+              )}
+            </div>
+
+            <button className="md:hidden p-1" onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open}>
+              {open ? <X size={16} /> : <Menu size={16} />}
+            </button>
+          </div>
         </div>
 
         {open && (
           <div className="md:hidden pb-3 pt-2 border-t border-[var(--border)] space-y-2">
             <Link href="/explore" className="block text-xs text-[var(--text-muted)] py-1" onClick={() => setOpen(false)}>Explore</Link>
+            <Link href="/competitions" className="block text-xs text-[var(--text-muted)] py-1" onClick={() => setOpen(false)}>Competitions</Link>
             <Link href="/rankings" className="block text-xs text-[var(--text-muted)] py-1" onClick={() => setOpen(false)}>Rankings</Link>
+            <Link href="/knowledge-hub" className="block text-xs text-[var(--text-muted)] py-1" onClick={() => setOpen(false)}>Knowledge Hub</Link>
             <div className="pt-2 border-t border-[var(--border)] flex gap-4">
               {isLoggedIn ? (
                 <Link href="/dashboard" className="text-xs font-medium" onClick={() => setOpen(false)}>Dashboard</Link>

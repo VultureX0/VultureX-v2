@@ -1,5 +1,47 @@
 import OpenAI from "openai";
 import type { Slide, DeckInput } from "./deck.types";
+import { orderSdgGoals, sdgName } from "../sdg/taxonomy";
+
+/**
+ * Builds the SDG slide deterministically from profile data instead of asking
+ * the model to write it. That guarantees no invented impact metrics and keeps
+ * self-declared alignment clearly separated from verified impact.
+ */
+export function buildImpactSlide(input: DeckInput): Slide | null {
+  const goals = input.sdgGoals ?? [];
+  if (goals.length === 0) return null;
+
+  const ordered = orderSdgGoals(goals, input.sdgPrimary ?? null);
+  const primary = input.sdgPrimary && goals.includes(input.sdgPrimary)
+    ? input.sdgPrimary
+    : null;
+  const headline = primary
+    ? `SDG ${primary}: ${sdgName(primary)}`
+    : "Our Sustainable Development Goals";
+
+  const description = (input.impactDescription ?? "").trim();
+  const verification = input.impactVerified
+    ? "This impact claim has been reviewed and verified by VultureX."
+    : "This SDG alignment is self-declared and has not been independently verified.";
+
+  const body = description
+    ? `${description} ${verification}`
+    : `The team has declared alignment with the UN goals below. No impact metrics have been provided yet. ${verification}`;
+
+  return {
+    type: "impact",
+    headline,
+    body,
+    bullets: ordered.slice(0, 4).map((id) => `SDG ${id} — ${sdgName(id)}`),
+  };
+}
+
+export function withImpactSlide(slides: Slide[], input: DeckInput): Slide[] {
+  const impact = buildImpactSlide(input);
+  if (!impact) return slides;
+  // Never duplicate an impact slide if a stored deck is regenerated.
+  return [...slides.filter((slide) => slide.type !== "impact"), impact];
+}
 
 function getOpenAI() {
   const apiKey = process.env.OPENAI_API_KEY;
@@ -80,5 +122,5 @@ Return ONLY a valid JSON array. No markdown fences, no explanation, just the arr
     throw new Error(`Invalid deck format returned for startup "${input.name}"`);
   }
 
-  return slides;
+  return withImpactSlide(slides, input);
 }

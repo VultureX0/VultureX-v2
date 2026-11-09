@@ -5,9 +5,23 @@ import { ProfileCard } from "@/components/startup/ProfileCard";
 import { ExploreFilters } from "./filters";
 
 type Startup = {
-  id: string; slug: string; name: string; tagline: string | null;
+  id: string; userId: string | null; slug: string; name: string; tagline: string | null;
   sector: string; stage: string; score: number; mrr: number;
   monthlyGrowth: string; location: string | null;
+  sdgGoals: number[]; sdgPrimary: number | null;
+};
+
+type InterestStatus = {
+  status:
+    | "none"
+    | "self"
+    | "pending_sent"
+    | "pending_received"
+    | "accepted"
+    | "rejected"
+    | "rejected_by_me";
+  requestId: string | null;
+  conversationId: string | null;
 };
 
 type Props = {
@@ -15,9 +29,26 @@ type Props = {
   currentSector?: string;
   currentStage?: string;
   currentQuery?: string;
+  currentSdg: number[];
+  currentSdgMode: "any" | "all";
+  preferredSdgs: number[];
+  viewerId: string | null;
+  canSendInterest: boolean;
+  statuses: Record<string, InterestStatus>;
 };
 
-export function ExploreClient({ startups, currentSector, currentStage, currentQuery }: Props) {
+export function ExploreClient({
+  startups,
+  currentSector,
+  currentStage,
+  currentQuery,
+  currentSdg,
+  currentSdgMode,
+  preferredSdgs,
+  viewerId,
+  canSendInterest,
+  statuses,
+}: Props) {
   return (
     <div>
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
@@ -28,7 +59,14 @@ export function ExploreClient({ startups, currentSector, currentStage, currentQu
         </div>
       </motion.div>
 
-      <ExploreFilters currentSector={currentSector} currentStage={currentStage} currentQuery={currentQuery} />
+      <ExploreFilters
+        currentSector={currentSector}
+        currentStage={currentStage}
+        currentQuery={currentQuery}
+        currentSdg={currentSdg}
+        currentSdgMode={currentSdgMode}
+        preferredSdgs={preferredSdgs}
+      />
 
       {startups.length === 0 ? (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-16 text-center">
@@ -48,6 +86,11 @@ export function ExploreClient({ startups, currentSector, currentStage, currentQu
                 slug={s.slug} name={s.name} tagline={s.tagline} sector={s.sector}
                 stage={s.stage} score={s.score} mrr={s.mrr}
                 monthlyGrowth={s.monthlyGrowth} location={s.location}
+                sdgGoals={s.sdgGoals} sdgPrimary={s.sdgPrimary}
+                targetUserId={s.userId ?? undefined}
+                interest={s.userId ? statuses[s.userId] : undefined}
+                canSendInterest={canSendInterest && !!viewerId && s.userId !== viewerId}
+                authenticated={!!viewerId}
               />
             </motion.div>
           ))}

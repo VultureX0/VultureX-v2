@@ -8,6 +8,76 @@
       "when": 1783624792319,
       "tag": "0000_outstanding_chamber",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791666617017,
+      "tag": "0001_sweet_the_hunter",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792310563859,
+      "tag": "0002_interest_plus_messaging",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792604216332,
+      "tag": "0003_greedy_thunderbolt_ross",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792609373999,
+      "tag": "0004_business_matchmaking",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792693310814,
+      "tag": "0005_sdg_layer",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793733072918,
+      "tag": "0006_founder_profiles",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1793733995315,
+      "tag": "0007_founder_roadmap",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793735746743,
+      "tag": "0008_saved_resources_reminders",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1793817600000,
+      "tag": "0009_bookmarks",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1793904000000,
+      "tag": "0010_startups_owner_select",
+      "breakpoints": true
     }
   ]
 }

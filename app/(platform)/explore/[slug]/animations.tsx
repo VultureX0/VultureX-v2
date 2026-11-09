@@ -49,7 +49,7 @@ export function AnimatedBar({ value, max, delay = 0 }: { value: number; max: num
         initial={{ width: 0 }}
         animate={{ width: `${pct}%` }}
         transition={{ duration: 0.6, delay, ease: "easeOut" }}
-        className="h-full rounded-full bg-[var(--accent)]"
+        className="h-full rounded-full bg-[var(--accent-fill)]"
       />
     </div>
   );

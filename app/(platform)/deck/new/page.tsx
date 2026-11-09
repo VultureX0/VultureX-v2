@@ -33,7 +33,7 @@ export default function NewDeckPage() {
 
   return (
     <div className="max-w-lg mx-auto text-center pt-12">
-      <div className="w-20 h-20 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center mx-auto mb-6">
+      <div className="w-20 h-20 rounded-xl bg-[var(--accent-fill)]/10 flex items-center justify-center mx-auto mb-6">
         <Sparkles className="w-10 h-10 text-[var(--accent)]" />
       </div>
 
@@ -51,7 +51,7 @@ export default function NewDeckPage() {
       <button
         onClick={handleGenerate}
         disabled={loading}
-        className="inline-flex items-center gap-3 px-8 py-4 bg-[var(--accent)] text-[#171717] font-medium rounded-xl text-lg hover:bg-[var(--accent-hover)] disabled:opacity-60 transition-colors"
+        className="inline-flex items-center gap-3 px-8 py-4 bg-[var(--accent-fill)] text-[var(--accent-foreground)] font-medium rounded-xl text-lg hover:bg-[var(--accent-hover)] disabled:opacity-60 transition-colors"
       >
         {loading ? (
           <>

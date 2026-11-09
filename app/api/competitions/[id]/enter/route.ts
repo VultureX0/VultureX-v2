@@ -3,6 +3,7 @@ import { eq, desc } from "drizzle-orm";
 import { auth } from "@/features/auth";
 import { db } from "@/db";
 import { competitionEntries, competitions, startups, decks } from "@/db/schema";
+import { isUuid } from "@/lib/utils";
 
 export async function POST(
   request: Request,
@@ -12,6 +13,9 @@ export async function POST(
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id: competitionId } = await params;
+  if (!isUuid(competitionId)) {
+    return NextResponse.json({ error: "Competition not found" }, { status: 404 });
+  }
 
   // Verify competition exists and is active
   const [competition] = await db.select().from(competitions).where(eq(competitions.id, competitionId)).limit(1);

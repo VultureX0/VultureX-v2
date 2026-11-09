@@ -7,10 +7,19 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "check:schema": "node scripts/ci/validate-schema.cjs",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "db:seed": "tsx db/seed.ts",
+    "db:seed:admin": "tsx db/seed-admin.ts",
+    "matches:backfill": "tsx db/backfill-matches.ts",
+    "test:matchmaking": "node --import tsx --test features/matchmaking/engine.test.ts",
+    "test:sdg": "node --import tsx --test features/sdg/sdg.test.ts",
+    "test:roadmap": "node --import tsx --test features/roadmap/roadmap.test.ts",
+    "test:reminders": "node --import tsx --test features/reminders/reminders.test.ts",
+    "test:saved-resources": "node --import tsx --test features/saved-resources/catalog.test.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.2",

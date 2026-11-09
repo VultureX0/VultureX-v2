@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { startups, investors, interests, profileViews, decks, competitionEntries } from "@/db/schema";
 import { eq, sql, and, desc } from "drizzle-orm";
 import Link from "next/link";
+import { getRecommendationSummary } from "@/features/matchmaking";
 import { DashboardClient } from "./dashboard-client";
 
 export const metadata = { title: "Dashboard" };
@@ -14,6 +15,9 @@ export default async function DashboardPage() {
 
   const role = (session.user as { role?: string }).role;
   const userId = session.user.id;
+
+  // Admins get their own dashboard
+  if (role === "admin") redirect("/admin");
 
   if (role === "startup") {
     const [startup] = await db.select().from(startups).where(eq(startups.userId, userId!)).limit(1);
@@ -48,6 +52,12 @@ export default async function DashboardPage() {
     const recentInterests = await db.select().from(interests)
       .where(eq(interests.startupId, startup.id)).orderBy(desc(interests.createdAt)).limit(5);
 
+    // Reads persisted recommendations only — never recalculates on render.
+    const connections = await getRecommendationSummary(startup.id, 4).catch((error) => {
+      console.error("Failed to load recommendations:", error);
+      return { items: [], counts: { total: 0 }, total: 0, hasMore: false };
+    });
+
     const score = parseFloat(startup.score || "0");
     const breakdown = startup.scoreBreakdown as { traction: number; financial: number; team: number; market: number; momentum: number } | null;
 
@@ -70,6 +80,7 @@ export default async function DashboardPage() {
           mrr: startup.mrr || 0,
           growth: startup.monthlyGrowth || "0",
           recentInterests: recentInterests.length,
+          connections: { items: connections.items, total: connections.total },
         }}
       />
     );

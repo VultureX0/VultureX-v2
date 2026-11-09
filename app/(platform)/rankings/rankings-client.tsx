@@ -2,18 +2,38 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { TrendingUp, ArrowRight } from "lucide-react";
+import { TrendingUp, ArrowRight, Globe2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { SDG_GOALS, sdgColor } from "@/features/sdg/taxonomy";
 
 const SECTORS = ["All", "Fintech", "AI/ML", "Climate", "SaaS", "Healthtech", "Edtech"];
 
 type Startup = {
   id: string; slug: string; name: string; tagline: string | null;
   sector: string; stage: string; score: number; monthlyGrowth: string;
+  sdgGoals: number[]; sdgPrimary: number | null;
 };
 
-export function RankingsClient({ startups, currentSector }: { startups: Startup[]; currentSector?: string }) {
+export function RankingsClient({
+  startups,
+  currentSector,
+  currentSdg,
+}: {
+  startups: Startup[];
+  currentSector?: string;
+  currentSdg?: number | null;
+}) {
   const router = useRouter();
+
+  function href(input: { sector?: string | null; sdg?: number | null }) {
+    const params = new URLSearchParams();
+    const sector = input.sector === undefined ? currentSector : input.sector;
+    const sdg = input.sdg === undefined ? currentSdg : input.sdg;
+    if (sector && sector.toLowerCase() !== "all") params.set("sector", sector.toLowerCase());
+    if (sdg) params.set("sdg", String(sdg));
+    const query = params.toString();
+    return query ? `/rankings?${query}` : "/rankings";
+  }
 
   return (
     <div>
@@ -30,7 +50,7 @@ export function RankingsClient({ startups, currentSector }: { startups: Startup[
           return (
             <button
               key={s}
-              onClick={() => router.push(s === "All" ? "/rankings" : `/rankings?sector=${s.toLowerCase()}`)}
+              onClick={() => router.push(href({ sector: s === "All" ? null : s }))}
               className={`px-3 py-1.5 text-xs rounded-md border transition-all ${
                 isActive
                   ? "border-[var(--accent)] text-[var(--accent)] bg-[var(--accent-muted)]"
@@ -43,10 +63,41 @@ export function RankingsClient({ startups, currentSector }: { startups: Startup[
         })}
       </motion.div>
 
+      {/* SDG rankings — same scoring engine, filtered by declared goal. */}
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.05 }}
+        className="flex flex-wrap items-center gap-2 mb-8 -mt-4">
+        <span className="inline-flex items-center gap-1.5 text-[10px] text-[var(--text-muted)]">
+          <Globe2 size={11} /> Impact goal
+        </span>
+        <select
+          aria-label="Rank startups by Sustainable Development Goal"
+          value={currentSdg ?? ""}
+          onChange={(e) => router.push(href({ sdg: e.target.value ? Number(e.target.value) : null }))}
+          className="px-3 py-1.5 rounded-md border border-[var(--border)] bg-[var(--bg-card)] text-[var(--text-secondary)] text-xs focus:outline-none focus:border-[var(--border-hover)] transition-colors cursor-pointer"
+        >
+          <option value="">All goals</option>
+          {SDG_GOALS.map((goal) => (
+            <option key={goal.id} value={goal.id}>
+              SDG {goal.id} · {goal.name}
+            </option>
+          ))}
+        </select>
+        {currentSdg && (
+          <span
+            className="inline-flex items-center gap-1 px-2 py-1 rounded border border-[var(--border)] bg-[var(--bg-elevated)]/40 text-[10px] text-[var(--text-muted)]"
+          >
+            <span aria-hidden className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: sdgColor(currentSdg) }} />
+            Ranked by VultureScore within SDG {currentSdg}
+          </span>
+        )}
+      </motion.div>
+
       {startups.length === 0 ? (
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           className="text-sm text-[var(--text-muted)] py-16 text-center">
-          No startups in this sector yet.
+          {currentSdg
+            ? `No startups have declared SDG ${currentSdg} in this sector yet.`
+            : "No startups in this sector yet."}
         </motion.p>
       ) : (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}

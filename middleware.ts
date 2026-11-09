@@ -5,10 +5,17 @@ import type { NextRequest } from "next/server";
 const PROTECTED_ROUTES = [
   "/dashboard",
   "/deck",
+  "/pitch-decks",
+  "/admin",
   "/onboarding",
   "/settings",
   "/saved",
   "/interests",
+  "/messages",
+  "/knowledge-hub/for-you/profile",
+  "/knowledge-hub/roadmap",
+  "/knowledge-hub/for-you/saved",
+  "/knowledge-hub/for-you/reminders",
 ];
 
 export function middleware(request: NextRequest) {
