@@ -1,6 +1,6 @@
 # VultureX
 
-A startup-investor connection platform. Startups show verified traction, get scored, generate pitch decks, and connect with investors directly.
+A startup-investor connection platform. Startups show verified traction, get scored, generate pitch decks, and connect with investors.
 
 **Live**: https://vulturex-v2.vercel.app
 
